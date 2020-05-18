@@ -21,10 +21,10 @@ function createWindow () {
   });
   
   // 并且为你的应用加载index.html
-  win.loadFile('main.html')
+  win.loadFile('main.html');
 
   // 打开开发者工具
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools();
   //import sqlite3Db from './nw/sqlite3_test'
 }
 
@@ -128,6 +128,38 @@ ipcMain.on('getbuildlist', (event, args) => {
     db.close();
   });
 });
+
+const newLocal = 'searchbuildlist';
+ipcMain.on(newLocal, (event, args) => {
+  console.log('searchbuildlist is captured.args:'+args);
+  initSqlJs().then(SQL => {
+    // 创建数据库
+    db = new SQL.Database(data);
+    // 运行查询而不读取结果
+    console.log("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
+    contents = db.exec("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
+    arr=contents[0].values;
+    arr_sys= [];
+    arr_sys1=[];
+    //console.log(contents);
+    console.log(arr);
+    console.log(arr.length);
+    for(var i = 0; i < arr.length; i++) {
+      arr_sys1=[];
+      for(var j = 0; j < arr[i].length; j++) {
+        console.log(arr[i][j]);
+        arr_sys1.push(arr[i][j]);
+      };
+      arr_sys.push(arr_sys1);
+    };
+    var json1=JSON.stringify(arr_sys);
+    console.log(json1);
+    win.webContents.send('searchlist',[args,json1]);
+    console.log('message sent.');
+    db.close();
+  });
+});
+
 ipcMain.on('getbuildinfo', (event, args) => {
   console.log('getbuildinfo is captured.args:'+args);
   initSqlJs().then(SQL => {

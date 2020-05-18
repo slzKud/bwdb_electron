@@ -4,6 +4,7 @@
 }
 body{
     overflow: hidden;
+    height:100%
 }
 .bwdb_toolbar{
     background-color: #113260;
@@ -154,10 +155,10 @@ body{
 .bwdb_sidebar{
     width:298px;
     background-color: #ececec;
-    overflow-y:auto;
 }
 .bwdb_sidebarA{
     position: relative;
+    overflow-y:auto;
 }
 .big_stage_divider{
     width:100%;
@@ -272,6 +273,7 @@ body{
     flex: 1;
     max-width: 70%;
     overflow-y: auto;
+    white-space:unset;
 }
 .info_box_pics {
 	height: 150px;

@@ -15,6 +15,8 @@
         var textflag=0;
         var picflag=0;
         var firstid=0;
+        var now_proid=-1;
+        var now_buildid=-1;
         const ipcRenderer = require('electron').ipcRenderer;
         const shell = require('electron').shell;
         function hide_pic(){
@@ -27,6 +29,13 @@
             $('#infobox_1').attr('class','info_listbox info_have_pic');
             $('.notice_text').css('flex-basis','75%');
         }
+        function getpar_height(sel){
+            var w=0;
+			$(sel).each(function(){
+				w=w+parseInt($(this).height());//获取宽度。并累加
+            });
+            return w;
+        }
         $(document).ready(function(){
             now_height=document.documentElement.clientHeight-55;
             now_width=document.documentElement.clientWidth-355;
@@ -34,6 +43,13 @@
             $('.bwdb_sidebar').css('min-height',now_height);
             $('.bwdb_infobox').css('min-width',now_width);
             $('.install_notice_text').css('min-height',notice_text);
+            if($('.bw_sidebar_info_box').css('display')=='none'){
+                $('.bwdb_sidebarA').css('max-height',now_height);
+                $('.bwdb_sidebarA').css('height',now_height);
+            }else{
+                $('.bwdb_sidebarA').css('max-height',now_height-$('.bw_sidebar_info_box').height);
+                $('.bwdb_sidebarA').css('height',now_height-$('.bw_sidebar_info_box').height);
+            }
             console.log(document.documentElement.clientWidth);
             hide_pic();
             picflag=1;
@@ -50,6 +66,8 @@
                 $(".search_box_title").attr('data-id',$(this).attr('data-id'));
                 $(".search_box_title").attr('data-id-codename',$(this).attr('data-id-codename'));
                 console.log($(this).attr('data-id'));
+                now_buildid=-1;
+                now_proid=-1;
                 ipcRenderer.send('getbuildstage', $(this).attr('data-id'));
                 if(slideflag==1){
                     $("#bwdb_nav_select_bar").hide();
@@ -95,16 +113,34 @@
                 $('.bwdb_infobox_textarea').hide();
                 $('.info_box_items_btn_text').attr('class','info_box_items_btn_text');
                 console.log($(this).attr('data-id'));
-                get_build_info($('.search_box_title').attr('data-id'),$(this).attr('data-id'));
+                if($('.bw_sidebar_info_box').css('display')=='none'){
+                    get_build_info($('.search_box_title').attr('data-id'),$(this).attr('data-id'));
+                }else{
+                    console.log($(this).attr('data-id-proid'));
+                    get_build_info($(this).attr('data-id-proid'),$(this).attr('data-id'));
+                }
+                
             });
             $(window).resize(function(){
                 now_height=document.documentElement.clientHeight-55;
                 now_width=document.documentElement.clientWidth-355;
                 notice_text=document.documentElement.clientHeight-$('.install_notice_text').offset()['top']-25;
-                $('.bwdb_sidebar').css('min-height',now_height);
+                $('.bwdb_sidebar').css('max-height',now_height);
                 $('.bwdb_sidebar').css('height',now_height);
                 $('.bwdb_infobox').css('min-width',now_width);
                 $('.install_notice_text').css('min-height',notice_text);
+                if($('.bw_sidebar_info_box').css('display')=='none'){
+                    $('.bwdb_sidebarA').css('max-height',now_height);
+                    $('.bwdb_sidebarA').css('height',now_height);
+                }else{
+                    $('.bwdb_sidebarA').css('max-height',now_height-$('.bw_sidebar_info_box').height);
+                    $('.bwdb_sidebarA').css('height',now_height-$('.bw_sidebar_info_box').height);
+                }
+                if(getpar_height('.bwdb_sidebarA')>$('.bwdb_sidebarA').css('max-height')){
+                    $('.bwdb_sidebarA').css('overflow-y','scroll');
+                }else{
+                    $('.bwdb_sidebarA').css('overflow-y','auto');
+                }
                 console.log(document.documentElement.clientWidth);
                 if(document.documentElement.clientWidth>975  && picflag==0){
                     show_pic();
@@ -117,6 +153,7 @@
             $('.bwdb_nav_search_text').keypress(function (e){
  　　           if(e.keyCode == 13){
                    console.log($(this).val());
+                   ipcRenderer.send('searchbuildlist',$(this).val());
 　　　          }
             });  
         });
@@ -135,16 +172,24 @@
                     slideflag=0; 
             }
             if(textflag==0){
+                $('.search_btn').css('border','#fff 2px solid');
+                $('.bwdb_nav_search_text').val('');
                 $(".bwdb_nav_search").show();
                 $(".bw_sidebar_info_box").html('按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。')
                 $(".bw_sidebar_info_box").show();
                 $(".bwdb_sidebarA").hide()
                 textflag=1;
             }else{
+                $('.search_btn').css('border','unset');
                 $(".bwdb_nav_search").hide();
                 $(".bw_sidebar_info_box").hide();
                 $(".bwdb_sidebarA").show();
-                ipcRenderer.send('getbuildstage', $(".search_box_title").attr('data-id'));
+                if($(".bw_sidebar_info_box").html().indexOf('按回车键开始搜索') == -1){
+                $(".search_box_title").html($(".bwdb_select_item[data-id='"+now_proid+"']").html());
+                $(".search_box_title").attr('data-id',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id'));
+                $(".search_box_title").attr('data-id-codename',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id-codename'));
+                ipcRenderer.send('getbuildstage', now_proid);
+                }
                 textflag=0;
             }
         }
@@ -189,7 +234,7 @@
             for(var i = 0; i < s.length; i++) {
                 console.log(s[i]);
                 $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text">'+s[i]+'</span></div></div><div class="build_list" data-id="'+s[i]+'" data-type="build_stage" >');
-                ipcRenderer.send('getbuildlist', [$('.search_box_title').attr('data-id'),s[i]]);
+                ipcRenderer.send('getbuildlist', [arg[0],s[i]]);
             };
             ipcRenderer.send('show-win', 'win');
             //添加相关的代码
@@ -205,9 +250,20 @@
             };
             //添加相关的代码
             //alert(s[s.length-1][0]);
-            if(firstid!=$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id')){
-                get_build_info($('.search_box_title').attr('data-id'),$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id'));
+            if(firstid!=$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id')  && now_proid==-1){
+                get_build_info(arg[0],$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id'));
             } 
+            if(now_buildid>0 && $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').length>0){
+                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('background-color','#19478a');
+                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('color','#fff');
+                get_build_info(now_proid,now_buildid);
+                //$('.bwdb_sidebar').scrollTop(0);
+            }
+            if(getpar_height('.bwdb_sidebarA')>$('.bwdb_sidebarA').css('max-height')){
+                $('.bwdb_sidebarA').css('overflow-y','scroll');
+            }else{
+                $('.bwdb_sidebarA').css('overflow-y','auto');
+            }
         });
         ipcRenderer.on('buildinfo', function(event, arg) {
             console.log(arg);
@@ -221,19 +277,60 @@
                 //$("#"+arrlist[i]).html(s[2+i]);
                 changeinfotext(arrlist[i],s[0][3+i]);
             }
-            var x=$('.search_box_title').attr('data-id-codename');
-            if(x=="null" || x==null){
-                $("#ver_smalltag").text($('.search_box_title').html()+' - '+s[0][1]);
+            if($('.bw_sidebar_info_box').css('display')=='none'){
+                var x=$('.search_box_title').attr('data-id-codename');
+                var y=$('.search_box_title').html();
             }else{
-                $("#ver_smalltag").text('Codename "'+$('.search_box_title').attr('data-id-codename')+'" - '+s[0][1]);
+                var x=$('.bwdb_select_item[data-id="'+arg[0]+'"]').attr('data-id-codename');
+                var y=$('.bwdb_select_item[data-id="'+arg[0]+'"]').html();
+            }
+            if(x=="null" || x==null){
+                $("#ver_smalltag").text(y+' - '+s[0][1]);
+            }else{
+                $("#ver_smalltag").text('Codename "'+x+'" - '+s[0][1]);
+            }
+            var i=$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').parents('.build_list').length;
+            console.log('元素索引：'+i);
+            if(i==0){return 0;}
+            if(i==1){
+                $('.bwdb_sidebar').scrollTop($('.bwdb_sidebar').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').parents('.build_list').prev().offset().top- $(".bwdb_sidebar").offset().top);
+            }else{
+                $('.bwdb_sidebar').scrollTop($('.bwdb_sidebar').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().offset().top- $(".bwdb_sidebar").offset().top);
             }
             //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])
             //添加相关的代码
         });
+        ipcRenderer.on('searchlist', function(event, arg) {
+            console.log(arg);
+            var s=JSON.parse(arg[1]);
+            console.log(s);
+            $('.bwdb_sidebarA').html('');
+            for(var i = 0; i < s.length; i++){
+                var proid=s[i][1];
+                var proname=$('.bwdb_select_item[data-id="'+proid+'"]').html()
+                var buildid=s[i][0];
+                var buildver=s[i][3];
+                if($(".bwdb_sidebarA").children('.build_list[data-id="'+proname+'"]').length==0){
+                    $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text">'+proname+'</span></div></div><div class="build_list" data-id="'+proname+'" data-type="build_stage" >');
+                }
+                $("[data-type='build_stage'][data-id='"+proname+"']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="'+buildid+'" data-id-proid="'+proid+'" data-type="build_item">'+buildver+'</div>');
+            }
+            $(".bw_sidebar_info_box").html('共找到'+s.length+'项。');
+            $(".bw_sidebar_info_box").show();
+            $(".bwdb_sidebarA").show();
+            if(getpar_height('.bwdb_sidebarA')>$('.bwdb_sidebarA').css('max-height')){
+                $('.bwdb_sidebarA').css('overflow-y','scroll');
+            }else{
+                $('.bwdb_sidebarA').css('overflow-y','auto');
+            }
+        });
         function test1(){
-            ipcRenderer.send('getbuildinfo',[1,1]);
+            ipcRenderer.send('searchbuildlist','10');
         }
         function get_build_info(proid,buildid){
+            console.log([proid,buildid])
+            now_proid=proid;
+            now_buildid=buildid;
             ipcRenderer.send('getbuildinfo',[proid,buildid]);
         }
         function open_wiki_link(){
