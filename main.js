@@ -1,9 +1,16 @@
 const { app, BrowserWindow,Menu } = require('electron')
 const ipcMain = require('electron').ipcMain;
 const initSqlJs=require('sql.js/dist/sql-asm');
+const dialog = require('electron').dialog;
 //const SQL = require('sql.js/dist/sql-asm');
 const fs = require("fs");
-var data = fs.readFileSync('./DataBase.db');
+try{
+  var data = fs.readFileSync('./DataBase.db');
+}catch{
+    dialog.showErrorBox('基本数据库不存在','基本数据库不存在，程序将退出。');
+    app.quit();
+}
+
 //console.log(db);
 var win;
 function createWindow () {   
@@ -138,6 +145,15 @@ ipcMain.on(newLocal, (event, args) => {
     // 运行查询而不读取结果
     console.log("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
     contents = db.exec("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
+    if(contents.length==0){
+      dialog.showErrorBox('找不到数据','你查找的"'+args+'"找不到条目。');
+      var json1=JSON.stringify([]);
+      console.log(json1);
+      win.webContents.send('searchlist',[args,json1]);
+      console.log('message sent.');
+      db.close();
+      return -1;
+    }
     arr=contents[0].values;
     arr_sys= [];
     arr_sys1=[];
