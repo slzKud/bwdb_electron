@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>BetaWorld Library Electron Version</title>
+    <link rel="stylesheet" type="text/css" href="static/css/bwdb.css" /> 
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/font-awesome.min.css">
+    <script src="static/js/bootstrap.min.js"></script>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <script>
+        var slideflag=0;
+        var textflag=0;
+        var picflag=0;
+        var firstid=0;
+        const ipcRenderer = require('electron').ipcRenderer;
+        const shell = require('electron').shell;
+        function hide_pic(){
+            $(".info_box_pics").hide();
+            $('#infobox_1').attr('class','info_listbox info_no_pic');
+            $('.notice_text').css('flex-basis','65%');
+        }
+        function show_pic(){
+            $(".info_box_pics").show();
+            $('#infobox_1').attr('class','info_listbox info_have_pic');
+            $('.notice_text').css('flex-basis','75%');
+        }
+        $(document).ready(function(){
+            now_height=document.documentElement.clientHeight-55;
+            now_width=document.documentElement.clientWidth-355;
+            notice_text=document.documentElement.clientHeight-$('.install_notice_text').offset()['top']-25;
+            $('.bwdb_sidebar').css('min-height',now_height);
+            $('.bwdb_infobox').css('min-width',now_width);
+            $('.install_notice_text').css('min-height',notice_text);
+            console.log(document.documentElement.clientWidth);
+            hide_pic();
+            picflag=1;
+            if(document.documentElement.clientWidth>975 && picflag==0){
+                show_pic();
+            }else{
+                hide_pic();
+            }
+            ipcRenderer.send('getsyslist', 'ping');
+            //$(".bwdb_select_item").click(function(){
+            $(document).on('click', '.bwdb_select_item', function() {
+                console.log($(this).html());
+                $(".search_box_title").html($(this).html());
+                $(".search_box_title").attr('data-id',$(this).attr('data-id'));
+                $(".search_box_title").attr('data-id-codename',$(this).attr('data-id-codename'));
+                console.log($(this).attr('data-id'));
+                ipcRenderer.send('getbuildstage', $(this).attr('data-id'));
+                if(slideflag==1){
+                    $("#bwdb_nav_select_bar").hide();
+                    slideflag=0; 
+                }
+            });
+            $(".bwdb_content").click(function(){
+                if(slideflag==1){
+                    $("#bwdb_nav_select_bar").slideUp('100ms');
+                    slideflag=0; 
+                }
+            });
+            $(".info_box_items_btn").click(function(){
+               console.log($(this).parent('.info_box_items').children('.info_box_items_text').html());
+               if($('.bwdb_infobox_textarea').css('display')!='none'){
+                    $('.bwdb_infobox_textarea').hide();
+                    $(this).children('.info_box_items_btn_text').attr('class','info_box_items_btn_text');
+                    return 0;
+               }
+               $('.bwdb_infobox_textarea').hide()
+               $('.bwdb_infobox_textarea').css('top',$(this).parent('.info_box_items').children('.info_box_items_text').offset()['top']);
+               $('.bwdb_infobox_textarea').css('left',$(this).parent('.info_box_items').children('.info_box_items_text').offset()['left']);
+               $('.bwdb_infobox_textarea').width($(this).parent('.info_box_items').children('.info_box_items_text').width());
+               $('.bwdb_infobox_textarea').children('textarea').html($(this).parent('.info_box_items').children('.info_box_items_text').html());
+               $(this).children('.info_box_items_btn_text').attr('class','info_box_items_btn_text active');
+               $('.bwdb_infobox_textarea').show();
+            });
+            //$(".big_stage_item").hover(function(){
+            $(document).on('mouseenter', '.big_stage_item', function() {
+                $(this).children('.big_stage_text').css('background-color','#d4e2ee');
+            });
+            //$(".big_stage_item").mouseleave(function(){
+            $(document).on('mouseleave', '.big_stage_item', function() {
+                $(this).children('.big_stage_text').css('background-color','#ececec');
+            });
+            
+            //$(".bwdb_sidebar_item").click(function(){
+            $(document).on('click', '.bwdb_sidebar_item', function() {    
+                $('.bwdb_sidebar_item').css('background-color','unset');
+                $('.bwdb_sidebar_item').css('color','unset');
+                $(this).css('background-color','#19478a');
+                $(this).css('color','#fff');
+                $('.bwdb_infobox_textarea').hide();
+                $('.info_box_items_btn_text').attr('class','info_box_items_btn_text');
+                console.log($(this).attr('data-id'));
+                get_build_info($('.search_box_title').attr('data-id'),$(this).attr('data-id'));
+            });
+            $(window).resize(function(){
+                now_height=document.documentElement.clientHeight-55;
+                now_width=document.documentElement.clientWidth-355;
+                notice_text=document.documentElement.clientHeight-$('.install_notice_text').offset()['top']-25;
+                $('.bwdb_sidebar').css('min-height',now_height);
+                $('.bwdb_sidebar').css('height',now_height);
+                $('.bwdb_infobox').css('min-width',now_width);
+                $('.install_notice_text').css('min-height',notice_text);
+                console.log(document.documentElement.clientWidth);
+                if(document.documentElement.clientWidth>975  && picflag==0){
+                    show_pic();
+                }else{
+                    hide_pic();
+                }
+                $('.bwdb_infobox_textarea').hide();
+                $('.info_box_items_btn_text').attr('class','info_box_items_btn_text');
+            });
+            $('.bwdb_nav_search_text').keypress(function (e){
+ 　　           if(e.keyCode == 13){
+                   console.log($(this).val());
+　　　          }
+            });  
+        });
+        function slide_select(){
+            if(slideflag==0){
+                $("#bwdb_nav_select_bar").slideDown('100ms');
+                slideflag=1;
+            }else{
+                $("#bwdb_nav_select_bar").slideUp('100ms');
+                slideflag=0;
+            }
+        }
+        function show_search_textbox(){
+            if(slideflag==1){
+                    $("#bwdb_nav_select_bar").slideUp('100ms');
+                    slideflag=0; 
+            }
+            if(textflag==0){
+                $(".bwdb_nav_search").show();
+                $(".bw_sidebar_info_box").html('按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。')
+                $(".bw_sidebar_info_box").show();
+                $(".bwdb_sidebarA").hide()
+                textflag=1;
+            }else{
+                $(".bwdb_nav_search").hide();
+                $(".bw_sidebar_info_box").hide();
+                $(".bwdb_sidebarA").show();
+                ipcRenderer.send('getbuildstage', $(".search_box_title").attr('data-id'));
+                textflag=0;
+            }
+        }
+        function changeinfotext(infoid,show_text){
+            if(show_text==null){
+                $("#"+infoid).children('.info_box_items_text').text('N/A');
+            }else{
+                var r=show_text.replace(/(\r\n)|(\n)/g,'<br>')
+                $("#"+infoid).children('.info_box_items_text').html(r);
+            }
+            
+        }
+    </script>
+    <script>
+        //node
+        ipcRenderer.on('test1', function(event, arg) {
+            alert(arg); // prints "pong"
+        });
+        ipcRenderer.on('syslist', function(event, arg) {
+            console.log(arg);
+            var s=JSON.parse(arg);
+            $('#bwdb_nav_select_bar').html('');
+            for(var i = 0; i < s.length; i++) {
+                console.log(s[i]);
+                var s1=s[i][1];
+                s1=s1.replace('\"','&quot');
+                $("#bwdb_nav_select_bar").append('<div class="bwdb_select_item"'+ 'data-id="'+s[i][0]+'" data-id-codename="'+s[i][2]+'">'+s1+'</div>');
+            };
+            //默认配置
+            $('.search_box_title').attr('data-id-codename',$(".bwdb_select_item[data-id='1']").attr('data-id-codename'));
+            $('.search_box_title').attr('data-id','1');
+            $('.search_box_title').html(s[0][1]);
+            ipcRenderer.send('getbuildstage', 1);
+            get_build_info(1,1);
+            
+        });
+        ipcRenderer.on('stagelist', function(event, arg) {
+            console.log(arg);
+            console.log($('.search_box_title').attr('data-id'));
+            var s=JSON.parse(arg[1]);
+            $('.bwdb_sidebarA').html('');
+            for(var i = 0; i < s.length; i++) {
+                console.log(s[i]);
+                $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text">'+s[i]+'</span></div></div><div class="build_list" data-id="'+s[i]+'" data-type="build_stage" >');
+                ipcRenderer.send('getbuildlist', [$('.search_box_title').attr('data-id'),s[i]]);
+            };
+            ipcRenderer.send('show-win', 'win');
+            //添加相关的代码
+        });
+        ipcRenderer.on('buildlist', function(event, arg) {
+            console.log(arg);
+            console.log($('.search_box_title').attr('data-id'));
+            var s=JSON.parse(arg[2]);
+            $("[data-type='build_stage'][data-id='"+arg[1]+"']").html('');
+            for(var i = 0; i < s.length; i++) {
+                console.log(s[i]);
+                $("[data-type='build_stage'][data-id='"+arg[1]+"']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="'+s[i][0]+'" data-type="build_item">'+s[i][1]+'</div>');
+            };
+            //添加相关的代码
+            //alert(s[s.length-1][0]);
+            if(firstid!=$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id')){
+                get_build_info($('.search_box_title').attr('data-id'),$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id'));
+            } 
+        });
+        ipcRenderer.on('buildinfo', function(event, arg) {
+            console.log(arg);
+            console.log($('.search_box_title').attr('data-id'));
+            var s=JSON.parse(arg[2]);
+            console.log(s);
+            console.log(s[0][2]);
+            $("#ver_name").text(s[0][2]);
+            var arrlist=['ver_archlist','ver_verlist','ver_langlist','ver_tag','install_bios_date','install_sn','install_notice'];
+            for(var i = 0; i < arrlist.length; i++){
+                //$("#"+arrlist[i]).html(s[2+i]);
+                changeinfotext(arrlist[i],s[0][3+i]);
+            }
+            var x=$('.search_box_title').attr('data-id-codename');
+            if(x=="null" || x==null){
+                $("#ver_smalltag").text($('.search_box_title').html()+' - '+s[0][1]);
+            }else{
+                $("#ver_smalltag").text('Codename "'+$('.search_box_title').attr('data-id-codename')+'" - '+s[0][1]);
+            }
+            //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])
+            //添加相关的代码
+        });
+        function test1(){
+            ipcRenderer.send('getbuildinfo',[1,1]);
+        }
+        function get_build_info(proid,buildid){
+            ipcRenderer.send('getbuildinfo',[proid,buildid]);
+        }
+        function open_wiki_link(){
+            var link=encodeURI('https://wiki.betaworld.org/index.php?search='+$('.search_box_title').html()+':'+$("#ver_tag").children('.info_box_items_text').html().replace('#',''));
+            console.log(link);
+            shell.openExternal(link);
+        }
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bwdb_toolbar">
+        <div class="nav_search_1">
+        <div class="nav_search" onclick="slide_select();">
+            <div class="search_box">
+                <div class="search_box_title">Windows 1.0</div>  
+            </div>
+            <div class="search_box_down"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+            
+        </div>
+            <div class="search_btn" onclick="show_search_textbox();"><i class="fa fa-search" aria-hidden="true"></i></div>
+        </div>
+        <div class="nav_right_btn">
+            <div class="nav_btn"><i class="fa fa-home" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="test1();"><i class="fa fa-cog" aria-hidden="true"></i></div>
+        </div>
+    </nav>
+    
+    <div class="bwdb_content">
+    <div class="bwdb_sidebar">
+        <div class="bw_sidebar_info_box">
+            按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。
+        </div>
+        <div class="bwdb_sidebarA">
+
+        </div>
+    </div>
+    <div class="bwdb_infobox">
+        <div class="Version_Title">
+            <div style="display: inline-flex;width:100%"><h2 id="ver_name">1.0 Alpha</h2> <a title="查看BetaWorld Wiki页面" id="wiki_link" style="margin-left: 20px;font-size:1.8rem;cursor: pointer;" onclick="open_wiki_link();"><i class="fa fa-book" aria-hidden="true"></i>  </a></div>
+            <span id="ver_smalltag">Codename "Interface Manager" - Alpha</span>
+        </div>
+        <div class="infobox_sub_title">基本信息</div>
+        <div class="version_info_box" style="display: flex;">
+            <div class="info_listbox info_have_pic" id="infobox_1">
+            <div class="info_box_items" id="ver_archlist">
+                <div class="info_box_items_title" >架构</div>
+                <div class="info_box_items_text">16-Bits</div>
+                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
+            </div>
+            <div class="info_box_items" id="ver_verlist">
+                <div class="info_box_items_title" >版本</div>
+                <div class="info_box_items_text">Professional</div>
+                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
+            </div>
+            <div class="info_box_items"  id="ver_langlist">
+                <div class="info_box_items_title" >语言</div>
+                <div class="info_box_items_text">English (United States)</div>
+                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
+            </div>
+            <div class="info_box_items"  id="ver_tag">
+                <div class="info_box_items_title" >版本字符串</div>
+                <div class="info_box_items_text">5.0.2202.1.ntvbl06.000202-1835</div>
+                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
+            </div>
+            </div>
+            <div class="info_box_pics" title="点击查看截图"></div>
+        </div>
+        <br>
+        <div class="infobox_sub_title">安装信息</div>
+        <div class="version_info_box">
+            <div class="info_box_items" id="install_bios_date">
+                <div class="info_box_items_title">BIOS日期</div>
+                <div class="info_box_items_text notice_text">16-Bits</div>
+                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
+            </div>
+            <div class="info_box_items" id="install_sn">
+                <div class="info_box_items_title">序列号</div>
+                <div class="info_box_items_text notice_text">English (United States)</div>
+                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
+            </div>
+            <div class="info_box_items" id="install_notice">
+                <div class="info_box_items_title">注意事项</div>
+                <div class="info_box_items_text install_notice_text">
+                    使用启动软盘进行安装。硬盘设置为SCSI。<br>
+                    <br>
+                    反馈按钮<br>
+                    Windows Registry Editor Version 5.00<br>
+                    <br>
+                    [HKEY_CURRENT_USER\Control Panel\Desktop]<br>
+                    "LameButtonEnadled"=dword:00000001<br>
+                    "LameButtonText"="Comments?"<br>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="bwdb_nav_select" id='bwdb_nav_select_bar'>
+        
+    </div>
+    <div class="bwdb_nav_search">
+        <input type="text" id="email" placeholder="在这里搜索" class="bwdb_nav_search_text">
+    </div>
+    <div class="bwdb_infobox_textarea">
+        <textarea row=20 style="resize:none"></textarea>
+    </div>
+    <!--如果在主进程中，则用var initSqlJs=require('sql-wasm.js')-->
+  </body>
+</html>
