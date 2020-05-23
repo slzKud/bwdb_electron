@@ -17,7 +17,24 @@
         var firstid=0;
         var now_proid=-1;
         var now_buildid=-1;
+        var zipflag=0;
+        var verflag=0;
         const ipcRenderer = require('electron').ipcRenderer;
+        const remote = require('electron').remote;
+        const { Menu, MenuItem } = remote;
+        const menu = new Menu()
+        menu.append(new MenuItem({ label: '仅显示有截图的Build', type: 'checkbox', click() { console.log('item 1 clicked') } }));
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(new MenuItem({ label: 'Language' }));
+        menu.append(new MenuItem({ label: '关于' }));
+        var AdmZip = require('adm-zip');
+        try{
+            var zip = new AdmZip("./gallery.zip");
+            var zipflag=0;
+        }catch{
+            var zipflag=1;
+        }
+        
         const shell = require('electron').shell;
         function hide_pic(){
             $(".info_box_pics").hide();
@@ -42,6 +59,7 @@
             notice_text=document.documentElement.clientHeight-$('.install_notice_text').offset()['top']-25;
             $('.bwdb_sidebar').css('min-height',now_height);
             $('.bwdb_infobox').css('min-width',now_width);
+            $('.bwdb_infobox').css('max-height',now_height);
             $('.install_notice_text').css('min-height',notice_text);
             if($('.bw_sidebar_info_box').css('display')=='none'){
                 $('.bwdb_sidebarA').css('max-height',now_height);
@@ -59,6 +77,8 @@
                 hide_pic();
             }
             ipcRenderer.send('getsyslist', 'ping');
+            ipcRenderer.send('getbwdbversion','');
+            ipcRenderer.send('getupdatelist','');
             //$(".bwdb_select_item").click(function(){
             $(document).on('click', '.bwdb_select_item', function() {
                 console.log($(this).html());
@@ -72,6 +92,10 @@
                 if(slideflag==1){
                     $("#bwdb_nav_select_bar").hide();
                     slideflag=0; 
+                }
+                if($("#homeinfobox").css('display')!='none'){
+                    $("#verinfobox").show();
+                    $("#homeinfobox").hide();
                 }
             });
             $(".bwdb_content").click(function(){
@@ -119,7 +143,29 @@
                     console.log($(this).attr('data-id-proid'));
                     get_build_info($(this).attr('data-id-proid'),$(this).attr('data-id'));
                 }
+                if($("#homeinfobox").css('display')!='none'){
+                    $("#verinfobox").show();
+                    $("#homeinfobox").hide();
+                }
                 
+            });
+            $(document).on('click', '.update_list_item', function() {
+                $('.update_list_item').css('background-color','unset');
+                $('.update_list_item').css('color','unset');
+                $(this).css('background-color','#19478a');
+                $(this).css('color','#fff');
+                console.log($(this).attr('data-id'));
+                console.log($(this).attr('data-id-proid'));
+                verflag=1;
+                get_build_info($(this).attr('data-id-proid'),$(this).attr('data-id'));
+                $(".search_box_title").html($(".bwdb_select_item[data-id='"+now_proid+"']").html());
+                $(".search_box_title").attr('data-id',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id'));
+                $(".search_box_title").attr('data-id-codename',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id-codename'));
+                ipcRenderer.send('getbuildstage', now_proid);
+                if($("#homeinfobox").css('display')!='none'){
+                    $("#verinfobox").show();
+                    $("#homeinfobox").hide();
+                }
             });
             $(window).resize(function(){
                 now_height=document.documentElement.clientHeight-55;
@@ -128,6 +174,7 @@
                 $('.bwdb_sidebar').css('max-height',now_height);
                 $('.bwdb_sidebar').css('height',now_height);
                 $('.bwdb_infobox').css('min-width',now_width);
+                $('.bwdb_infobox').css('max-height',now_height);
                 $('.install_notice_text').css('min-height',notice_text);
                 if($('.bw_sidebar_info_box').css('display')=='none'){
                     $('.bwdb_sidebarA').css('max-height',now_height);
@@ -193,6 +240,9 @@
                 textflag=0;
             }
         }
+        function setting_btn_do(){
+            menu.popup({ window: remote.getCurrentWindow() });
+        }
         function changeinfotext(infoid,show_text){
             if(show_text==null){
                 $("#"+infoid).children('.info_box_items_text').text('N/A');
@@ -202,9 +252,35 @@
             }
             
         }
+        function switch_home(){
+            if($("#homeinfobox").css('display')!='none'){
+                $("#verinfobox").show();
+                $("#homeinfobox").hide();
+                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('background-color','#19478a');
+                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('color','#fff');
+            }else{
+                $("#verinfobox").hide();
+                $("#homeinfobox").show();
+                $('.bwdb_sidebar_item').css('background-color','unset');
+                $('.bwdb_sidebar_item').css('color','unset');
+                $('.update_list_item').css('background-color','unset');
+                $('.update_list_item').css('color','unset');
+            }
+            
+        }
     </script>
     <script>
         //node
+        function ifzipfileexist(entryname){
+            console.log(entryname);
+            if(zipflag!=0){return -1;}
+            try{
+                var decompressedData = zip.readFile(entryname); 
+                return 1;
+            }catch{
+                return -1;
+            }
+        }
         ipcRenderer.on('test1', function(event, arg) {
             alert(arg); // prints "pong"
         });
@@ -254,8 +330,10 @@
                 get_build_info(arg[0],$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id'));
             } 
             if(now_buildid>0 && $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').length>0){
+                if($("#homeinfobox").css('display')=='none'){
                 $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('background-color','#19478a');
                 $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('color','#fff');
+                }
                 get_build_info(now_proid,now_buildid);
                 //$('.bwdb_sidebar').scrollTop(0);
             }
@@ -280,6 +358,7 @@
             if($('.bw_sidebar_info_box').css('display')=='none'){
                 var x=$('.search_box_title').attr('data-id-codename');
                 var y=$('.search_box_title').html();
+                verflag=0;
             }else{
                 var x=$('.bwdb_select_item[data-id="'+arg[0]+'"]').attr('data-id-codename');
                 var y=$('.bwdb_select_item[data-id="'+arg[0]+'"]').html();
@@ -293,9 +372,38 @@
             console.log('元素索引：'+i);
             if(i==0){return 0;}
             if(i==1){
-                $('.bwdb_sidebar').scrollTop($('.bwdb_sidebar').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').parents('.build_list').prev().offset().top- $(".bwdb_sidebar").offset().top);
+                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').parents('.build_list').prev().offset().top- $(".bwdb_sidebar").offset().top);
             }else{
-                $('.bwdb_sidebar').scrollTop($('.bwdb_sidebar').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().offset().top- $(".bwdb_sidebar").offset().top);
+                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().offset().top- $(".bwdb_sidebar").offset().top);
+            }
+            //隐藏图片
+            hide_pic();
+            picflag=1;
+            if(ifzipfileexist(now_buildid+'/pic.json')==1){
+                var info=zip.readAsText(now_buildid+"/pic.json");
+                console.log(info);
+                if(info==""){return 0;}
+                var s=JSON.parse(info);
+                if(s.productid!=now_proid ||s.buildid!=now_buildid){
+                    alert('当前截图库 产品/Build ID不一致！请检查。');
+                }else{
+                    mainpicid=s.main_pic;
+                    console.log(mainpicid)
+                    try{
+                        var decompressedData = zip.readFile(now_buildid+"/"+s.screenshot[mainpicid].screenshothash+".png");
+                        $('#main_pic').css('background-image',"url(data:image/png;base64," + decompressedData.toString('base64')+')');
+                        $('#main_pic').attr('class','info_box_pics have_pic');
+                        $('#main_pic').attr('title','点击查看截图');
+                    }catch{
+                        alert('在读取头图中发生错误。');
+                    }
+                }
+                picflag=0;
+                show_pic();
+            }else{
+                $('#main_pic').css('background-image',"unset");
+                $('#main_pic').attr('class','info_box_pics');
+                $('#main_pic').attr('title','');
             }
             //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])
             //添加相关的代码
@@ -324,8 +432,43 @@
                 $('.bwdb_sidebarA').css('overflow-y','auto');
             }
         });
+        ipcRenderer.on('bwdbversion', function(event, arg) {
+            console.log(arg);
+            var s=JSON.parse(arg);
+            console.log(s);
+            $("#basedb_version").html('基础数据库版本：V'+s[0][0]+' ,更新于'+s[0][1]+'。');
+            if(zipflag==0){
+                var info=zip.readAsText("info.json");
+                if(info!=""){
+                    var s1=JSON.parse(info);
+                    $("#gallerypak_version").html('图片数据库版本：V'+s1.GalleryVersion+' ,更新于'+s1.GalleryUpdateTime+'。');
+                }
+            }
+        });
+        ipcRenderer.on('updatelist', function(event, arg) {
+            console.log(arg);
+            //alert(arg);
+            var s=JSON.parse(arg);
+            console.log(s);
+            //alert(s);
+            $('#update_list').html('');
+            for(var i = 0; i < s.length; i++){
+                var proid=s[i][1];
+                var proname=$('.bwdb_select_item[data-id="'+proid+'"]').html()
+                var buildid=s[i][0];
+                var buildver=s[i][2];
+                var things_html='<div class="update_list_item" data-id="'+buildid+'" data-id-proid="'+proid+'" data-type="update_list_items" >'+proname+' - '+buildver+'</div>';
+                $('#update_list').append(things_html);  
+            }
+        });
         function test1(){
-            ipcRenderer.send('searchbuildlist','10');
+            var decompressedData = zip.readFile("1/1.png");
+            console.log(zip.readAsText("1/pic.json")); 
+            console.log(decompressedData.toString('base64')); 
+            //console.log("data:image/png;base64," + window.btoa(data));
+            $('#main_pic').css('background-image',"url(data:image/png;base64," + decompressedData.toString('base64')+')');
+            $('#main_pic').attr('class','info_box_pics have_pic');
+            $('#main_pic').attr('title','点击查看截图');
         }
         function get_build_info(proid,buildid){
             console.log([proid,buildid])
@@ -353,8 +496,8 @@
             <div class="search_btn" onclick="show_search_textbox();"><i class="fa fa-search" aria-hidden="true"></i></div>
         </div>
         <div class="nav_right_btn">
-            <div class="nav_btn"><i class="fa fa-home" aria-hidden="true"></i></div>
-            <div class="nav_btn" onclick="test1();"><i class="fa fa-cog" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="switch_home();"><i class="fa fa-home" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="setting_btn_do();"><i class="fa fa-cog" aria-hidden="true"></i></div>
         </div>
     </nav>
     
@@ -367,9 +510,32 @@
 
         </div>
     </div>
-    <div class="bwdb_infobox">
+    <div class="bwdb_infobox" id="homeinfobox">
+        <div class="home_title">
+            <div><h5>感谢您使用BetaWorld Library!</h5><button class="btn btn-primary" style="float:right;margin-right:25px;position: relative;display: block;width: 30%;min-width: 60px;background-color: #19478a;border:#19478a;max-width: 220px;"><i class="fa fa-cloud-download" aria-hidden="true"></i> 检查数据库更新</button></div>
+            <div class="version_info" id="basedb_version">基础数据库版本：V16.66，更新于2020/01/01日</div>
+            <div class="version_info" id="gallerypak_version">图片数据库版本：V16.66，更新于2020/01/01日</div>
+        </div>
+        <div class="update_info">
+            
+            <h5>更新日志</h5>
+            <div class="update_listbox">
+                <div id="update_list">
+                    <div class="update_list_item">A</div>
+                    <div class="update_list_item">A</div>
+                    <div class="update_list_item">A</div>
+                    <div class="update_list_item">A</div>
+                    <div class="update_list_item">A</div>
+                    <div class="update_list_item">A</div>
+                    <div class="update_list_item">A</div>
+                    <div class="update_list_item">A</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bwdb_infobox" id="verinfobox" style="display: none;">
         <div class="Version_Title">
-            <div style="display: inline-flex;width:100%"><h2 id="ver_name">1.0 Alpha</h2> <a title="查看BetaWorld Wiki页面" id="wiki_link" style="margin-left: 20px;font-size:1.8rem;cursor: pointer;" onclick="open_wiki_link();"><i class="fa fa-book" aria-hidden="true"></i>  </a></div>
+            <div style="display: inline-flex;width:100%"><h2 id="ver_name">1.0 Alpha</h2> <a title="查看BetaWorld Wiki页面" id="wiki_link" style="margin-top: -5px;margin-left: 10px;font-size:1.8rem;cursor: pointer;" onclick="open_wiki_link();"> <img src="./static/img/bwWikiLogo.png" /></a></div>
             <span id="ver_smalltag">Codename "Interface Manager" - Alpha</span>
         </div>
         <div class="infobox_sub_title">基本信息</div>
@@ -396,7 +562,7 @@
                 <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
             </div>
             </div>
-            <div class="info_box_pics" title="点击查看截图"></div>
+            <div class="info_box_pics" id="main_pic"></div>
         </div>
         <br>
         <div class="infobox_sub_title">安装信息</div>

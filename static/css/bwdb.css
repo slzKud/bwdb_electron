@@ -217,8 +217,8 @@ body{
     user-select: none;
 }
 .bwdb_infobox{
-    margin-top: 15px;
-    margin-left: 25px;
+    padding-top: 15px;
+    padding-left: 25px;
     flex:1;
 }
 .Version_Title{
@@ -272,15 +272,22 @@ body{
 .install_notice_text{
     flex: 1;
     max-width: 70%;
+    height:unset;
     overflow-y: auto;
     white-space:unset;
 }
-.info_box_pics {
+.info_box_pics{
 	height: 150px;
 	width: 200px;
-	background-color: #ececec;
+    background-color: #ececec;
+    background-size:100% 100%;
+    background-repeat: no-repeat;
+    cursor: pointer;
     margin-right: 15px;
     margin-left:15px;
+}
+.info_box_pics.have_pic:hover{
+    border: 1px #bdb7b7 solid;
 }
 .info_have_pic{
     width:70%;
@@ -296,4 +303,31 @@ body{
 .bwdb_infobox_textarea textarea{
     width: 100%;
     z-index: 350;
+}
+.home_title{
+    margin-top:15px;
+    margin-bottom:25px;
+    user-select: none;
+}
+.version_info{
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    user-select: none;
+}
+.update_info{
+    user-select: none;
+}
+.update_listbox {
+	width: 97%;
+	max-height: 200px;
+	overflow: auto;
+	margin-top: 20px;
+}
+.update_list_item {
+	width: 100%;
+	font-size: 0.85rem;
+	cursor: pointer;
+	margin-bottom: 2px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }

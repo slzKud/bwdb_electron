@@ -59,4 +59,6 @@ typings/
 .env
 
 out/
+gallery/
 buildgallery.pak
+*.zip

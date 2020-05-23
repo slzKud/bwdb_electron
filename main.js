@@ -31,7 +31,7 @@ function createWindow () {
   win.loadFile('main.html');
 
   // 打开开发者工具
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
   //import sqlite3Db from './nw/sqlite3_test'
 }
 
@@ -171,6 +171,99 @@ ipcMain.on(newLocal, (event, args) => {
     var json1=JSON.stringify(arr_sys);
     console.log(json1);
     win.webContents.send('searchlist',[args,json1]);
+    console.log('message sent.');
+    db.close();
+  });
+});
+
+ipcMain.on('getupdatelist', (event, args) => {
+  console.log('getbwdbversion is captured.args:'+args);
+  initSqlJs().then(SQL => {
+    // 创建数据库
+    db = new SQL.Database(data);
+    // 运行查询而不读取结果
+    console.log("select BuildID,Build.ProductID,Build.Version from ChangeLog inner join Build on build.ID=BuildID");
+    contents = db.exec("select BuildID,Build.ProductID,Build.Version from ChangeLog inner join Build on build.ID=BuildID");
+    arr=contents[0].values;
+    arr_sys= [];
+    arr_sys1=[];
+    //console.log(contents);
+    console.log(arr);
+    console.log(arr.length);
+    for(var i = 0; i < arr.length; i++) {
+      arr_sys1=[];
+      for(var j = 0; j < arr[i].length; j++) {
+        console.log(arr[i][j]);
+        arr_sys1.push(arr[i][j]);
+      };
+      arr_sys.push(arr_sys1);
+    };
+    console.log(arr_sys);
+    var json1=JSON.stringify(arr_sys);
+    console.log([json1]);
+    win.webContents.send('updatelist',[json1]);
+    console.log('message sent.');
+    db.close();
+  });
+});
+
+ipcMain.on('getbuildinfo', (event, args) => {
+  console.log('getbuildinfo is captured.args:'+args);
+  initSqlJs().then(SQL => {
+    // 创建数据库
+    db = new SQL.Database(data);
+    // 运行查询而不读取结果
+    console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
+    contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
+    arr=contents[0].values;
+    arr_sys= [];
+    arr_sys1=[];
+    //console.log(contents);
+    console.log(arr);
+    console.log(arr.length);
+    for(var i = 0; i < arr.length; i++) {
+      arr_sys1=[];
+      for(var j = 0; j < arr[i].length; j++) {
+        console.log(arr[i][j]);
+        arr_sys1.push(arr[i][j]);
+      };
+      arr_sys.push(arr_sys1);
+    };
+    console.log(arr_sys);
+    var json1=JSON.stringify(arr_sys);
+    console.log([args[0],args[1],json1]);
+    win.webContents.send('buildinfo',[args[0],args[1],json1]);
+    console.log('message sent.');
+    db.close();
+  });
+});
+
+ipcMain.on('getbwdbversion', (event, args) => {
+  console.log('getbwdbversion is captured.args:'+args);
+  initSqlJs().then(SQL => {
+    // 创建数据库
+    db = new SQL.Database(data);
+    // 运行查询而不读取结果
+    console.log("SELECT * FROM Version");
+    contents = db.exec("SELECT * FROM Version");
+    arr=contents[0].values;
+    arr_sys= [];
+    arr_sys1=[];
+    //console.log(contents);
+    console.log(arr);
+    console.log(arr.length);
+    for(var i = 0; i < arr.length; i++) {
+      arr_sys1=[];
+      for(var j = 0; j < arr[i].length; j++) {
+        console.log(arr[i][j]);
+        arr_sys1.push(arr[i][j]);
+      };
+      arr_sys.push(arr_sys1);
+    };
+    console.log(arr_sys);
+    var json1=JSON.stringify(arr_sys);
+    console.log([json1]);
+    win.webContents.send('bwdbversion',[json1]);
     console.log('message sent.');
     db.close();
   });
