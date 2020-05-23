@@ -97,6 +97,7 @@
                     $("#verinfobox").show();
                     $("#homeinfobox").hide();
                 }
+                $('.bwdb_sidebarA').scrollTop(0-$('.bwdb_sidebarA').scrollTop);
             });
             $(".bwdb_content").click(function(){
                 if(slideflag==1){
@@ -129,7 +130,8 @@
             });
             
             //$(".bwdb_sidebar_item").click(function(){
-            $(document).on('click', '.bwdb_sidebar_item', function() {    
+            $(document).on('click', '.bwdb_sidebar_item', function() {   
+                verflag=1; 
                 $('.bwdb_sidebar_item').css('background-color','unset');
                 $('.bwdb_sidebar_item').css('color','unset');
                 $(this).css('background-color','#19478a');
@@ -156,7 +158,6 @@
                 $(this).css('color','#fff');
                 console.log($(this).attr('data-id'));
                 console.log($(this).attr('data-id-proid'));
-                verflag=1;
                 get_build_info($(this).attr('data-id-proid'),$(this).attr('data-id'));
                 $(".search_box_title").html($(".bwdb_select_item[data-id='"+now_proid+"']").html());
                 $(".search_box_title").attr('data-id',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id'));
@@ -224,7 +225,8 @@
                 $(".bwdb_nav_search").show();
                 $(".bw_sidebar_info_box").html('按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。')
                 $(".bw_sidebar_info_box").show();
-                $(".bwdb_sidebarA").hide()
+                $(".bwdb_sidebarA").hide();
+                verflag=1;
                 textflag=1;
             }else{
                 $('.search_btn').css('border','unset');
@@ -235,6 +237,7 @@
                 $(".search_box_title").html($(".bwdb_select_item[data-id='"+now_proid+"']").html());
                 $(".search_box_title").attr('data-id',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id'));
                 $(".search_box_title").attr('data-id-codename',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id-codename'));
+                verflag=0;
                 ipcRenderer.send('getbuildstage', now_proid);
                 }
                 textflag=0;
@@ -358,7 +361,6 @@
             if($('.bw_sidebar_info_box').css('display')=='none'){
                 var x=$('.search_box_title').attr('data-id-codename');
                 var y=$('.search_box_title').html();
-                verflag=0;
             }else{
                 var x=$('.bwdb_select_item[data-id="'+arg[0]+'"]').attr('data-id-codename');
                 var y=$('.bwdb_select_item[data-id="'+arg[0]+'"]').html();
@@ -368,21 +370,13 @@
             }else{
                 $("#ver_smalltag").text('Codename "'+x+'" - '+s[0][1]);
             }
-            var i=$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').parents('.build_list').length;
-            console.log('元素索引：'+i);
-            if(i==0){return 0;}
-            if(i==1){
-                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').parents('.build_list').prev().offset().top- $(".bwdb_sidebar").offset().top);
-            }else{
-                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().offset().top- $(".bwdb_sidebar").offset().top);
-            }
             //隐藏图片
             hide_pic();
             picflag=1;
             if(ifzipfileexist(now_buildid+'/pic.json')==1){
                 var info=zip.readAsText(now_buildid+"/pic.json");
                 console.log(info);
-                if(info==""){return 0;}
+                if(info!=""){
                 var s=JSON.parse(info);
                 if(s.productid!=now_proid ||s.buildid!=now_buildid){
                     alert('当前截图库 产品/Build ID不一致！请检查。');
@@ -400,11 +394,27 @@
                 }
                 picflag=0;
                 show_pic();
+                }else{
+                    $('#main_pic').css('background-image',"unset");
+                    $('#main_pic').attr('class','info_box_pics');
+                    $('#main_pic').attr('title','');
+                }
             }else{
                 $('#main_pic').css('background-image',"unset");
                 $('#main_pic').attr('class','info_box_pics');
                 $('#main_pic').attr('title','');
             }
+            console.log(verflag);
+            if(verflag==1){verflag=0;return 0;}
+            var i=$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').index();
+            console.log('元素索引：'+i);
+            if($('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().length==0){return 0;}
+            if(i==0){
+                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').parents('.build_list').prev().offset().top- $(".bwdb_sidebarA").offset().top);
+            }else{
+                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().offset().top- $(".bwdb_sidebarA").offset().top);
+            }
+            
             //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])
             //添加相关的代码
         });
@@ -431,6 +441,7 @@
             }else{
                 $('.bwdb_sidebarA').css('overflow-y','auto');
             }
+            $('.bwdb_sidebarA').scrollTop(0-$('.bwdb_sidebarA').scrollTop);
         });
         ipcRenderer.on('bwdbversion', function(event, arg) {
             console.log(arg);

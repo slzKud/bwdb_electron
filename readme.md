@@ -23,3 +23,4 @@ BetaWorld Library的Electron版本，以SQLite3为基本数据架构。
 ## 依赖
 * sql.js
 * jquery
+* adm-zip
