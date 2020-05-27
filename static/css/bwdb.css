@@ -159,6 +159,7 @@ body{
 .bwdb_sidebarA{
     position: relative;
     overflow-y:auto;
+    overflow-x:hidden;
 }
 .big_stage_divider{
     width:100%;
@@ -170,13 +171,19 @@ body{
     z-index:0;
     user-select: none;
     cursor: pointer;
+    text-overflow:ellipsis;
 }
 .big_stage_text{
     background-color:#ececec ;
     z-index: 10;
     padding-right: 10px;
+    width:90%;
     user-select: none;
     cursor: pointer;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+
 }
 .big_stage_divider:hover{
     background-color: #d4e2ee;
@@ -330,4 +337,10 @@ body{
 	margin-bottom: 2px;
 	padding-top: 5px;
 	padding-bottom: 5px;
+}
+.update_list_item:hover{
+    color:#fff;
+    background-color:#19478a ;
+    cursor: pointer;
+    
 }

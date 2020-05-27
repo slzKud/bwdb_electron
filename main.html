@@ -26,7 +26,7 @@
         menu.append(new MenuItem({ label: '仅显示有截图的Build', type: 'checkbox', click() { console.log('item 1 clicked') } }));
         menu.append(new MenuItem({ type: 'separator' }));
         menu.append(new MenuItem({ label: 'Language' }));
-        menu.append(new MenuItem({ label: '关于' }));
+        menu.append(new MenuItem({ label: '关于' , click() { ipcRenderer.send('openabout','');}}));
         var AdmZip = require('adm-zip');
         try{
             var zip = new AdmZip("./gallery.zip");
@@ -312,7 +312,12 @@
             $('.bwdb_sidebarA').html('');
             for(var i = 0; i < s.length; i++) {
                 console.log(s[i]);
-                $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text">'+s[i]+'</span></div></div><div class="build_list" data-id="'+s[i]+'" data-type="build_stage" >');
+                if(s[i].length>30){
+                    var s1=s[i].substring(0,30)+'...'
+                }else{
+                    var s1=s[i]
+                }
+                $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text" title="'+s[i]+'">'+s1+'</span></div></div><div class="build_list" data-id="'+s[i]+'" data-type="build_stage" >');
                 ipcRenderer.send('getbuildlist', [arg[0],s[i]]);
             };
             ipcRenderer.send('show-win', 'win');
@@ -429,7 +434,12 @@
                 var buildid=s[i][0];
                 var buildver=s[i][3];
                 if($(".bwdb_sidebarA").children('.build_list[data-id="'+proname+'"]').length==0){
-                    $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text">'+proname+'</span></div></div><div class="build_list" data-id="'+proname+'" data-type="build_stage" >');
+                    if(proname.length>30){
+                        var s1=proname.substring(0,30)+'...';
+                    }else{
+                        var s1=proname;
+                    }
+                    $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text" title="'+proname+'">'+s1+'</span></div></div><div class="build_list" data-id="'+proname+'" data-type="build_stage" >');
                 }
                 $("[data-type='build_stage'][data-id='"+proname+"']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="'+buildid+'" data-id-proid="'+proid+'" data-type="build_item">'+buildver+'</div>');
             }
@@ -468,7 +478,7 @@
                 var proname=$('.bwdb_select_item[data-id="'+proid+'"]').html()
                 var buildid=s[i][0];
                 var buildver=s[i][2];
-                var things_html='<div class="update_list_item" data-id="'+buildid+'" data-id-proid="'+proid+'" data-type="update_list_items" >'+proname+' - '+buildver+'</div>';
+                var things_html='<div class="update_list_item" data-id="'+buildid+'" data-id-proid="'+proid+'" data-type="update_list_items" title="点击跳转到对应版本" >'+proname+' - '+buildver+'</div>';
                 $('#update_list').append(things_html);  
             }
         });

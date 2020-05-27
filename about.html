@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+    </script>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  </head>
+  <body style="margin: 0;overflow: hidden;"  >
+    <div class="aboutwindow" style="width:400px;height:250px;background-color: #fff;border: 1px #ececec solid;display:flex;">
+        <div clas="blank_sidebar" style="width: 50px;height: 250px;background-color: #19478a;color:#19478a;user-select: none;">
+            Slzkud
+        </div>
+        <div clas="right_side" style="width: 350px;height: 250px;background-color: #fff;color:#000;user-select: none;" >
+            <div class="bwdb_logoNtitle" style="justify-content:center;align-items:center;display:flex;margin-top: 25%;" >
+                <img src="./static/img/bwdb_icon.png" style="width:50px;height: 50px;margin-right: 10px;"><div><div style="font-size: 1.55rem;">BetaWorld Library</div><div style="font-size: 0.7rem;">DataBase v11.11 - 2020-04-30</div></div>
+            </div>
+            <div class="bottom_bar" style="height: 20px;margin-top: 25%;">
+                <div style="float: right;margin-right: 10px;"><a style="font-size: 0.8rem;color:#19478a ;cursor: pointer;">贡献者名单</a></div>
+            </div>
+        </div>
+
+    </div>
+  </body>
+</html>

@@ -12,7 +12,7 @@ try{
 }
 
 //console.log(db);
-var win;
+var win,aboutWindow;
 function createWindow () {   
   // 创建浏览器窗口
   Menu.setApplicationMenu(null);
@@ -32,9 +32,21 @@ function createWindow () {
 
   // 打开开发者工具
   win.webContents.openDevTools();
+  //createAboutWindow();
   //import sqlite3Db from './nw/sqlite3_test'
 }
 
+function createAboutWindow () {   
+  // 创建浏览器窗口
+  aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
+  aboutWindow.loadFile('about.html');
+  aboutWindow.on("close", function(){
+    aboutWindow = null;
+  });
+  aboutWindow.on("blur", function(){
+    aboutWindow.close();
+  });
+}
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
 app.whenReady().then(createWindow)
@@ -55,7 +67,7 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
+//主程序的IPC部分
 ipcMain.on('show-win', (event, args) => {
   win.show();
 });
@@ -299,3 +311,12 @@ ipcMain.on('getbuildinfo', (event, args) => {
     db.close();
   });
 });
+
+ipcMain.on('openabout', (event, args) => {
+  createAboutWindow();
+});
+
+ipcMain.on('closeabout', (event, args) => {
+  aboutWindow.close();
+});
+//关于界面的IPC部分
