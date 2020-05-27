@@ -38,7 +38,17 @@ function createWindow () {
 
 function createAboutWindow () {   
   // 创建浏览器窗口
-  aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
+  //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
+  aboutWindow = new BrowserWindow({
+    width: 420, 
+    height:290,
+    transparent: true,
+    frame: false,
+    show:true,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
   aboutWindow.loadFile('about.html');
   aboutWindow.on("close", function(){
     aboutWindow = null;
@@ -46,6 +56,7 @@ function createAboutWindow () {
   aboutWindow.on("blur", function(){
     aboutWindow.close();
   });
+  //aboutWindow.webContents.openDevTools();
 }
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
@@ -275,7 +286,12 @@ ipcMain.on('getbwdbversion', (event, args) => {
     console.log(arr_sys);
     var json1=JSON.stringify(arr_sys);
     console.log([json1]);
-    win.webContents.send('bwdbversion',[json1]);
+    if(args==""){
+      win.webContents.send('bwdbversion',[json1]);
+    }else{
+      aboutWindow.webContents.send('bwdbversion',[json1]);
+    }
+    
     console.log('message sent.');
     db.close();
   });
