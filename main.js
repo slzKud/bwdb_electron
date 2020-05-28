@@ -44,7 +44,7 @@ function createAboutWindow () {
     height:290,
     transparent: true,
     frame: false,
-    show:true,
+    show:false,
     webPreferences: {
       nodeIntegration: true
     }
@@ -80,7 +80,12 @@ app.on('activate', () => {
 })
 //主程序的IPC部分
 ipcMain.on('show-win', (event, args) => {
-  win.show();
+  if(args=="win"){
+    win.show();
+  }else{
+    aboutWindow.show();
+  }
+  
 });
 
 ipcMain.on('getsyslist', (event, args) => {
