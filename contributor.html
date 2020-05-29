@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Contributor</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <link rel="stylesheet" href="static/css/font-awesome.min.css">
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <style>
+        .aboutwindow {
+            background-color: #19478a;
+	        color: #fff; /* 浏览器不支持时显示 */
+            background-image: linear-gradient(#19478a, #113260);
+            width:650px;
+            height:400px;
+        }
+        .mute_btn{
+            color:#fff;
+            font-size: 2.3rem;
+            margin-left: 605px;
+            margin-top: 5px;
+            position:absolute;
+            cursor: pointer;
+        }
+        .show_str{
+            position:absolute;
+            color:#fff;
+            font-size: 2.5rem;
+            user-select: none;
+            font-style: italic;
+            display:none;
+            white-space: nowrap;
+        }
+    </style>
+    <script>
+        var audio_flag=0;
+        var sub_index=0;
+        var subtitle=[];
+        const ipcRenderer = require('electron').ipcRenderer;
+        ipcRenderer.on('authorlist', function(event, arg) {
+            console.log(arg);
+            var s=JSON.parse(arg);
+            //alert(s);
+            subtitle.push('感谢以下同志对BetaWorld的支持');
+            //$("#basedb_version").html('DataBase V'+s[0][0]+' - '+s[0][1]+'');
+            for(var i = 0; i < s.length; i++) {
+                subtitle.push(s[i][0]);
+            }
+            subtitle.push('网址：WWW.BetaWorld.ORG');
+            subtitle.push('交流群：479234331');
+            //subtitle.push('Windows 是微软公司的注册商标');
+            subtitle.push('BetaWorld (c) 2020');
+            audio_flag=1;
+            $('.mute_btn').html('<i class="fa fa-volume-down" aria-hidden="true"></i>');
+            $('audio').attr('autoplay','autoplay');
+            $('audio')[0].play();
+            next_subtitle();
+            window.setInterval(next_subtitle,4500);
+            
+            //ipcRenderer.send('show-win', 'about');
+        });
+        function randomString(len) {
+　　        len = len || 32;
+　　        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+　　        var maxPos = $chars.length;
+　　        var pwd = '';
+　　        for (i = 0; i < len; i++) {
+　　　　        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+　　        }
+　　        return pwd;
+        }
+        function GetRandomNum(Min,Max)
+        {
+            var Range = Max - Min;
+            var Rand = Math.random();
+            return(Min + Math.round(Rand * Range));
+        }
+        function getTextWith(text, fontStyle) {
+            var canvas = document.createElement('canvas')
+            var context = canvas.getContext('2d')
+            context.font = fontStyle || '2rem' // 设置字体样式，当然，也可以在这里给一个默认值
+            var dimension = context.measureText(text)
+            return dimension.width
+        }
+        function make_a_string(strtext){
+            var randomid=randomString(6);
+            var randomtop=GetRandomNum(35,285);
+            var randomleft=GetRandomNum(25,485);
+            console.log(randomid)
+            $('#box').append('<span class="show_str" id="'+randomid+'">'+strtext+'</span>');
+            $('#'+randomid).css('margin-top',randomtop);
+            console.log($('#'+randomid).width());
+            console.log(randomleft+$('#'+randomid).width());
+            if((randomleft+$('#'+randomid).width()+45)>$('.aboutwindow').width()){
+                console.log('超了');
+                console.log(randomleft+($('.aboutwindow').width()-(randomleft+$('#'+randomid).width())));
+                $('#'+randomid).css('margin-left',randomleft+($('.aboutwindow').width()-(randomleft+$('#'+randomid).width()+45)));
+            }else{
+                console.log('没超');
+                console.log(randomleft);
+                $('#'+randomid).css('margin-left',randomleft);
+            }
+            //$('#'+randomid).css('margin-left',randomleft);
+            $('#'+randomid).fadeIn(5000);
+            setTimeout(function(){ 
+                $('#'+randomid).fadeOut(5000,function(){ 
+                    $('#'+randomid).remove()
+                }); 
+
+            }, 5000);
+        }
+        function next_subtitle(){
+            console.log('start');
+            if(sub_index>=subtitle.length){sub_index=0;}
+            console.log('start');
+            make_a_string(subtitle[sub_index]);
+            sub_index=sub_index+1;
+        }
+
+        $(document).ready(function(){
+            audio_flag=0;
+            ipcRenderer.send('getauthorlist','about');
+        });
+        //$('.mute_btn').click(function(){
+        $(document).on('click', '.mute_btn', function() {
+            console.log(audio_flag);
+            if(audio_flag==0){
+                $('.mute_btn').html('<i class="fa fa-volume-down" aria-hidden="true"></i>');
+                $('audio').attr('autoplay','autoplay');
+                $('audio')[0].play();
+                audio_flag=1;
+            }else{
+                $('.mute_btn').html('<i class="fa fa-volume-off" aria-hidden="true"></i>');
+                $('audio')[0].pause();
+                audio_flag=0;
+            }
+        });
+    </script>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  </head>
+  <body style="margin: 0;overflow: hidden;"  >
+    <audio controls="controls" loop="loop" style="display: none;">
+        <source src="./static/media/clouds.ogg" type="audio/ogg" />
+    </audio>
+    <div class="aboutwindow">
+        <div class="mute_btn" title="点击以静音/恢复"><i class="fa fa-volume-off" aria-hidden="true"></i></div>
+        <div id="box">
+
+        </div>
+    </div>
+  </body>
+</html>

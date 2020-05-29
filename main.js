@@ -12,7 +12,7 @@ try{
 }
 
 //console.log(db);
-var win,aboutWindow;
+var win,aboutWindow,authorwindow;
 function createWindow () {   
   // 创建浏览器窗口
   Menu.setApplicationMenu(null);
@@ -58,6 +58,25 @@ function createAboutWindow () {
   });
   //aboutWindow.webContents.openDevTools();
 }
+function createAuthorWindow () {   
+  // 创建浏览器窗口
+  //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
+  authorwindow = new BrowserWindow({
+    width: 660, 
+    height:400,
+    show:true,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  authorwindow.loadFile('contributor.html');
+  authorwindow.on("close", function(){
+    aboutWindow = null;
+  });
+  app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+  //authorwindow.webContents.openDevTools();
+  //aboutWindow.webContents.openDevTools();
+}
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
 app.whenReady().then(createWindow)
@@ -82,10 +101,16 @@ app.on('activate', () => {
 ipcMain.on('show-win', (event, args) => {
   if(args=="win"){
     win.show();
-  }else{
-    aboutWindow.show();
+    return 0;
   }
-  
+  if(args=="about"){
+    aboutWindow.show();
+    return 0;
+  }
+  if(args=="author"){
+    authorWindow.show();
+    return 0;
+  }
 });
 
 ipcMain.on('getsyslist', (event, args) => {
@@ -302,6 +327,42 @@ ipcMain.on('getbwdbversion', (event, args) => {
   });
 });
 
+
+ipcMain.on('getauthorlist', (event, args) => {
+  console.log('getbwdbversion is captured.args:'+args);
+  initSqlJs().then(SQL => {
+    // 创建数据库
+    db = new SQL.Database(data);
+    // 运行查询而不读取结果
+    console.log("SELECT Name FROM Version");
+    contents = db.exec("SELECT Name FROM Contributor");
+    arr=contents[0].values;
+    arr_sys= [];
+    arr_sys1=[];
+    //console.log(contents);
+    console.log(arr);
+    console.log(arr.length);
+    for(var i = 0; i < arr.length; i++) {
+      arr_sys1=[];
+      for(var j = 0; j < arr[i].length; j++) {
+        console.log(arr[i][j]);
+        arr_sys1.push(arr[i][j]);
+      };
+      arr_sys.push(arr_sys1);
+    };
+    console.log(arr_sys);
+    var json1=JSON.stringify(arr_sys);
+    console.log([json1]);
+    if(args==""){
+      win.webContents.send('authorlist',[json1]);
+    }else{
+      authorwindow.webContents.send('authorlist',[json1]);
+    }
+    
+    console.log('message sent.');
+    db.close();
+  });
+});
 ipcMain.on('getbuildinfo', (event, args) => {
   console.log('getbuildinfo is captured.args:'+args);
   initSqlJs().then(SQL => {
@@ -336,7 +397,10 @@ ipcMain.on('getbuildinfo', (event, args) => {
 ipcMain.on('openabout', (event, args) => {
   createAboutWindow();
 });
-
+ipcMain.on('openauthor', (event, args) => {
+  aboutWindow.close();
+  createAuthorWindow();
+});
 ipcMain.on('closeabout', (event, args) => {
   aboutWindow.close();
 });
