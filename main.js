@@ -62,8 +62,10 @@ function createAuthorWindow () {
   // 创建浏览器窗口
   //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
   authorwindow = new BrowserWindow({
-    width: 660, 
+    width: 650, 
     height:400,
+    resizable: false,
+    maximizable:false,
     show:true,
     webPreferences: {
       nodeIntegration: true
