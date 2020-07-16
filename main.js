@@ -12,7 +12,8 @@ try{
 }
 
 //console.log(db);
-var win,aboutWindow,authorwindow;
+var win,aboutWindow,authorwindow,gallerywindow;
+var picjson;
 function createWindow () {   
   // 创建浏览器窗口
   Menu.setApplicationMenu(null);
@@ -31,7 +32,7 @@ function createWindow () {
   win.loadFile('main.html');
 
   // 打开开发者工具
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
   //createAboutWindow();
   //import sqlite3Db from './nw/sqlite3_test'
 }
@@ -79,6 +80,26 @@ function createAuthorWindow () {
   //authorwindow.webContents.openDevTools();
   //aboutWindow.webContents.openDevTools();
 }
+function creategalleryWindow () {   
+  // 创建浏览器窗口
+  //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
+  gallerywindow = new BrowserWindow({
+    width: 1024, 
+    height:768,
+    resizable: true,
+    transparent: true,
+    frame: false,
+    show:false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  gallerywindow.loadFile('gallery.html');
+  //gallerywindow.webContents.openDevTools();
+  gallerywindow.on("close", function(){
+    gallerywindow = null;
+  });
+}
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
 app.whenReady().then(createWindow)
@@ -111,6 +132,10 @@ ipcMain.on('show-win', (event, args) => {
   }
   if(args=="author"){
     authorWindow.show();
+    return 0;
+  }
+  if(args=="gallery"){
+    gallerywindow.show();
     return 0;
   }
 });
@@ -395,15 +420,25 @@ ipcMain.on('getbuildinfo', (event, args) => {
     db.close();
   });
 });
-
+ipcMain.on('gallerylist', (event, args) => {
+  gallerywindow.webContents.send('picjson',picjson);
+});
+ipcMain.on('opengallery', (event, args) => {
+  creategalleryWindow();
+  picjson=args;
+});
 ipcMain.on('openabout', (event, args) => {
   createAboutWindow();
 });
 ipcMain.on('openauthor', (event, args) => {
   aboutWindow.close();
   createAuthorWindow();
+  
 });
 ipcMain.on('closeabout', (event, args) => {
   aboutWindow.close();
+});
+ipcMain.on('closegallery', (event, args) => {
+  gallerywindow.close();
 });
 //关于界面的IPC部分

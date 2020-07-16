@@ -51,7 +51,7 @@
             //subtitle.push('Windows 是微软公司的注册商标');
             subtitle.push('BetaWorld (c) 2020');
             audio_flag=1;
-            $('.mute_btn').html('<i class="fa fa-volume-down" aria-hidden="true"></i>');
+            $('.mute_btn').html('<i class="fa fa-volume-up" aria-hidden="true"></i>');
             $('audio').attr('autoplay','autoplay');
             $('audio')[0].play();
             next_subtitle();
@@ -103,7 +103,7 @@
             //$('#'+randomid).css('margin-left',randomleft);
             $('#'+randomid).fadeIn(6000);
             setTimeout(function(){ 
-                $('#'+randomid).fadeOut(6000,function(){ 
+                $('#'+randomid).fadeOut(8800,function(){ 
                     $('#'+randomid).remove()
                 }); 
 
@@ -125,7 +125,7 @@
         $(document).on('click', '.mute_btn', function() {
             console.log(audio_flag);
             if(audio_flag==0){
-                $('.mute_btn').html('<i class="fa fa-volume-down" aria-hidden="true"></i>');
+                $('.mute_btn').html('<i class="fa fa-volume-up" aria-hidden="true"></i>');
                 $('audio').attr('autoplay','autoplay');
                 $('audio')[0].play();
                 audio_flag=1;

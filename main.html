@@ -28,13 +28,16 @@
         menu.append(new MenuItem({ label: 'Language' }));
         menu.append(new MenuItem({ label: '关于' , click() { ipcRenderer.send('openabout','');}}));
         var AdmZip = require('adm-zip');
+        var fs = require("fs")
+        /*
         try{
             var zip = new AdmZip("./gallery.zip");
             var zipflag=0;
         }catch{
             var zipflag=1;
         }
-        
+        */
+        //alert(tmpobj.Name);
         const shell = require('electron').shell;
         function hide_pic(){
             $(".info_box_pics").hide();
@@ -271,10 +274,24 @@
             }
             
         }
+        function main_pic_click() {
+            console.log($('#main_pic').attr('class'));
+            if ($('#main_pic').attr('class')=='info_box_pics have_pic'){
+                console.log('a');
+                var zip = new AdmZip("./gallery/"+now_buildid+".zip");
+                if(ifzipfileexist(zip,'pic.json')==1){
+                var info=zip.readAsText("pic.json");
+                if(info!=""){
+                    ipcRenderer.send('opengallery',info);
+                }
+                zip=null;
+                }
+            }
+        }
     </script>
     <script>
         //node
-        function ifzipfileexist(entryname){
+        function ifzipfileexist(zip,entryname){
             console.log(entryname);
             if(zipflag!=0){return -1;}
             try{
@@ -370,7 +387,7 @@
                 var x=$('.bwdb_select_item[data-id="'+arg[0]+'"]').attr('data-id-codename');
                 var y=$('.bwdb_select_item[data-id="'+arg[0]+'"]').html();
             }
-            if(x=="null" || x==null){
+            if(x=="null" || x==null || x==""){
                 $("#ver_smalltag").text(y+' - '+s[0][1]);
             }else{
                 $("#ver_smalltag").text('Codename "'+x+'" - '+s[0][1]);
@@ -378,27 +395,34 @@
             //隐藏图片
             hide_pic();
             picflag=1;
-            if(ifzipfileexist(now_buildid+'/pic.json')==1){
-                var info=zip.readAsText(now_buildid+"/pic.json");
+            try{
+                zip = new AdmZip("./gallery/"+now_buildid+".zip");
+                if(ifzipfileexist(zip,'pic.json')==1){
+                var info=zip.readAsText("pic.json");
                 console.log(info);
                 if(info!=""){
                 var s=JSON.parse(info);
+                /*
                 if(s.productid!=now_proid ||s.buildid!=now_buildid){
                     alert('当前截图库 产品/Build ID不一致！请检查。');
                 }else{
+                    */
                     mainpicid=s.main_pic;
                     console.log(mainpicid)
                     try{
-                        var decompressedData = zip.readFile(now_buildid+"/"+s.screenshot[mainpicid].screenshothash+".png");
+                        var decompressedData = zip.readFile(s.screenshot[mainpicid].screenshothash+".png");
                         $('#main_pic').css('background-image',"url(data:image/png;base64," + decompressedData.toString('base64')+')');
                         $('#main_pic').attr('class','info_box_pics have_pic');
                         $('#main_pic').attr('title','点击查看截图');
                     }catch{
                         alert('在读取头图中发生错误。');
                     }
+                /*
                 }
+                */
                 picflag=0;
                 show_pic();
+                zip=null;
                 }else{
                     $('#main_pic').css('background-image',"unset");
                     $('#main_pic').attr('class','info_box_pics');
@@ -409,6 +433,13 @@
                 $('#main_pic').attr('class','info_box_pics');
                 $('#main_pic').attr('title','');
             }
+            }catch{
+                hide_pic();
+                $('#main_pic').css('background-image',"unset");
+                $('#main_pic').attr('class','info_box_pics');
+                $('#main_pic').attr('title','');  
+            }
+            
             console.log(verflag);
             if(verflag==1){verflag=0;return 0;}
             var i=$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').index();
@@ -458,14 +489,15 @@
             var s=JSON.parse(arg);
             console.log(s);
             $("#basedb_version").html('基础数据库版本：V'+s[0][0]+' ,更新于'+s[0][1]+'。');
-            if(zipflag==0){
-                var info=zip.readAsText("info.json");
+            if(fs.existsSync('./gallery/info.json')==true){
+                var data = fs.readFileSync('./gallery/info.json');
+                var info=data.toString();
                 if(info!=""){
                     var s1=JSON.parse(info);
                     $("#gallerypak_version").html('图片数据库版本：V'+s1.GalleryVersion+' ,更新于'+s1.GalleryUpdateTime+'。');
                 }
             }
-        });
+            });
         ipcRenderer.on('updatelist', function(event, arg) {
             console.log(arg);
             //alert(arg);
@@ -483,13 +515,13 @@
             }
         });
         function test1(){
-            var decompressedData = zip.readFile("1/1.png");
-            console.log(zip.readAsText("1/pic.json")); 
-            console.log(decompressedData.toString('base64')); 
+            //var decompressedData = zip.readFile("1/1.png");
+            //console.log(zip.readAsText("1/pic.json")); 
+            //console.log(decompressedData.toString('base64')); 
             //console.log("data:image/png;base64," + window.btoa(data));
-            $('#main_pic').css('background-image',"url(data:image/png;base64," + decompressedData.toString('base64')+')');
-            $('#main_pic').attr('class','info_box_pics have_pic');
-            $('#main_pic').attr('title','点击查看截图');
+            //$('#main_pic').css('background-image',"url(data:image/png;base64," + decompressedData.toString('base64')+')');
+            //$('#main_pic').attr('class','info_box_pics have_pic');
+            //$('#main_pic').attr('title','点击查看截图');
         }
         function get_build_info(proid,buildid){
             console.log([proid,buildid])
@@ -583,7 +615,7 @@
                 <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
             </div>
             </div>
-            <div class="info_box_pics" id="main_pic"></div>
+            <div class="info_box_pics" id="main_pic" onclick="main_pic_click();"></div>
         </div>
         <br>
         <div class="infobox_sub_title">安装信息</div>

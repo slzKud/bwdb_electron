@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="static/css/font-awesome.min.css">
+  <script>window.$ = window.jQuery = require('jquery');</script>
+  <style>
+    .pic_cat {
+      margin-top: 30px;
+      height: 88%;
+      background-color: #5f5f5f;
+      margin-left: 65px;
+      margin-right: 65px;
+      margin-bottom: 18px;
+      background-position-x: center;
+      background-position-y: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      user-select: none;
+      position: relative;
+    }
+
+    .close_btn {
+      background-color: #2f2f2f;
+      color: #fff;
+      font-size: 2.3rem;
+      top: 0;
+      left: 0;
+      width: 3.85rem;
+      height: 3.85rem;
+      position: absolute;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0.8;
+    }
+
+    .toolbar {
+      background-color: #2f2f2f;
+      color: #fff;
+      font-size: 2.3rem;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      z-index: 999;
+      position: absolute;
+      display: flex;
+      justify-content: space-between;
+      opacity: 0.8;
+    }
+
+    .toolbar_btn {
+      background-color: #2f2f2f;
+      color: #fff;
+      font-size: 1.85rem;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0.6;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .toolbar_btn:hover {
+      opacity: unset;
+      background-color: #2f2f2f !important;
+    }
+
+    .close_btn:hover {
+      opacity: unset;
+      background-color: tomato;
+    }
+
+    .left_btn:hover {
+      opacity: unset;
+      background-color: #2f2f2f !important;
+    }
+
+    .right_btn:hover {
+      opacity: unset;
+      background-color: #2f2f2f !important;
+    }
+
+    .img_listitem {
+      width: 150px;
+      height: 150px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 2999;
+      margin: 15px;
+    }
+
+    .img_list_imgbox {
+      width: 150px;
+      height: 125px;
+      background-position-x: center;
+      background-position-y: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    .img_listitem:hover {
+      border: 2px #fff solid;
+    }
+
+    .img_list_label {
+      color: #fff;
+      text-align: center;
+    }
+    #img_list {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    @media screen and (max-width: 1025px) and (min-width:915px) {
+      #img_list {
+        padding-left: 5%;
+      }
+    }
+    @media screen and (max-width: 915px) and (min-width:595px) {
+      #img_list {
+        padding-left: 8%;
+      }
+    }
+
+    @media screen and (max-width: 595px) and (min-width:395px) {
+      #img_list {
+        padding-left: 20%;
+      }
+    }
+
+    @media screen and (max-width:395px) {
+      #img_list {
+        padding-left: 25%;
+      }
+    }
+  </style>
+  <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+  <!-- <script>window.$ = window.jQuery = require('jquery');</script>-->
+  <script>
+    var dv = 0;
+    var x = 0;
+    var y = 0;
+    var l = 0;
+    var t = 0;
+    var s = 0;
+    var now_picid = 0;
+    var pic_num = 0;
+    var i1 = 1;
+    var times = 0;
+    var isDown = false;
+    const ipcRenderer = require('electron').ipcRenderer;
+    var AdmZip = require('adm-zip');
+    var fs = require("fs");
+    const clipboard = require('electron').clipboard
+    const nativeImage = require('electron').nativeImage
+    const { remote } = require('electron');
+    function openSaveDialog() {
+      var path = remote.dialog.showSaveDialogSync({
+        title: "请选择图片保存的路径：",
+        properties: ['showOverwriteConfirmation'],
+        filters: [
+          { name: '图片文件(*.png)', extensions: ['png'] }
+        ]
+      });
+      return (path);
+    }
+    function pic_mousedown(e) {
+      if (i1 <= 1) {
+        return;
+      }
+      console.log("B" + isDown)
+      //获取x坐标和y坐标
+      x = e.clientX;
+      y = e.clientY;
+      //获取左部和顶部的偏移量
+      l = dv.offsetLeft;
+      t = dv.offsetTop;
+      console.log(l);
+      console.log(t);
+      //开关打开
+      isDown = true;
+      //设置样式  
+      $("#pic_cat_1").css("cursor", 'move');
+      //dv.style.cursor = 'move';
+    }
+    //鼠标移动
+    window.onmousemove = function (e) {
+      times = new Date().getTime();
+      if ($('.close_btn').css('display') == 'none') {
+        $('.close_btn').fadeIn();
+      }
+      /*
+      if($('.toolbar').css('display')=='none'){
+        $('.toolbar').fadeIn();
+      }
+      */
+      console.log("C" + isDown)
+      if (isDown == false || i1 <= 1) {
+        return;
+      }
+      //获取x和y
+      var nx = e.clientX;
+      var ny = e.clientY;
+
+      //计算移动后的左偏移量和顶部的偏移量
+      var nl = nx - (x - l);
+      var nt = ny - (y - t);
+      console.log(nl);
+      console.log(nt);
+      $("#pic_cat_1").css("left", nl);
+      $("#pic_cat_1").css("top", nt);
+      //dv.style.left = nl + 'px';
+      //dv.style.top = nt + 'px';
+      e.preventDefault();
+    }
+    //鼠标抬起事件
+
+    function pic_mouseup(e) {
+      if (i1 <= 1) {
+        return;
+      }
+      console.log("E" + isDown)
+      //开关关闭
+      isDown = false;
+      $("#pic_cat_1").css("cursor", 'default');
+      e.preventDefault();
+    }
+    let i = 1;
+    function handlerMouseWheel(e) {
+      // cross-browser wheel delta
+      const event = window.event || e; // old IE support
+      event.preventDefault();
+      const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+      if (delta === 1) {
+        i += 0.2;
+        $("#pic_cat_1").css("transform", 'scale(' + i + ')');
+      } else if (delta === -1) {
+        if (i < 0.3) {
+          i = 0.2;
+        } else {
+          i -= 0.2;
+        }
+        $("#pic_cat_1").css("transform", 'scale(' + i + ')');
+      }
+      console.log(i);
+      i1 = i;
+      if (i1 <= 1) {
+        $('.pic_cat').css("left", 0);
+        $('.pic_cat').css("top", 0);
+      }
+      $("#scale_label").html(parseInt(i1 * 100) + "%")
+      return false;
+    }
+    function scan_do() {
+      nowtime = new Date().getTime();
+      if ((nowtime - times) > 10) {
+        $('.close_btn').fadeOut();
+        //$('.toolbar').fadeOut();
+      }
+    }
+    function loadpic(buildid, picid) {
+      if (picid >= s.screenshot.length) {
+        picid = 0;
+      }
+      zip = new AdmZip("./gallery/" + buildid + ".zip");
+      //设置主图
+      try {
+        var decompressedData = zip.readFile(s.screenshot[picid].screenshothash + ".png");
+        zip = null;
+        return decompressedData;
+      } catch{
+        alert('在读取图片中发生错误。');
+      }
+      zip = null;
+    }
+    function showpic(buildid, picid) {
+      i1 = 1;
+      $("#pic_cat_1").css("transform", 'scale(' + i1 + ')');
+      $("#pic_cat_1").css("top", 0);
+      $("#pic_cat_1").css("left", 0);
+      $("#scale_label").html(parseInt(i1 * 100) + "%")
+      var decompressedData = loadpic(buildid, picid);
+      s1 = "url(data:image/png;base64," + decompressedData.toString('base64') + ')';
+      s2 = s.screenshot[picid].screenshottitle;
+      $('#pic_cat_1').css('background-image', s1);
+      $('#pic_title_label').html(s2);
+      $('#pic_title_label').attr('title', s2);
+    }
+    function close_win(){
+      ipcRenderer.send('closegallery', 'gallery');
+    }
+    $(document).ready(function () {
+      now_height = document.documentElement.clientHeight;
+      now_width = document.documentElement.clientWidth;
+      times = new Date().getTime();
+      if (i1 == 1) {
+        $('.pic_cat').css("width", now_width - 70);
+        $('.pic_cat').css("height", now_height - 50);
+      }
+      $('.close_btn').css("left", now_width - $('.close_btn').width());
+      $('.left_btn').css("left", 0);
+      $('.left_btn').css("top", (now_height - $('.left_btn').height()) / 2);
+      $('.right_btn').css("top", (now_height - $('.left_btn').height()) / 2);
+      $('.toolbar').css("top", now_height - $('.toolbar').height());
+      document.getElementById("pic_cat_1").addEventListener('mousewheel', handlerMouseWheel);
+      document.getElementById("pic_cat_1").addEventListener('DOMMouseScroll', handlerMouseWheel);
+      document.getElementById("pic_cat_1").addEventListener('mousedown', pic_mousedown);
+      document.getElementById("pic_cat_1").addEventListener('mouseup', pic_mouseup);
+      dv = document.getElementById('pic_cat_1');
+      if (document.documentElement.clientWidth < 950) {
+        font_s = 1.85 * (now_width / 950);
+        $('.toolbar_btn').css("font-size", font_s + 'rem');
+      } else {
+        $('.toolbar_btn').css("font-size", '1.85rem');
+      }
+      setInterval(scan_do, 5000);
+      $('.img_listbox').hide();
+      ipcRenderer.send('gallerylist', 'gallery');
+    });
+    $(window).resize(function () {
+      now_height = document.documentElement.clientHeight;
+      now_width = document.documentElement.clientWidth;
+      console.log("A" + i1)
+      if (i1 == 1) {
+        $('.pic_cat').css("width", now_width - 70);
+        $('.pic_cat').css("height", now_height - 50);
+      }
+      $('.close_btn').css("left", now_width - $('.close_btn').width());
+      $('.left_btn').css("left", 0);
+      $('.left_btn').css("top", (now_height - $('.left_btn').height()) / 2);
+      $('.right_btn').css("top", (now_height - $('.left_btn').height()) / 2);
+      $('.toolbar').css("top", now_height - $('.toolbar').height());
+      if (document.documentElement.clientWidth < 950) {
+        font_s = 1.85 * (now_width / 950);
+        $('.toolbar_btn').css("font-size", font_s + 'rem');
+      } else {
+        $('.toolbar_btn').css("font-size", '1.85rem');
+      }
+    });
+    $(document).on('click', '.toolbar_btn', function () {
+      console.log($(this).attr("do"));
+      switch ($(this).attr("do")) {
+        case "plus":
+          i1 += 0.1;
+          $("#pic_cat_1").css("transform", 'scale(' + i1 + ')');
+          $("#scale_label").html(parseInt(i1 * 100) + "%")
+          break;
+        case "minus":
+          i1 -= 0.1;
+          if (i1 <= 0.2) {
+            i1 = 1;
+          }
+          $("#pic_cat_1").css("transform", 'scale(' + i1 + ')');
+          $("#scale_label").html(parseInt(i1 * 100) + "%")
+          break;
+        case "reshow":
+          i1 = 1;
+          $("#pic_cat_1").css("transform", 'scale(' + i1 + ')');
+          $("#pic_cat_1").css("top", 0);
+          $("#pic_cat_1").css("left", 0);
+          $("#scale_label").html(parseInt(i1 * 100) + "%")
+          break;
+        case "piclist":
+          $('.img_listbox').fadeIn();
+          break;
+        case "refresh":
+          showpic(s.buildid, now_picid);
+          break;
+        case "save":
+          path = openSaveDialog();
+          if (path != undefined) {
+            fs.writeFile(path, loadpic(s.buildid, now_picid), function (err) {
+              if (err) {
+                alert("保存图片时发生错误："+err);
+              } else {
+                alert("保存成功！");
+              }
+            });
+          }
+          break;
+          case "copy":
+          var decompressedData = loadpic(s.buildid,now_picid);
+          const image = nativeImage.createFromDataURL("data:image/png;base64," + decompressedData.toString('base64'));
+          clipboard.writeImage(image);
+          alert("您选择的图片已复制！");
+          break;
+      }
+
+    });
+    $(document).on('click', '.img_listbox .close_btn', function () {
+      $('.img_listbox').fadeOut();
+    });
+    $(document).on('click', '.left_btn', function () {
+      now_picid -= 1;
+      if (now_picid < 0) {
+        now_picid = pic_num - 1;
+      }
+      showpic(s.buildid, now_picid);
+    });
+    $(document).on('click', '.right_btn', function () {
+      now_picid += 1;
+      if (now_picid >= pic_num) {
+        now_picid = 0;
+    }
+      showpic(s.buildid, now_picid);
+    });
+    $(document).on('click', '.img_listitem', function () {
+      now_picid = $(this).attr('data-index');
+      showpic(s.buildid, now_picid);
+      $('.img_listbox').hide();
+    });
+    ipcRenderer.on('picjson', function (event, arg) {
+      console.log(arg);
+      s = JSON.parse(arg);
+      buildid = s.buildid;
+      mainpic = s.main_pic;
+      zip = new AdmZip("./gallery/" + buildid + ".zip");
+      //设置主图
+      try {
+        var decompressedData = zip.readFile(s.screenshot[mainpic].screenshothash + ".png");
+      } catch{
+        alert('在读取图片中发生错误。');
+      }
+
+      $('#pic_cat_1').css('background-image', "url(data:image/png;base64," + decompressedData.toString('base64') + ')');
+      $('#pic_title_label').html(s.screenshot[mainpic].screenshottitle);
+      $('#pic_title_label').attr('title', s.screenshot[mainpic].screenshottitle);
+      now_picid = mainpic;
+      pic_num = s.screenshot.length;
+      //预置列表
+      $('#img_list').html('');
+      for (var i = 0; i < pic_num; i++) {
+        var decompressedData = loadpic(buildid, i);
+        s1 = "url(data:image/png;base64," + decompressedData.toString('base64') + ')';
+        s2 = s.screenshot[i].screenshottitle;
+        $('#img_list').append('<div class="img_listitem" data-index="' + i + '"><div class="img_list_imgbox" style="background-image: ' + s1 + ';"></div><div class="img_list_label">' + s2 + '</div></div>');
+        s1 = "";
+        s2 = "";
+      }
+      zip = null;
+      ipcRenderer.send('show-win', 'gallery');
+    });
+  </script>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+
+<body style="margin: 0;overflow: hidden;" style="width: 100%;height: 100%;">
+  <div class="img_preview_box"
+    style="width: 100%;height: 100%;background: #5f5f5f; display:flex;justify-content: center;">
+    <div class="pic_cat" id="pic_cat_1" style="background-image: url('static/img/preview_img_2.png');">
+    </div>
+
+    <div class="close_btn" onclick="close_win();" title="关闭窗口"><i class="fa fa-close" aria-hidden="true"></i></div>
+    <div class="close_btn left_btn" title="上一张" ><i class="fa fa-angle-left" aria-hidden="true"></i></div>
+    <div class="close_btn right_btn" title="下一张"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
+    <div class="toolbar">
+      <div class="toolbar_btn" title="刷新" do="refresh"><i class="fa fa-refresh" aria-hidden="true"></i></div>
+      <div class="toolbar_btn" title="保存图片" do="save"><i class="fa fa-save" aria-hidden="true"></i></div>
+      <div class="toolbar_btn" title="复制" do="copy"><i class="fa fa-copy" aria-hidden="true"></i></div>
+      <div class="toolbar_btn" title="图片列表" do="piclist"><i class="fa fa-bars" aria-hidden="true"></i></div>
+      <div class="toolbar_btn" style="width: unset;" title="INTERFACE 1" id="pic_title_label">INTERFACE 1</div>
+      <div class="toolbar_btn" title="放大" do="plus"><i class="fa fa-plus" aria-hidden="true"></i></div>
+      <div class="toolbar_btn" title="1：1" id="scale_label" style="width: unset;" do="reshow">100%</div>
+      <div class="toolbar_btn" title="缩小" do="minus"><i class="fa fa-minus" aria-hidden="true"></i></div>
+    </div>
+    <div class="img_listbox"
+      style="width: 100%;height: 100%;background: rgba(31,31,31,0.95); display:flex;justify-content: center;z-index: 1999;position:absolute;overflow:hidden;">
+      <div id="img_list" style="margin-top: 3.85rem;">
+        <div class="img_listitem">
+          <div class="img_list_imgbox" style="background-image: url('static/img/preview_img.png');"></div>
+          <div class="img_list_label">Interface 1</div>
+        </div>
+        <div class="img_listitem">
+          <div class="img_list_imgbox" style="background-image: url('static/img/preview_img.png');"></div>
+          <div class="img_list_label">Interface 1</div>
+        </div>
+        <div class="img_listitem">
+          <div class="img_list_imgbox" style="background-image: url('static/img/preview_img.png');"></div>
+          <div class="img_list_label">Interface 1</div>
+        </div>
+        <div class="img_listitem">
+          <div class="img_list_imgbox" style="background-image: url('static/img/preview_img.png');"></div>
+          <div class="img_list_label">Interface 1</div>
+        </div>
+        <div class="img_listitem">
+          <div class="img_list_imgbox" style="background-image: url('static/img/preview_img.png');"></div>
+          <div class="img_list_label">Interface 1</div>
+        </div>
+      </div>
+      <div class="close_btn" title="返回"><i class="fa fa-close" aria-hidden="true"></i></div>
+    </div>
+</body>
+
+</html>
