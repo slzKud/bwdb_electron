@@ -256,6 +256,9 @@
                 var r=show_text.replace(/(\r\n)|(\n)/g,'<br>')
                 $("#"+infoid).children('.info_box_items_text').html(r);
             }
+            notice_text=document.documentElement.clientHeight-$('.install_notice_text').offset()['top']-25;
+            $('.install_notice_text').css('min-height',notice_text);
+            
             
         }
         function switch_home(){
@@ -450,7 +453,6 @@
             }else{
                 $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().offset().top- $(".bwdb_sidebarA").offset().top);
             }
-            
             //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])
             //添加相关的代码
         });
