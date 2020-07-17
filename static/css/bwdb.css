@@ -286,8 +286,9 @@ body{
 .info_box_pics{
 	height: 150px;
 	width: 200px;
-    background-color: #ececec;
-    background-size:100% 100%;
+    background-color: #fff;
+    background-size:contain;
+    background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
     margin-right: 15px;
@@ -310,6 +311,7 @@ body{
 .bwdb_infobox_textarea textarea{
     width: 100%;
     z-index: 350;
+    height:120px;
 }
 .home_title{
     margin-top:15px;

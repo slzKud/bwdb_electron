@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>BetaWorld Library Image Preview</title>
   <link rel="stylesheet" href="static/css/font-awesome.min.css">
   <script>window.$ = window.jQuery = require('jquery');</script>
   <style>
@@ -118,15 +118,18 @@
       color: #fff;
       text-align: center;
     }
+
     #img_list {
-        overflow-x: hidden;
-        overflow-y: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
+
     @media screen and (max-width: 1025px) and (min-width:915px) {
       #img_list {
         padding-left: 5%;
       }
     }
+
     @media screen and (max-width: 915px) and (min-width:595px) {
       #img_list {
         padding-left: 8%;
@@ -297,7 +300,7 @@
       $('#pic_title_label').html(s2);
       $('#pic_title_label').attr('title', s2);
     }
-    function close_win(){
+    function close_win() {
       ipcRenderer.send('closegallery', 'gallery');
     }
     $(document).ready(function () {
@@ -382,15 +385,15 @@
           if (path != undefined) {
             fs.writeFile(path, loadpic(s.buildid, now_picid), function (err) {
               if (err) {
-                alert("保存图片时发生错误："+err);
+                alert("保存图片时发生错误：" + err);
               } else {
                 alert("保存成功！");
               }
             });
           }
           break;
-          case "copy":
-          var decompressedData = loadpic(s.buildid,now_picid);
+        case "copy":
+          var decompressedData = loadpic(s.buildid, now_picid);
           const image = nativeImage.createFromDataURL("data:image/png;base64," + decompressedData.toString('base64'));
           clipboard.writeImage(image);
           alert("您选择的图片已复制！");
@@ -412,7 +415,7 @@
       now_picid += 1;
       if (now_picid >= pic_num) {
         now_picid = 0;
-    }
+      }
       showpic(s.buildid, now_picid);
     });
     $(document).on('click', '.img_listitem', function () {
@@ -451,6 +454,27 @@
       zip = null;
       ipcRenderer.send('show-win', 'gallery');
     });
+    $(document).keydown(function (event) {
+      var keyNum = event.which;  //获取键值
+      switch (keyNum) { //判断按键
+        case 37:
+          now_picid -= 1;
+          if (now_picid < 0) {
+            now_picid = pic_num - 1;
+          }
+          showpic(s.buildid, now_picid);
+          break;
+        case 39:
+          now_picid += 1;
+          if (now_picid >= pic_num) {
+            now_picid = 0;
+          }
+          showpic(s.buildid, now_picid);
+          break;
+        default:
+          break;
+      }
+    });
   </script>
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 </head>
@@ -462,7 +486,7 @@
     </div>
 
     <div class="close_btn" onclick="close_win();" title="关闭窗口"><i class="fa fa-close" aria-hidden="true"></i></div>
-    <div class="close_btn left_btn" title="上一张" ><i class="fa fa-angle-left" aria-hidden="true"></i></div>
+    <div class="close_btn left_btn" title="上一张"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
     <div class="close_btn right_btn" title="下一张"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
     <div class="toolbar">
       <div class="toolbar_btn" title="刷新" do="refresh"><i class="fa fa-refresh" aria-hidden="true"></i></div>

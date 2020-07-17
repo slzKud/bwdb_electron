@@ -119,7 +119,7 @@
                $('.bwdb_infobox_textarea').css('top',$(this).parent('.info_box_items').children('.info_box_items_text').offset()['top']);
                $('.bwdb_infobox_textarea').css('left',$(this).parent('.info_box_items').children('.info_box_items_text').offset()['left']);
                $('.bwdb_infobox_textarea').width($(this).parent('.info_box_items').children('.info_box_items_text').width());
-               $('.bwdb_infobox_textarea').children('textarea').html($(this).parent('.info_box_items').children('.info_box_items_text').html());
+               $('.bwdb_infobox_textarea').children('textarea').html($(this).parent('.info_box_items').children('.info_box_items_text').html().replace(';',';\n'));
                $(this).children('.info_box_items_btn_text').attr('class','info_box_items_btn_text active');
                $('.bwdb_infobox_textarea').show();
             });
@@ -653,7 +653,7 @@
         <input type="text" id="email" placeholder="在这里搜索" class="bwdb_nav_search_text">
     </div>
     <div class="bwdb_infobox_textarea">
-        <textarea row=20 style="resize:none"></textarea>
+        <textarea row=40 style="resize:none"></textarea>
     </div>
     <!--如果在主进程中，则用var initSqlJs=require('sql-wasm.js')-->
   </body>
