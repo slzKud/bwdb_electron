@@ -100,9 +100,35 @@ function creategalleryWindow () {
     gallerywindow = null;
   });
 }
+function createManageMainWindow(){
+  Menu.setApplicationMenu(null);
+  win = new BrowserWindow({
+    minHeight:400,
+    minWidth:700,
+    width: 1009,
+    height: 679,
+    show:false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  
+  // 并且为你的应用加载index.html
+  win.loadFile('manage/main.html');
+  win.webContents.openDevTools();
+}
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
-app.whenReady().then(createWindow)
+function app_ready_do(){
+  console.log(process.argv)
+  if(process.argv[2]=="--manage"){
+    createManageMainWindow();
+  }else{
+    createWindow();
+  }
+  
+}
+app.whenReady().then(app_ready_do)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
