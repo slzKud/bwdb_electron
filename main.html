@@ -28,7 +28,7 @@
         menu.append(new MenuItem({ label: 'Language' }));
         menu.append(new MenuItem({ label: '关于' , click() { ipcRenderer.send('openabout','');}}));
         var AdmZip = require('adm-zip');
-        var fs = require("fs")
+        var fs = require("fs");
         /*
         try{
             var zip = new AdmZip("./gallery.zip");
@@ -337,7 +337,7 @@
                 }else{
                     var s1=s[i]
                 }
-                $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text" title="'+s[i]+'">'+s1+'</span></div></div><div class="build_list" data-id="'+s[i]+'" data-type="build_stage" >');
+                $(".bwdb_sidebarA").append('<div class="big_stage_divider non_search"><div class="big_stage_item"><span class="big_stage_text" title="'+s[i]+'">'+s1+'</span></div></div><div class="build_list" data-id="'+s[i]+'" data-type="build_stage" >');
                 ipcRenderer.send('getbuildlist', [arg[0],s[i]]);
             };
             ipcRenderer.send('show-win', 'win');

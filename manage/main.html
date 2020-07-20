@@ -8,233 +8,13 @@
     <link rel="stylesheet" href="../static/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/css/bwdb.css">
     <link rel="stylesheet" href="static/css/manage.css">
+    <link rel="stylesheet" href="static/css/jquery-editable-select.min.css">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="../static/js/bootstrap.min.js"></script>
+    <script src="static/js/jquery-editable-select.min.js"></script>
+    <script src="static/js/manage.js"></script>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <script>
-        var slideflag = 0;
-        var textflag = 0;
-        var picflag = 0;
-        var firstid = 0;
-        var now_proid = -1;
-        var now_buildid = -1;
-        var zipflag = 0;
-        var verflag = 0;
-        const ipcRenderer = require('electron').ipcRenderer;
-        const remote = require('electron').remote;
-        const { Menu, MenuItem } = remote;
-
-        function getpar_height(sel) {
-            var w = 0;
-            $(sel).each(function () {
-                w = w + parseInt($(this).height());//获取宽度。并累加
-            });
-            return w;
-        }
-        $(window).ready(function () {
-            now_height = document.documentElement.clientHeight - 55;
-            now_width = document.documentElement.clientWidth - 355;
-            $('.bwdb_sidebar').css('max-height', now_height);
-            $('.bwdb_sidebar').css('height', now_height);
-            if ($('.bw_sidebar_info_box').css('display') == 'none') {
-                $('.bwdb_sidebarA').css('max-height', now_height);
-                $('.bwdb_sidebarA').css('height', now_height);
-            } else {
-                $('.bwdb_sidebarA').css('max-height', now_height - $('.bw_sidebar_info_box').height);
-                $('.bwdb_sidebarA').css('height', now_height - $('.bw_sidebar_info_box').height);
-            }
-            if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
-                $('.bwdb_sidebarA').css('overflow-y', 'scroll');
-            } else {
-                $('.bwdb_sidebarA').css('overflow-y', 'auto');
-            }
-            console.log(document.documentElement.clientWidth);
-            ipcRenderer.send('getsyslist', 'ping');
-        });
-        $(window).resize(function () {
-            now_height = document.documentElement.clientHeight - 55;
-            now_width = document.documentElement.clientWidth - 355;
-            $('.bwdb_sidebar').css('max-height', now_height);
-            $('.bwdb_sidebar').css('height', now_height);
-            if ($('.bw_sidebar_info_box').css('display') == 'none') {
-                $('.bwdb_sidebarA').css('max-height', now_height);
-                $('.bwdb_sidebarA').css('height', now_height);
-            } else {
-                $('.bwdb_sidebarA').css('max-height', now_height - $('.bw_sidebar_info_box').height);
-                $('.bwdb_sidebarA').css('height', now_height - $('.bw_sidebar_info_box').height);
-            }
-            if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
-                $('.bwdb_sidebarA').css('overflow-y', 'scroll');
-            } else {
-                $('.bwdb_sidebarA').css('overflow-y', 'auto');
-            }
-            console.log(document.documentElement.clientWidth);
-        });
-        $(document).on('click', '.bwdb_select_item', function() {
-                console.log($(this).html());
-                $(".search_box_title").html($(this).html());
-                $(".search_box_title").attr('data-id',$(this).attr('data-id'));
-                $(".search_box_title").attr('data-id-codename',$(this).attr('data-id-codename'));
-                console.log($(this).attr('data-id'));
-                now_buildid=-1;
-                now_proid=-1;
-                ipcRenderer.send('getbuildstage', $(this).attr('data-id'));
-                if(slideflag==1){
-                    $("#bwdb_nav_select_bar").hide();
-                    slideflag=0; 
-                }
-                if($("#homeinfobox").css('display')!='none'){
-                    $("#verinfobox").show();
-                    $("#homeinfobox").hide();
-                }
-                $('.bwdb_sidebarA').scrollTop(0-$('.bwdb_sidebarA').scrollTop);
-            });
-            $(".bwdb_content").click(function(){
-                if(slideflag==1){
-                    $("#bwdb_nav_select_bar").slideUp('100ms');
-                    slideflag=0; 
-                }
-            });
-            $(document).on('mouseenter', '.big_stage_item', function() {
-                $(this).children('.big_stage_text').css('background-color','#d4e2ee');
-            });
-            //$(".big_stage_item").mouseleave(function(){
-            $(document).on('mouseleave', '.big_stage_item', function() {
-                $(this).children('.big_stage_text').css('background-color','#ececec');
-            });
-            
-            //$(".bwdb_sidebar_item").click(function(){
-            $(document).on('click', '.bwdb_sidebar_item', function() {   
-                verflag=1; 
-                $('.bwdb_sidebar_item').css('background-color','unset');
-                $('.bwdb_sidebar_item').css('color','unset');
-                $(this).css('background-color','#19478a');
-                $(this).css('color','#fff');
-                $('.bwdb_infobox_textarea').hide();
-                $('.info_box_items_btn_text').attr('class','info_box_items_btn_text');
-                console.log($(this).attr('data-id'));
-                if($('.bw_sidebar_info_box').css('display')=='none'){
-                    get_build_info($('.search_box_title').attr('data-id'),$(this).attr('data-id'));
-                }else{
-                    console.log($(this).attr('data-id-proid'));
-                    get_build_info($(this).attr('data-id-proid'),$(this).attr('data-id'));
-                }
-                if($("#homeinfobox").css('display')!='none'){
-                    $("#verinfobox").show();
-                    $("#homeinfobox").hide();
-                }
-                
-            });
-            $('.bwdb_nav_search_text').keypress(function (e){
- 　　           if(e.keyCode == 13){
-                   console.log($(this).val());
-                   ipcRenderer.send('searchbuildlist',$(this).val());
-　　　          }
-            });  
-            function slide_select(){
-            if(slideflag==0){
-                $("#bwdb_nav_select_bar").slideDown('100ms');
-                slideflag=1;
-            }else{
-                $("#bwdb_nav_select_bar").slideUp('100ms');
-                slideflag=0;
-            }
-        }
-        function show_search_textbox(){
-            if(slideflag==1){
-                    $("#bwdb_nav_select_bar").slideUp('100ms');
-                    slideflag=0; 
-            }
-            if(textflag==0){
-                $('.search_btn').css('border','#fff 2px solid');
-                $('.bwdb_nav_search_text').val('');
-                $(".bwdb_nav_search").show();
-                $(".bw_sidebar_info_box").html('按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。')
-                $(".bw_sidebar_info_box").show();
-                $(".bwdb_sidebarA").hide();
-                verflag=1;
-                textflag=1;
-            }else{
-                $('.search_btn').css('border','unset');
-                $(".bwdb_nav_search").hide();
-                $(".bw_sidebar_info_box").hide();
-                $(".bwdb_sidebarA").show();
-                if($(".bw_sidebar_info_box").html().indexOf('按回车键开始搜索') == -1){
-                $(".search_box_title").html($(".bwdb_select_item[data-id='"+now_proid+"']").html());
-                $(".search_box_title").attr('data-id',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id'));
-                $(".search_box_title").attr('data-id-codename',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id-codename'));
-                verflag=0;
-                ipcRenderer.send('getbuildstage', now_proid);
-                }
-                textflag=0;
-            }
-        }
-        ipcRenderer.on('syslist', function(event, arg) {
-            console.log(arg);
-            var s=JSON.parse(arg);
-            $('#bwdb_nav_select_bar').html('');
-            for(var i = 0; i < s.length; i++) {
-                console.log(s[i]);
-                var s1=s[i][1];
-                s1=s1.replace('\"','&quot');
-                $("#bwdb_nav_select_bar").append('<div class="bwdb_select_item"'+ 'data-id="'+s[i][0]+'" data-id-codename="'+s[i][2]+'">'+s1+'</div>');
-            };
-            //默认配置
-            $('.search_box_title').attr('data-id-codename',$(".bwdb_select_item[data-id='1']").attr('data-id-codename'));
-            $('.search_box_title').attr('data-id','1');
-            $('.search_box_title').html(s[0][1]);
-            ipcRenderer.send('getbuildstage', 1);
-            get_build_info(1,1);
-            
-        });
-        ipcRenderer.on('stagelist', function(event, arg) {
-            console.log(arg);
-            console.log($('.search_box_title').attr('data-id'));
-            var s=JSON.parse(arg[1]);
-            $('.bwdb_sidebarA').html('');
-            for(var i = 0; i < s.length; i++) {
-                console.log(s[i]);
-                if(s[i].length>30){
-                    var s1=s[i].substring(0,30)+'...'
-                }else{
-                    var s1=s[i]
-                }
-                $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text" title="'+s[i]+'">'+s1+'</span></div></div><div class="build_list" data-id="'+s[i]+'" data-type="build_stage" >');
-                ipcRenderer.send('getbuildlist', [arg[0],s[i]]);
-            };
-            ipcRenderer.send('show-win', 'win');
-            //添加相关的代码
-        });
-        ipcRenderer.on('buildlist', function(event, arg) {
-            console.log(arg);
-            console.log($('.search_box_title').attr('data-id'));
-            var s=JSON.parse(arg[2]);
-            $("[data-type='build_stage'][data-id='"+arg[1]+"']").html('');
-            for(var i = 0; i < s.length; i++) {
-                console.log(s[i]);
-                $("[data-type='build_stage'][data-id='"+arg[1]+"']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="'+s[i][0]+'" data-type="build_item">'+s[i][1]+'</div>');
-            };
-            //添加相关的代码
-            //alert(s[s.length-1][0]);
-            if(firstid!=$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id')  && now_proid==-1){
-                get_build_info(arg[0],$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id'));
-            } 
-            if(now_buildid>0 && $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').length>0){
-                if($("#homeinfobox").css('display')=='none'){
-                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('background-color','#19478a');
-                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('color','#fff');
-                }
-                get_build_info(now_proid,now_buildid);
-                //$('.bwdb_sidebar').scrollTop(0);
-            }
-            if(getpar_height('.bwdb_sidebarA')>$('.bwdb_sidebarA').css('max-height')){
-                $('.bwdb_sidebarA').css('overflow-y','scroll');
-            }else{
-                $('.bwdb_sidebarA').css('overflow-y','auto');
-            }
-        });
-    </script>
 </head>
 
 <body style="margin: 0;overflow: hidden;">
@@ -252,12 +32,13 @@
             <div class="title_bar">DataBase Manage</div>
         </div>
         <div class="nav_right_btn">
-            <div class="nav_btn" onclick="switch_home();"><i class="fa fa-plus" aria-hidden="true"></i></div>
-            <div class="nav_btn" onclick="switch_home();"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
-            <div class="nav_btn" onclick="setting_btn_do();"><i class="fa fa-pencil" aria-hidden="true"></i></div>
-            <div class="nav_btn" onclick="setting_btn_do();"><i class="fa fa-refresh" aria-hidden="true"></i></div>
-            <div class="nav_btn" onclick="setting_btn_do();"><i class="fa fa-cog" aria-hidden="true"></i></div>
-            <div class="nav_btn" onclick="setting_btn_do();"><i class="fa fa-info-circle" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="switch_home();" title="新建项目"><i class="fa fa-plus" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="switch_home();" title="删除此Build"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="setting_btn_do();" title="保存更改"><i class="fa fa-save" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="setting_btn_do();" title="放弃更改"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="setting_btn_do();" title="刷新"><i class="fa fa-refresh" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="setting_btn_do();" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div>
+            <div class="nav_btn" onclick="setting_btn_do();" title="操作提示"><i class="fa fa-info-circle" aria-hidden="true"></i></div>
         </div>
     </nav>
     </div>
@@ -270,7 +51,199 @@
 
             </div>
         </div>
-        <div class="bwdb_infobox" id="homeinfobox">
+        <div class="bwdb_infobox" id="verinfobox" style="overflow-y: auto;overflow-x: hidden;">
+            <div style="display: inline-flex;width:100%">
+                <h3 id="ver_name">编辑版本信息</h3>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Basic Information</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            ProductName
+                        </div>
+                        <div class="edit_control">
+                            <select class="form-control edit_select" id="productname">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            Stage
+                        </div>
+                        <div class="edit_control">
+                            <select class="form-control edit_select" id="stage">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            Version
+                        </div>
+                        <div class="edit_control">
+                            <input type="text" class="form-control" id="vername" placeholder="">
+                        </div>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            BuildTag
+                        </div>
+                        <div class="edit_control">
+                            <input type="text" class="form-control" id="buildtag" placeholder="">
+                        </div>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            BIOSDate
+                        </div>
+                        <div class="edit_control">
+                            <input type="date" class="form-control" id="biosdate" placeholder="">
+                        </div>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            Arch.
+                        </div>
+                        <div class="edit_control">
+                            <select class="form-control edit_select" id="arch">
+                                <option>16-Bit</option>
+                                <option>x86</option>
+                                <option>x64</option>
+                                <option>ARM</option>
+                                <option>ARM64</option>
+                                <option>IA64</option>
+                                <option>MIPS</option>
+                                <option>Alpha</option>
+                                <option>PPC</option>
+                                <option>PC98</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            CodeName
+                        </div>
+                        <div class="edit_control">
+                            <select class="form-control edit_select" id="CodeName">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            Serial Number
+                        </div>
+                        <div class="edit_control">
+                            <div class="edit_control">
+                                <input type="text" class="form-control" id="SerialNumber" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">SKU/Language List</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            SKU
+                        </div>
+                        <div class="edit_control">
+                            <textarea class="form-control" rows="3" id="SKU"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            Language
+                        </div>
+                        <div class="edit_control">
+                            <textarea class="form-control" rows="3" id="LANG"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Fixes</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            Fixes(CN)
+                        </div>
+                        <div class="edit_control">
+                            <textarea class="form-control" rows="3" id="FixCN"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            Fixes(EN)
+                        </div>
+                        <div class="edit_control">
+                            <textarea class="form-control" rows="3" id="FixEN"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">ScreenShot</h3>
+                </div>
+                <div class="panel-body">
+                    <div style="display: inline;">
+                        <button type="button" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> 添加图片</button>
+                        <button type="button" class="btn btn-primary"><i class="fa fa-times" aria-hidden="true"></i> 删除图片</button>
+                        <button type="button" class="btn btn-primary"><i class="fa fa-folder-open" aria-hidden="true"></i> 替换图片</button>
+                        <button type="button" class="btn btn-primary"><i class="fa fa-arrow-up" aria-hidden="true"></i> 上移图片</button>
+                        <button type="button" class="btn btn-primary"><i class="fa fa-arrow-down" aria-hidden="true"></i> 下移图片</button>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            ScreenShotList
+                        </div>
+                        <div class="edit_control">
+                            <select multiple class="form-control" id="screenshotlist">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit_item">
+                        <div class="edit_title">
+                            Preview
+                        </div>
+                        <div class="edit_control">
+                            <div class="info_box_pics manage" id="main_pic" style="background-image: url('../static/img/preview_img_2.png');"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bwdb_infobox" id="homeinfobox" style="display: none;overflow-y: auto;overflow-x: hidden;">
             <div class="home_title">
                 <div>
                     <h5>点击侧边栏的Build开始编辑，点击右上方的 <i class="fa fa-plus" aria-hidden="true"></i> 添加产品/Build。</h5>

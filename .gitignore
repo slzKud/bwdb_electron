@@ -62,3 +62,4 @@ out/
 gallery/
 buildgallery.pak
 *.zip
+DataBase.db

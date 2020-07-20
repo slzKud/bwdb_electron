@@ -215,6 +215,30 @@ ipcMain.on('getbuildstage', (event, args) => {
     db.close();
   });
 });
+ipcMain.on('getbuildstageA', (event, args) => {
+  console.log('getbuildstage is captured.args:'+args);
+  initSqlJs().then(SQL => {
+    // 创建数据库
+    db = new SQL.Database(data);
+    // 运行查询而不读取结果
+    console.log("SELECT Stage FROM Build where ProductID="+args+" group by Stage ORDER BY Date asc");
+    contents = db.exec("SELECT Stage FROM Build where ProductID="+args+" group by Stage ORDER BY Date asc");
+    arr=contents[0].values;
+    arr_sys= [];
+    arr_sys1=[];
+    //console.log(contents);
+    console.log(arr);
+    console.log(arr.length);
+    for(var i = 0; i < arr.length; i++) {
+      arr_sys.push(arr[i][0]);
+    };
+    var json1=JSON.stringify(arr_sys);
+    console.log(json1);
+    win.webContents.send('stagelistA',[args,json1]);
+    console.log('message sent.');
+    db.close();
+  });
+});
 
 ipcMain.on('getbuildlist', (event, args) => {
   console.log('getbuildlist is captured.args:'+args);
@@ -319,8 +343,8 @@ ipcMain.on('getbuildinfo', (event, args) => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
-    contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
+    console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
+    contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
     arr=contents[0].values;
     arr_sys= [];
     arr_sys1=[];

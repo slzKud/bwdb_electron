@@ -13,6 +13,7 @@
   "dependencies": {
     "jquery": "^3.5.1",
     "sql.js": "^1.2.2",
-    "adm-zip":"^0.4.14"
+    "adm-zip":"^0.4.14",
+    "jquery-editable-select":"^2.2.5"
   }
 }
