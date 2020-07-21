@@ -1,33 +1,37 @@
-const { app, BrowserWindow,Menu } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 const ipcMain = require('electron').ipcMain;
-const initSqlJs=require('sql.js/dist/sql-asm');
+const initSqlJs = require('sql.js/dist/sql-asm');
 const dialog = require('electron').dialog;
 //const SQL = require('sql.js/dist/sql-asm');
 const fs = require("fs");
-try{
+const { promises } = require('dns');
+try {
   var data = fs.readFileSync('./DataBase.db');
-}catch{
-    dialog.showErrorBox('基本数据库不存在','基本数据库不存在，程序将退出。');
-    app.quit();
+} catch{
+  dialog.showErrorBox('基本数据库不存在', '基本数据库不存在，程序将退出。');
+  app.quit();
 }
-
-//console.log(db);
-var win,aboutWindow,authorwindow,gallerywindow;
+String.prototype.myReplace = function (f, e) {//吧f替换成e
+  var reg = new RegExp(f, "g"); //创建正则RegExp对象   
+  return this.replace(reg, e);
+}
+////console.log(db);
+var win, aboutWindow, authorwindow, gallerywindow;
 var picjson;
-function createWindow () {   
+function createWindow() {
   // 创建浏览器窗口
   Menu.setApplicationMenu(null);
   win = new BrowserWindow({
-    minHeight:400,
-    minWidth:700,
+    minHeight: 400,
+    minWidth: 700,
     width: 1009,
     height: 679,
-    show:false,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
   });
-  
+
   // 并且为你的应用加载index.html
   win.loadFile('main.html');
 
@@ -37,96 +41,96 @@ function createWindow () {
   //import sqlite3Db from './nw/sqlite3_test'
 }
 
-function createAboutWindow () {   
+function createAboutWindow() {
   // 创建浏览器窗口
   //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
   aboutWindow = new BrowserWindow({
-    width: 420, 
-    height:290,
+    width: 420,
+    height: 290,
     transparent: true,
     frame: false,
-    show:false,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
   });
   aboutWindow.loadFile('about.html');
-  aboutWindow.on("close", function(){
+  aboutWindow.on("close", function () {
     aboutWindow = null;
   });
-  aboutWindow.on("blur", function(){
+  aboutWindow.on("blur", function () {
     aboutWindow.close();
   });
   //aboutWindow.webContents.openDevTools();
 }
-function createAuthorWindow () {   
+function createAuthorWindow() {
   // 创建浏览器窗口
   //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
   authorwindow = new BrowserWindow({
-    width: 650, 
-    height:400,
+    width: 650,
+    height: 400,
     resizable: false,
-    maximizable:false,
-    show:true,
+    maximizable: false,
+    show: true,
     webPreferences: {
       nodeIntegration: true
     }
   });
   authorwindow.loadFile('contributor.html');
-  authorwindow.on("close", function(){
+  authorwindow.on("close", function () {
     aboutWindow = null;
   });
   app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
   //authorwindow.webContents.openDevTools();
   //aboutWindow.webContents.openDevTools();
 }
-function creategalleryWindow () {   
+function creategalleryWindow() {
   // 创建浏览器窗口
   //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
   gallerywindow = new BrowserWindow({
-    width: 1024, 
-    height:768,
+    width: 1024,
+    height: 768,
     resizable: true,
     transparent: true,
     frame: false,
-    show:false,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
   });
   gallerywindow.loadFile('gallery.html');
   //gallerywindow.webContents.openDevTools();
-  gallerywindow.on("close", function(){
+  gallerywindow.on("close", function () {
     gallerywindow = null;
   });
 }
-function createManageMainWindow(){
+function createManageMainWindow() {
   Menu.setApplicationMenu(null);
   win = new BrowserWindow({
-    minHeight:400,
-    minWidth:700,
+    minHeight: 400,
+    minWidth: 700,
     width: 1009,
     height: 679,
-    show:false,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
   });
-  
+
   // 并且为你的应用加载index.html
   win.loadFile('manage/main.html');
   win.webContents.openDevTools();
 }
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
-function app_ready_do(){
-  console.log(process.argv)
-  if(process.argv[2]=="--manage"){
+function app_ready_do() {
+  //console.log(process.argv)
+  if (process.argv[2] == "--manage") {
     createManageMainWindow();
-  }else{
+  } else {
     createWindow();
   }
-  
+
 }
 app.whenReady().then(app_ready_do)
 
@@ -148,334 +152,334 @@ app.on('activate', () => {
 })
 //主程序的IPC部分
 ipcMain.on('show-win', (event, args) => {
-  if(args=="win"){
+  if (args == "win") {
     win.show();
     return 0;
   }
-  if(args=="about"){
+  if (args == "about") {
     aboutWindow.show();
     return 0;
   }
-  if(args=="author"){
+  if (args == "author") {
     authorWindow.show();
     return 0;
   }
-  if(args=="gallery"){
+  if (args == "gallery") {
     gallerywindow.show();
     return 0;
   }
 });
 
 ipcMain.on('getsyslist', (event, args) => {
-  console.log('getsyslist is captured.');
+  //console.log('getsyslist is captured.');
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
     contents = db.exec("SELECT ID,Name,CodeName FROM Product order by ID");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
-      arr_sys1=[arr[i][0],arr[i][1],arr[i][2]];
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [arr[i][0], arr[i][1], arr[i][2]];
       arr_sys.push(arr_sys1);
     };
-    var json1=JSON.stringify(arr_sys);
-    console.log(json1);
-    win.webContents.send('syslist',json1);
-    console.log('message sent.');
+    var json1 = JSON.stringify(arr_sys);
+    //console.log(json1);
+    win.webContents.send('syslist', json1);
+    //console.log('message sent.');
     db.close();
   });
 });
 
 ipcMain.on('getbuildstage', (event, args) => {
-  console.log('getbuildstage is captured.args:'+args);
+  //console.log('getbuildstage is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT Stage FROM Build where ProductID="+args+" group by Stage ORDER BY Date asc");
-    contents = db.exec("SELECT Stage FROM Build where ProductID="+args+" group by Stage ORDER BY Date asc");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
+    //console.log("SELECT Stage FROM Build where ProductID="+args+" group by Stage ORDER BY Date asc");
+    contents = db.exec("SELECT Stage FROM Build where ProductID=" + args + " group by Stage ORDER BY Date asc");
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
       arr_sys.push(arr[i][0]);
     };
-    var json1=JSON.stringify(arr_sys);
-    console.log(json1);
-    win.webContents.send('stagelist',[args,json1]);
-    console.log('message sent.');
+    var json1 = JSON.stringify(arr_sys);
+    //console.log(json1);
+    win.webContents.send('stagelist', [args, json1]);
+    //console.log('message sent.');
     db.close();
   });
 });
 ipcMain.on('getbuildstageA', (event, args) => {
-  console.log('getbuildstage is captured.args:'+args);
+  //console.log('getbuildstage is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT Stage FROM Build where ProductID="+args+" group by Stage ORDER BY Date asc");
-    contents = db.exec("SELECT Stage FROM Build where ProductID="+args+" group by Stage ORDER BY Date asc");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
+    //console.log("SELECT Stage FROM Build where ProductID="+args+" group by Stage ORDER BY Date asc");
+    contents = db.exec("SELECT Stage FROM Build where ProductID=" + args + " group by Stage ORDER BY Date asc");
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
       arr_sys.push(arr[i][0]);
     };
-    var json1=JSON.stringify(arr_sys);
-    console.log(json1);
-    win.webContents.send('stagelistA',[args,json1]);
-    console.log('message sent.');
+    var json1 = JSON.stringify(arr_sys);
+    //console.log(json1);
+    win.webContents.send('stagelistA', [args, json1]);
+    //console.log('message sent.');
     db.close();
   });
 });
 
 ipcMain.on('getbuildlist', (event, args) => {
-  console.log('getbuildlist is captured.args:'+args);
+  //console.log('getbuildlist is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT ID,Version FROM Build where ProductID="+args[0]+" and Stage='"+args[1]+"' ORDER BY Date");
-    contents = db.exec("SELECT ID,Version FROM Build where ProductID="+args[0]+" and Stage='"+args[1]+"' ORDER BY Date");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
-      arr_sys1=[arr[i][0],arr[i][1]];
+    //console.log("SELECT ID,Version FROM Build where ProductID="+args[0]+" and Stage='"+args[1]+"' ORDER BY Date");
+    contents = db.exec("SELECT ID,Version FROM Build where ProductID=" + args[0] + " and Stage='" + args[1] + "' ORDER BY Date");
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [arr[i][0], arr[i][1]];
       arr_sys.push(arr_sys1);
     };
-    var json1=JSON.stringify(arr_sys);
-    console.log(json1);
-    win.webContents.send('buildlist',[args[0],args[1],json1]);
-    console.log('message sent.');
+    var json1 = JSON.stringify(arr_sys);
+    //console.log(json1);
+    win.webContents.send('buildlist', [args[0], args[1], json1]);
+    //console.log('message sent.');
     db.close();
   });
 });
 
 const newLocal = 'searchbuildlist';
 ipcMain.on(newLocal, (event, args) => {
-  console.log('searchbuildlist is captured.args:'+args);
+  //console.log('searchbuildlist is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
-    contents = db.exec("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
-    if(contents.length==0){
-      dialog.showErrorBox('找不到数据','你查找的"'+args+'"找不到条目。');
-      var json1=JSON.stringify([]);
-      console.log(json1);
-      win.webContents.send('searchlist',[args,json1]);
-      console.log('message sent.');
+    //console.log("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
+    contents = db.exec("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%" + args + "%' ORDER BY ID,Date");
+    if (contents.length == 0) {
+      dialog.showErrorBox('找不到数据', '你查找的"' + args + '"找不到条目。');
+      var json1 = JSON.stringify([]);
+      //console.log(json1);
+      win.webContents.send('searchlist', [args, json1]);
+      //console.log('message sent.');
       db.close();
       return -1;
     }
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
-      arr_sys1=[];
-      for(var j = 0; j < arr[i].length; j++) {
-        console.log(arr[i][j]);
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [];
+      for (var j = 0; j < arr[i].length; j++) {
+        //console.log(arr[i][j]);
         arr_sys1.push(arr[i][j]);
       };
       arr_sys.push(arr_sys1);
     };
-    var json1=JSON.stringify(arr_sys);
-    console.log(json1);
-    win.webContents.send('searchlist',[args,json1]);
-    console.log('message sent.');
+    var json1 = JSON.stringify(arr_sys);
+    //console.log(json1);
+    win.webContents.send('searchlist', [args, json1]);
+    //console.log('message sent.');
     db.close();
   });
 });
 
 ipcMain.on('getupdatelist', (event, args) => {
-  console.log('getbwdbversion is captured.args:'+args);
+  //console.log('getbwdbversion is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("select BuildID,Build.ProductID,Build.Version from ChangeLog inner join Build on build.ID=BuildID");
+    //console.log("select BuildID,Build.ProductID,Build.Version from ChangeLog inner join Build on build.ID=BuildID");
     contents = db.exec("select BuildID,Build.ProductID,Build.Version from ChangeLog inner join Build on build.ID=BuildID");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
-      arr_sys1=[];
-      for(var j = 0; j < arr[i].length; j++) {
-        console.log(arr[i][j]);
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [];
+      for (var j = 0; j < arr[i].length; j++) {
+        //console.log(arr[i][j]);
         arr_sys1.push(arr[i][j]);
       };
       arr_sys.push(arr_sys1);
     };
-    console.log(arr_sys);
-    var json1=JSON.stringify(arr_sys);
-    console.log([json1]);
-    win.webContents.send('updatelist',[json1]);
-    console.log('message sent.');
+    //console.log(arr_sys);
+    var json1 = JSON.stringify(arr_sys);
+    //console.log([json1]);
+    win.webContents.send('updatelist', [json1]);
+    //console.log('message sent.');
     db.close();
   });
 });
 
 ipcMain.on('getbuildinfo', (event, args) => {
-  console.log('getbuildinfo is captured.args:'+args);
+  //console.log('getbuildinfo is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
-    contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
-      arr_sys1=[];
-      for(var j = 0; j < arr[i].length; j++) {
-        console.log(arr[i][j]);
+    //console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
+    contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID=" + args[0] + " and ID=" + args[1] + " ORDER BY ID");
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [];
+      for (var j = 0; j < arr[i].length; j++) {
+        //console.log(arr[i][j]);
         arr_sys1.push(arr[i][j]);
       };
       arr_sys.push(arr_sys1);
     };
-    console.log(arr_sys);
-    var json1=JSON.stringify(arr_sys);
-    console.log([args[0],args[1],json1]);
-    win.webContents.send('buildinfo',[args[0],args[1],json1]);
-    console.log('message sent.');
+    //console.log(arr_sys);
+    var json1 = JSON.stringify(arr_sys);
+    //console.log([args[0],args[1],json1]);
+    win.webContents.send('buildinfo', [args[0], args[1], json1]);
+    //console.log('message sent.');
     db.close();
   });
 });
 
 ipcMain.on('getbwdbversion', (event, args) => {
-  console.log('getbwdbversion is captured.args:'+args);
+  //console.log('getbwdbversion is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT * FROM Version");
+    //console.log("SELECT * FROM Version");
     contents = db.exec("SELECT * FROM Version");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
-      arr_sys1=[];
-      for(var j = 0; j < arr[i].length; j++) {
-        console.log(arr[i][j]);
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [];
+      for (var j = 0; j < arr[i].length; j++) {
+        //console.log(arr[i][j]);
         arr_sys1.push(arr[i][j]);
       };
       arr_sys.push(arr_sys1);
     };
-    console.log(arr_sys);
-    var json1=JSON.stringify(arr_sys);
-    console.log([json1]);
-    if(args==""){
-      win.webContents.send('bwdbversion',[json1]);
-    }else{
-      aboutWindow.webContents.send('bwdbversion',[json1]);
+    //console.log(arr_sys);
+    var json1 = JSON.stringify(arr_sys);
+    //console.log([json1]);
+    if (args == "") {
+      win.webContents.send('bwdbversion', [json1]);
+    } else {
+      aboutWindow.webContents.send('bwdbversion', [json1]);
     }
-    
-    console.log('message sent.');
+
+    //console.log('message sent.');
     db.close();
   });
 });
 
 
 ipcMain.on('getauthorlist', (event, args) => {
-  console.log('getbwdbversion is captured.args:'+args);
+  //console.log('getbwdbversion is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT Name FROM Version");
+    //console.log("SELECT Name FROM Version");
     contents = db.exec("SELECT Name FROM Contributor");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
-      arr_sys1=[];
-      for(var j = 0; j < arr[i].length; j++) {
-        console.log(arr[i][j]);
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [];
+      for (var j = 0; j < arr[i].length; j++) {
+        //console.log(arr[i][j]);
         arr_sys1.push(arr[i][j]);
       };
       arr_sys.push(arr_sys1);
     };
-    console.log(arr_sys);
-    var json1=JSON.stringify(arr_sys);
-    console.log([json1]);
-    if(args==""){
-      win.webContents.send('authorlist',[json1]);
-    }else{
-      authorwindow.webContents.send('authorlist',[json1]);
+    //console.log(arr_sys);
+    var json1 = JSON.stringify(arr_sys);
+    //console.log([json1]);
+    if (args == "") {
+      win.webContents.send('authorlist', [json1]);
+    } else {
+      authorwindow.webContents.send('authorlist', [json1]);
     }
-    
-    console.log('message sent.');
+
+    //console.log('message sent.');
     db.close();
   });
 });
 ipcMain.on('getbuildinfo', (event, args) => {
-  console.log('getbuildinfo is captured.args:'+args);
+  //console.log('getbuildinfo is captured.args:'+args);
   initSqlJs().then(SQL => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
-    contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
-    arr=contents[0].values;
-    arr_sys= [];
-    arr_sys1=[];
-    //console.log(contents);
-    console.log(arr);
-    console.log(arr.length);
-    for(var i = 0; i < arr.length; i++) {
-      arr_sys1=[];
-      for(var j = 0; j < arr[i].length; j++) {
-        console.log(arr[i][j]);
+    //console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
+    contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID=" + args[0] + " and ID=" + args[1] + " ORDER BY ID");
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [];
+      for (var j = 0; j < arr[i].length; j++) {
+        //console.log(arr[i][j]);
         arr_sys1.push(arr[i][j]);
       };
       arr_sys.push(arr_sys1);
     };
-    console.log(arr_sys);
-    var json1=JSON.stringify(arr_sys);
-    console.log([args[0],args[1],json1]);
-    win.webContents.send('buildinfo',[args[0],args[1],json1]);
-    console.log('message sent.');
+    //console.log(arr_sys);
+    var json1 = JSON.stringify(arr_sys);
+    //console.log([args[0],args[1],json1]);
+    win.webContents.send('buildinfo', [args[0], args[1], json1]);
+    //console.log('message sent.');
     db.close();
   });
 });
 ipcMain.on('gallerylist', (event, args) => {
-  gallerywindow.webContents.send('picjson',picjson);
+  gallerywindow.webContents.send('picjson', picjson);
 });
 ipcMain.on('opengallery', (event, args) => {
   creategalleryWindow();
-  picjson=args;
+  picjson = args;
 });
 ipcMain.on('openabout', (event, args) => {
   createAboutWindow();
@@ -483,7 +487,7 @@ ipcMain.on('openabout', (event, args) => {
 ipcMain.on('openauthor', (event, args) => {
   aboutWindow.close();
   createAuthorWindow();
-  
+
 });
 ipcMain.on('closeabout', (event, args) => {
   aboutWindow.close();
@@ -491,4 +495,125 @@ ipcMain.on('closeabout', (event, args) => {
 ipcMain.on('closegallery', (event, args) => {
   gallerywindow.close();
 });
-//关于界面的IPC部分
+//管理界面的IPC部分
+ipcMain.on('editbuild', (event, args) => {
+  var s = args;
+  console.log(s);
+  var p = new Promise(resolve => {
+    //查询ID是否存在
+    proid = args[0];
+    buildid = args[1];
+    proname = args[13];
+    codename = args[12];
+    console.log("proid:" + proid);
+    if (proid == -1) {
+      return new Promise(resolve => {
+        initSqlJs().then(SQL => {
+          // 创建数据库
+          db = new SQL.Database(data);
+          db.run('BEGIN;');
+          db.exec("insert into 'Product' values (null, '" + proname + "', '" + codename + "');");
+          db.run('COMMIT;');
+          data = db.export();
+          contents = db.exec("SELECT ID from 'Product' where Name='" + proname + "'");
+          arr = contents[0].values;
+          try {
+            resolve(arr[0][0]);
+          } catch{
+            throw new Error('create product error');
+          }
+        })
+      }).then(val => {
+        return(val);
+      });
+
+    } else {
+      return new Promise(resolve => {
+        console.log("proidA:" + proid);
+        initSqlJs().then(SQL => {
+          // 创建数据库
+          db = new SQL.Database(data);
+          contents = db.exec("SELECT ID from 'Product' where ID=" + proid + "");
+          arr = contents[0].values;
+          try {
+            resolve(arr[0][0]);
+          } catch{
+            throw new Error('product invild');
+          }
+        })
+      }).then(val => {
+        resolve(val);
+      });
+    }
+  }).then(val => {
+    //检验产品是否存在
+    proid = val;
+    //防止ID传错
+    if (proid != args[0]) {
+      throw new Error('invild pro id');
+    }
+    if (buildid == -1) {
+      return new Promise(resolve => {
+        initSqlJs().then(SQL => {
+          // 创建数据库
+          db.run('BEGIN;');
+          db = new SQL.Database(data);
+          db.exec("insert into 'Build' values (null, " + proid + ", '" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "', '" + args[8] + "', '" + args[9] + "', '" + args[6] + "', '" + args[7] + "', '" + args[10].myReplace("'", "''") + "', '" + args[11].myReplace("'", "''") + "','" + row[12].myReplace("'", "''") + "');");
+          db.run('COMMIT;');
+          data = db.export();
+          contents = db.exec("select ID from Build where Version='" + args[2] + "' and Stage='" + args[3] + "' and BuildTag='" + args[4] + "' and ProductID=" + proid);
+          arr = contents[0].values;
+          try {
+            resolve(arr[0][0]);
+          } catch{
+            throw new Error('product invild');
+          }
+        });
+      }).then(val => {
+        return(val);
+      });
+      //如果Build不存在
+     
+    } else {
+      //如果存在
+      return new Promise(resolve => {
+        console.log("proidV:" + proid);
+        initSqlJs().then(SQL => {
+          update_list = ['Version', 'Stage', 'BuildTag', 'Architecture', 'Date', 'Serial', 'Edition', 'Language', 'Notes', 'NotesEN', 'CodeName'];
+          sql = `UPDATE 'Build' SET ProductID = '${proid}' WHERE ID=${buildid}`;
+          db.exec(sql);
+          for (let i = 0; i < update_list.length; i++) {
+            db.run('BEGIN;');
+            l = args[i + 2];
+            l = l.toString().replace("'", "''");
+            if(l==""){
+              l="N/A";
+            }
+            console.log(l);
+            sql = `UPDATE 'Build' SET ${update_list[i]} = '${l}' WHERE ID=${buildid}`;
+            //dialog.showErrorBox('发生致命错误', sql);
+            console.log(sql);
+            db.run(sql);
+            db.run('COMMIT;');
+          }
+          //dialog.showErrorBox('发生致命错误', '1');
+          data = db.export();
+          //dialog.showErrorBox('发生致命错误', '2');
+          resolve(buildid);
+        });
+      }).then(val => {
+        return(val);
+      });
+      
+    }
+  }).then(val => {
+    var buffer = Buffer.from(data, 'binary');
+        // 被创建数据库名称
+    var filename = './DataBase.db';
+    fs.writeFileSync(filename, buffer);
+    dialog.showMessageBoxSync(win, { title: '修改完成！', message: '修改完成!' });
+    win.webContents.send('newbuildid',[proid,buildid]);
+  }).catch(err => {
+    console.log(err);
+  })
+});

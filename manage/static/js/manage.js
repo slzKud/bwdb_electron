@@ -12,6 +12,7 @@ const remote = require('electron').remote;
 const { Menu, MenuItem } = remote;
 var AdmZip = require('adm-zip');
 var fs = require("fs");
+const { now } = require('jquery');
 function get_build_info(proid, buildid) {
     console.log([proid, buildid])
     console.log("clearD" + selectflag);
@@ -221,6 +222,50 @@ function show_search_textbox() {
         textflag = 0;
     }
 }
+function save_build(){
+    //info
+    buildid=now_buildid
+    if(buildid==-1){
+        buildid=-1;
+    }
+    proid=$('#productname').next('.es-list').children('[value="'+$('#productname').val()+'"]').attr('data-proid');
+    productname=$('#productname').val();
+    //如果没有该产品 那就设置为-1
+    if(proid==undefined){
+        proid=-1;
+    }
+    /*
+    $("#stage").val(s[0][1]);
+    $("#vername").val(s[0][2]);
+    $("#buildtag").val(s[0][6]);
+    $("#biosdate").attr('value', dateFtt('yyyy-MM-dd', s[0][7]));
+    $("#arch").val(s[0][3]);
+    $("#CodeName").val(s[0][11]);
+    $("#SerialNumber").val(s[0][8]);
+    $("#SKU").html(s[0][4]);
+    $("#LANG").html(s[0][5]);
+    $("#FixCN").html(s[0][9]);
+    $("#FixEN").html(s[0][10]);
+    */
+   stage=$("#stage").val();
+   vername=$("#vername").val();
+   buildtag=$("#buildtag").val();
+   biosdate=dateFtt('yyyy/MM/dd', $("#biosdate").val());
+   arch=$("#arch").val();
+   codename=$("#CodeName").val();
+   if (codename==""){
+    $('#productname').next('.es-list').children().html();
+    console.log(codename);
+   }
+   serialnum=$("#SerialNumber").val()
+   SKUa=$("#SKU").val();
+   lang=$("#LANG").val();
+   fixc=$("#FixCN").val();
+   fixe= $("#FixEN").val();
+   s=[proid,buildid,vername,stage,buildtag,arch,biosdate,serialnum,SKUa,lang,fixc,fixe,codename,productname];
+   console.log(s);
+   ipcRenderer.send('editbuild',s); 
+}
 ipcRenderer.on('syslist', function (event, arg) {
     console.log(arg);
     var s = JSON.parse(arg);
@@ -322,6 +367,17 @@ ipcRenderer.on('searchlist', function (event, arg) {
     }
     $('.bwdb_sidebarA').scrollTop(0 - $('.bwdb_sidebarA').scrollTop);
 });
+ipcRenderer.on('newbuildid', function (event, arg) {
+    console.log(arg);
+    now_proid=arg[0];
+    now_buildid=arg[1];
+    $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
+    $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
+    $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
+    verflag = 0;
+    ipcRenderer.send('getbuildstage', now_proid);
+    get_build_info(now_proid,now_buildid);
+});
 ipcRenderer.on('buildinfo', function (event, arg) {
     console.log(arg);
     console.log($('.search_box_title').attr('data-id'));
@@ -344,7 +400,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
         let i = 0;
         $('.bwdb_select_item').each(function (index) {
             //console.log($(this).html());
-            $("#productname").editableSelect('add', $(this).html(), i, ['value', $(this).html()]);
+            $("#productname").editableSelect('add', $(this).html(), i,[{name:'value',value:$(this).html()},{name:'data-proid',value:$(this).attr('data-id')}]);
             i = i + 1;
         });
     }
@@ -367,12 +423,14 @@ ipcRenderer.on('buildinfo', function (event, arg) {
         }
         selectflag = 0;
     }
+    //alert(s[0][11]);
     $("#CodeName").val(s[0][11]);
     $("#SerialNumber").val(s[0][8]);
-    $("#SKU").html(s[0][4]);
-    $("#LANG").html(s[0][5]);
-    $("#FixCN").html(s[0][9]);
-    $("#FixEN").html(s[0][10]);
+    $("#SKU").val(s[0][4]);
+    $("#LANG").val(s[0][5]);
+    //alert(s[0][9]);
+    $("#FixCN").val(s[0][9]);
+    $("#FixEN").val(s[0][10]);
         $("#screenshotlist").empty();
         try {
             zip = new AdmZip(process.cwd() + "/gallery/" + now_buildid + ".zip");
@@ -403,4 +461,26 @@ $(document).on('change', '#screenshotlist', function () {
     var checkValue = $("#screenshotlist").find("option:selected").attr('data-pic');
     console.log('a' + checkValue);
     showpic(now_buildid, checkValue)
+});
+$(document).on('select.editable-select',  '.edit_select',function (e) {
+    if($(this).attr('id')=='productname'){
+        proid=$('#productname').next('.es-list').children('[value="'+$('#productname').val()+'"]').attr('data-proid');
+        var x = $('.bwdb_select_item[data-id="' + proid + '"]').attr('data-id-codename');
+        console.log('clearB');
+        $("#CodeName").editableSelect('clear');
+        x1 = x.split(",");
+        //console.log(x1);
+        for (let i = 0; i < x1.length; i++) {
+            $("#CodeName").editableSelect('add', x1[i], i, ['value', x1[i]]);
+        }
+        ipcRenderer.send('getbuildstageA', proid);
+    }
+});
+$(document).on('click', '.nav_right_btn .nav_btn', function () {
+    console.log($(this).attr('data-do'));
+    switch($(this).attr('data-do')){
+        case "save":
+            save_build();
+            break;
+    }
 });
