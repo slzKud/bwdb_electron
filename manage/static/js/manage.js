@@ -222,17 +222,17 @@ function show_search_textbox() {
         textflag = 0;
     }
 }
-function save_build(){
+function save_build() {
     //info
-    buildid=now_buildid
-    if(buildid==-1){
-        buildid=-1;
+    buildid = now_buildid
+    if (buildid == -1) {
+        buildid = -1;
     }
-    proid=$('#productname').next('.es-list').children('[value="'+$('#productname').val()+'"]').attr('data-proid');
-    productname=$('#productname').val();
+    proid = $('#productname').next('.es-list').children('[value="' + $('#productname').val() + '"]').attr('data-proid');
+    productname = $('#productname').val();
     //如果没有该产品 那就设置为-1
-    if(proid==undefined){
-        proid=-1;
+    if (proid == undefined) {
+        proid = -1;
     }
     /*
     $("#stage").val(s[0][1]);
@@ -247,24 +247,31 @@ function save_build(){
     $("#FixCN").html(s[0][9]);
     $("#FixEN").html(s[0][10]);
     */
-   stage=$("#stage").val();
-   vername=$("#vername").val();
-   buildtag=$("#buildtag").val();
-   biosdate=dateFtt('yyyy/MM/dd', $("#biosdate").val());
-   arch=$("#arch").val();
-   codename=$("#CodeName").val();
-   if (codename==""){
-    $('#productname').next('.es-list').children().html();
-    console.log(codename);
-   }
-   serialnum=$("#SerialNumber").val()
-   SKUa=$("#SKU").val();
-   lang=$("#LANG").val();
-   fixc=$("#FixCN").val();
-   fixe= $("#FixEN").val();
-   s=[proid,buildid,vername,stage,buildtag,arch,biosdate,serialnum,SKUa,lang,fixc,fixe,codename,productname];
-   console.log(s);
-   ipcRenderer.send('editbuild',s); 
+    stage = $("#stage").val();
+    vername = $("#vername").val();
+    buildtag = $("#buildtag").val();
+    biosdate = dateFtt('yyyy/MM/dd', $("#biosdate").val());
+    arch = $("#arch").val();
+    codename = $("#CodeName").val();
+    if (codename == "" || codename == "N/A") {
+        codename = $('#codename').next('.es-list').children().html();
+        if (codename == undefined) {
+            codename = "";
+        }
+        if (codename != "" && codename != "N/A") {
+            $("#CodeName").editableSelect('add', codename, 0, ['value', codename]);
+        }
+
+        console.log(codename);
+    }
+    serialnum = $("#SerialNumber").val()
+    SKUa = $("#SKU").val();
+    lang = $("#LANG").val();
+    fixc = $("#FixCN").val();
+    fixe = $("#FixEN").val();
+    s = [proid, buildid, vername, stage, buildtag, arch, biosdate, serialnum, SKUa, lang, fixc, fixe, codename, productname];
+    console.log(s);
+    ipcRenderer.send('editbuild', s);
 }
 ipcRenderer.on('syslist', function (event, arg) {
     console.log(arg);
@@ -282,6 +289,34 @@ ipcRenderer.on('syslist', function (event, arg) {
     $('.search_box_title').html(s[0][1]);
     ipcRenderer.send('getbuildstage', 1);
     get_build_info(1, 1);
+
+});
+ipcRenderer.on('syslistA', function (event, arg) {
+    console.log(arg);
+    var s = JSON.parse(arg);
+    $('#bwdb_nav_select_bar').html('');
+    for (var i = 0; i < s.length; i++) {
+        console.log(s[i]);
+        var s1 = s[i][1];
+        s1 = s1.replace('\"', '&quot');
+        $("#bwdb_nav_select_bar").append('<div class="bwdb_select_item"' + 'data-id="' + s[i][0] + '" data-id-codename="' + s[i][2] + '">' + s1 + '</div>');
+    };
+
+    if ($('.bw_sidebar_info_box').css('display') == 'none') {
+        var x = $('.bwdb_select_item[data-id="' + now_proid + '"]').attr('data-id-codename');
+        var y = $('.bwdb_select_item[data-id="' + now_proid  + '"]').html();
+    } else {
+        var x = $('.bwdb_select_item[data-id="' + now_proid  + '"]').attr('data-id-codename');
+        var y = $('.bwdb_select_item[data-id="' + now_proid  + '"]').html();
+    }
+    $('.search_box_title').attr('data-id-codename', x);
+    $("#CodeName").editableSelect('clear');
+    x1 = x.split(",");
+    //console.log(x1);
+    for (let i = 0; i < x1.length; i++) {
+        $("#CodeName").editableSelect('add', x1[i], i, ['value', x1[i]]);
+    }
+
 
 });
 ipcRenderer.on('stagelist', function (event, arg) {
@@ -369,14 +404,15 @@ ipcRenderer.on('searchlist', function (event, arg) {
 });
 ipcRenderer.on('newbuildid', function (event, arg) {
     console.log(arg);
-    now_proid=arg[0];
-    now_buildid=arg[1];
+    now_proid = arg[0];
+    now_buildid = arg[1];
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
     $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
     $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
     verflag = 0;
+    ipcRenderer.send('getsyslistA', 'ping');
     ipcRenderer.send('getbuildstage', now_proid);
-    get_build_info(now_proid,now_buildid);
+    get_build_info(now_proid, now_buildid);
 });
 ipcRenderer.on('buildinfo', function (event, arg) {
     console.log(arg);
@@ -400,7 +436,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
         let i = 0;
         $('.bwdb_select_item').each(function (index) {
             //console.log($(this).html());
-            $("#productname").editableSelect('add', $(this).html(), i,[{name:'value',value:$(this).html()},{name:'data-proid',value:$(this).attr('data-id')}]);
+            $("#productname").editableSelect('add', $(this).html(), i, [{ name: 'value', value: $(this).html() }, { name: 'data-proid', value: $(this).attr('data-id') }]);
             i = i + 1;
         });
     }
@@ -431,29 +467,29 @@ ipcRenderer.on('buildinfo', function (event, arg) {
     //alert(s[0][9]);
     $("#FixCN").val(s[0][9]);
     $("#FixEN").val(s[0][10]);
-        $("#screenshotlist").empty();
-        try {
-            zip = new AdmZip(process.cwd() + "/gallery/" + now_buildid + ".zip");
-            if (ifzipfileexist(zip, 'pic.json') == 1) {
-                var info = zip.readAsText("pic.json");
-                console.log(info);
-                if (info != "") {
-                    var s = JSON.parse(info);
-                    mainpicid=s.main_pic;
-                    for (let i = 0; i < s.screenshot.length; i++) {
-                        if(i!=mainpicid){
-                            $("#screenshotlist").append("<option data-pic=" + i + " data-pic-hash='"+s.screenshot[i].screenshothash+"' >" + s.screenshot[i].screenshottitle + "</option>");
-                        }else{
-                            $("#screenshotlist").append("<option data-pic=" + i + " data-pic-hash='"+s.screenshot[i].screenshothash+"' selected >" + s.screenshot[i].screenshottitle + "</option>");
-                        }
-                        
+    $("#screenshotlist").empty();
+    try {
+        zip = new AdmZip(process.cwd() + "/gallery/" + now_buildid + ".zip");
+        if (ifzipfileexist(zip, 'pic.json') == 1) {
+            var info = zip.readAsText("pic.json");
+            console.log(info);
+            if (info != "") {
+                var s = JSON.parse(info);
+                mainpicid = s.main_pic;
+                for (let i = 0; i < s.screenshot.length; i++) {
+                    if (i != mainpicid) {
+                        $("#screenshotlist").append("<option data-pic=" + i + " data-pic-hash='" + s.screenshot[i].screenshothash + "' >" + s.screenshot[i].screenshottitle + "</option>");
+                    } else {
+                        $("#screenshotlist").append("<option data-pic=" + i + " data-pic-hash='" + s.screenshot[i].screenshothash + "' selected >" + s.screenshot[i].screenshottitle + "</option>");
                     }
-                    showpic(now_buildid,mainpicid);
+
                 }
+                showpic(now_buildid, mainpicid);
             }
-        } catch{
-            console.log('nopic');
         }
+    } catch{
+        console.log('nopic');
+    }
     //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])
     //添加相关的代码
 });
@@ -462,9 +498,9 @@ $(document).on('change', '#screenshotlist', function () {
     console.log('a' + checkValue);
     showpic(now_buildid, checkValue)
 });
-$(document).on('select.editable-select',  '.edit_select',function (e) {
-    if($(this).attr('id')=='productname'){
-        proid=$('#productname').next('.es-list').children('[value="'+$('#productname').val()+'"]').attr('data-proid');
+$(document).on('select.editable-select', '.edit_select', function (e) {
+    if ($(this).attr('id') == 'productname') {
+        proid = $('#productname').next('.es-list').children('[value="' + $('#productname').val() + '"]').attr('data-proid');
         var x = $('.bwdb_select_item[data-id="' + proid + '"]').attr('data-id-codename');
         console.log('clearB');
         $("#CodeName").editableSelect('clear');
@@ -478,7 +514,7 @@ $(document).on('select.editable-select',  '.edit_select',function (e) {
 });
 $(document).on('click', '.nav_right_btn .nav_btn', function () {
     console.log($(this).attr('data-do'));
-    switch($(this).attr('data-do')){
+    switch ($(this).attr('data-do')) {
         case "save":
             save_build();
             break;

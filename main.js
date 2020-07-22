@@ -5,6 +5,7 @@ const dialog = require('electron').dialog;
 //const SQL = require('sql.js/dist/sql-asm');
 const fs = require("fs");
 const { promises } = require('dns');
+const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 try {
   var data = fs.readFileSync('./DataBase.db');
 } catch{
@@ -194,7 +195,30 @@ ipcMain.on('getsyslist', (event, args) => {
     db.close();
   });
 });
-
+ipcMain.on('getsyslistA', (event, args) => {
+  //console.log('getsyslist is captured.');
+  initSqlJs().then(SQL => {
+    // 创建数据库
+    db = new SQL.Database(data);
+    // 运行查询而不读取结果
+    contents = db.exec("SELECT ID,Name,CodeName FROM Product order by ID");
+    arr = contents[0].values;
+    arr_sys = [];
+    arr_sys1 = [];
+    ////console.log(contents);
+    //console.log(arr);
+    //console.log(arr.length);
+    for (var i = 0; i < arr.length; i++) {
+      arr_sys1 = [arr[i][0], arr[i][1], arr[i][2]];
+      arr_sys.push(arr_sys1);
+    };
+    var json1 = JSON.stringify(arr_sys);
+    //console.log(json1);
+    win.webContents.send('syslistA', json1);
+    //console.log('message sent.');
+    db.close();
+  });
+});
 ipcMain.on('getbuildstage', (event, args) => {
   //console.log('getbuildstage is captured.args:'+args);
   initSqlJs().then(SQL => {
@@ -533,9 +557,22 @@ ipcMain.on('editbuild', (event, args) => {
         initSqlJs().then(SQL => {
           // 创建数据库
           db = new SQL.Database(data);
-          contents = db.exec("SELECT ID from 'Product' where ID=" + proid + "");
+          contents = db.exec("SELECT ID,CodeName from 'Product' where ID=" + proid + "");
           arr = contents[0].values;
           try {
+            x=arr[0][1];
+            x1=x.split(",");
+            if(x1.indexOf(codename)==-1){
+              if(x1[0]!=""){
+                x1.push(codename);
+              }else{
+                x1[0]=codename;
+              }
+              x2=x1.join();
+              sql=`UPDATE 'Product' SET CodeName = '${x2}' WHERE ID=${proid}`;
+              console.log(sql);
+              db.run(sql);
+            }
             resolve(arr[0][0]);
           } catch{
             throw new Error('product invild');
