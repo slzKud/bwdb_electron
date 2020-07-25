@@ -11,9 +11,10 @@
     "electron": "^8.3.0"
   },
   "dependencies": {
+    "adm-zip": "^0.4.14",
+    "electron-prompt": "^1.5.1",
     "jquery": "^3.5.1",
-    "sql.js": "^1.2.2",
-    "adm-zip":"^0.4.14",
-    "jquery-editable-select":"^2.2.5"
+    "jquery-editable-select": "^2.2.5",
+    "sql.js": "^1.2.2"
   }
 }

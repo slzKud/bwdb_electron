@@ -12,7 +12,9 @@ const remote = require('electron').remote;
 const { Menu, MenuItem } = remote;
 var AdmZip = require('adm-zip');
 var fs = require("fs");
+var picdo = require("./moudles/picdo");
 const { now } = require('jquery');
+const prompt = require('electron-prompt');
 function get_build_info(proid, buildid) {
     console.log([proid, buildid])
     console.log("clearD" + selectflag);
@@ -80,6 +82,25 @@ function ifzipfileexist(zip, entryname) {
     } catch{
         return -1;
     }
+}
+function movelist(selector, flag) {
+    if ($(selector).children("option:selected").prev().length == 0 && flag == true) {
+        alert('你不能再往上移动');
+        return -1;
+    }
+    if ($(selector).children("option:selected").next().length == 0 && flag == false) {
+        alert('你不能再往下移动');
+        return -1;
+    }
+    a = $(selector).find("option:selected").prop("outerHTML");
+    $(selector).find("option:selected").attr('remove', 1);
+    //$(selector).find("option:selected").remove();
+    if (flag == true) {
+        $(selector).children("option:selected").prev().before(a);
+    } else {
+        $(selector).children("option:selected").next().after(a);
+    }
+    $(selector).find("option:selected[remove=1]").remove();
 }
 $(window).ready(function () {
     now_height = document.documentElement.clientHeight - 55;
@@ -304,10 +325,10 @@ ipcRenderer.on('syslistA', function (event, arg) {
 
     if ($('.bw_sidebar_info_box').css('display') == 'none') {
         var x = $('.bwdb_select_item[data-id="' + now_proid + '"]').attr('data-id-codename');
-        var y = $('.bwdb_select_item[data-id="' + now_proid  + '"]').html();
+        var y = $('.bwdb_select_item[data-id="' + now_proid + '"]').html();
     } else {
-        var x = $('.bwdb_select_item[data-id="' + now_proid  + '"]').attr('data-id-codename');
-        var y = $('.bwdb_select_item[data-id="' + now_proid  + '"]').html();
+        var x = $('.bwdb_select_item[data-id="' + now_proid + '"]').attr('data-id-codename');
+        var y = $('.bwdb_select_item[data-id="' + now_proid + '"]').html();
     }
     $('.search_box_title').attr('data-id-codename', x);
     $("#CodeName").editableSelect('clear');
@@ -484,6 +505,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
                     }
 
                 }
+                $("#screenshotlist").attr('data-pic-num', s.screenshot.length);
                 showpic(now_buildid, mainpicid);
             }
         }
@@ -495,8 +517,15 @@ ipcRenderer.on('buildinfo', function (event, arg) {
 });
 $(document).on('change', '#screenshotlist', function () {
     var checkValue = $("#screenshotlist").find("option:selected").attr('data-pic');
-    console.log('a' + checkValue);
-    showpic(now_buildid, checkValue)
+    if (checkValue == -1) {
+        var s = $("#screenshotlist").find("option:selected").attr('data-pic-base64');
+        s1 = "url(data:image/png;base64," + s + ')';
+        $('#main_pic').css('background-image', s1);
+    } else {
+        console.log('a' + checkValue);
+        showpic(now_buildid, checkValue)
+    }
+
 });
 $(document).on('select.editable-select', '.edit_select', function (e) {
     if ($(this).attr('id') == 'productname') {
@@ -517,6 +546,89 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
     switch ($(this).attr('data-do')) {
         case "save":
             save_build();
+            break;
+        case "new":
+            now_buildid=-1;
+            now_proid=-1;
+            $("#productname").val('');
+            $("#stage").val('');
+            $("#vername").val('');
+            $("#buildtag").val('');
+            $("#biosdate").attr('value', '');
+            $("#arch").val('');
+            $("#CodeName").val('');
+            $("#SerialNumber").val('');
+            $("#SKU").val('');
+            $("#LANG").val('');
+            //alert(s[0][9]);
+            $("#FixCN").val('');
+            $("#FixEN").val('');
+            $("#screenshotlist").empty();
+            s1 = "url('static/images/no_image_preview.png')";
+            $('#main_pic').css('background-image', s1);
+            $('.title_bar').html('New Build');
+
+    }
+});
+$(document).on('click', '.pic_btn', function () {
+    console.log($(this).attr('data-do'));
+    switch ($(this).attr('data-do')) {
+        case "up":
+            movelist('#screenshotlist', true);
+            break;
+        case "down":
+            movelist('#screenshotlist', false);
+            break;
+        case "add":
+            prompt({
+                title: '请输入截图名',
+                label: '截图名:',
+                value: '',
+                inputAttrs: {
+                    type: 'text'
+                },
+                type: 'input'
+            })
+                .then((r) => {
+                    if (r != null) {
+                        console.log('result', r);
+                        var fp = picdo.openOpenDialog();
+                        if (fp != undefined) {
+                            console.log(fp);
+                            var s = picdo.waterimg2base64(fp);
+                            $("#screenshotlist").append("<option data-pic=" + "-1" + " data-pic-hash='" + picdo.base642hash(s) + "' data-pic-base64='" + s + "' >" + r + "</option>");
+                            alert('添加成功！');
+                        }
+                    }
+                })
+                .catch(console.error);
+
+            break;
+        case "replace":
+            var fp = picdo.openOpenDialog();
+            var checkValue = $("#screenshotlist").find("option:selected").attr('data-pic');
+            var pictitle = $("#screenshotlist").find("option:selected").html();
+            if (fp != undefined) {
+                console.log(fp);
+                var s = picdo.waterimg2base64(fp);
+                //console.log(s);
+                $("#screenshotlist").find("option:selected").after("<option data-pic=" + "-1" + " data-pic-hash='" + picdo.base642hash(s) + "' data-pic-base64='" + s + "' >" + pictitle + "</option>");
+                if (checkValue == -1) {
+                    $("#screenshotlist").find("option:selected").remove();
+                } else {
+                    $("#screenshotlist").children("[data-pic=" + checkValue + "]").remove();
+                }
+
+                $("#screenshotlist").children("[data-pic-hash=" + picdo.base642hash(s) + "]").attr("selected", true);
+                //$("#screenshotlist").children("[data-pic="+checkValue+"]").attr('data-pic-base64',s);
+                //$("#screenshotlist").children("[data-pic="+checkValue+"]").attr('data-pic','-1');
+                s1 = "url(data:image/png;base64," + s + ')';
+                $('#main_pic').css('background-image', s1);
+                alert('替换成功！');
+            }
+            break;
+        case "del":
+            $("#screenshotlist").find("option:selected").remove();
             break;
     }
 });

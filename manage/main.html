@@ -32,13 +32,14 @@
             <div class="title_bar">DataBase Manage</div>
         </div>
         <div class="nav_right_btn">
-            <div class="nav_btn" title="新建项目" data-do='new' ><i class="fa fa-plus" aria-hidden="true"></i></div>
-            <div class="nav_btn" title="删除此Build" data-do='delete'><i class="fa fa-trash-o" aria-hidden="true"></i></div>
-            <div class="nav_btn" title="保存更改" data-do='save' ><i class="fa fa-save" aria-hidden="true"></i></div>
-            <div class="nav_btn" title="放弃更改" data-do='ignore' ><i class="fa fa-times" aria-hidden="true"></i></div>
-            <div class="nav_btn" title="刷新"  data-do='refresh' ><i class="fa fa-refresh" aria-hidden="true"></i></div>
-            <div class="nav_btn" title="设置"  data-do='setting' ><i class="fa fa-cog" aria-hidden="true"></i></div>
-            <div class="nav_btn" title="操作提示" data-do='info' ><i class="fa fa-info-circle" aria-hidden="true"></i></div>
+            <div class="nav_btn" title="新建项目" data-do='new'><i class="fa fa-plus" aria-hidden="true"></i></div>
+            <div class="nav_btn" title="删除此Build" data-do='delete'><i class="fa fa-trash-o" aria-hidden="true"></i>
+            </div>
+            <div class="nav_btn" title="保存更改" data-do='save'><i class="fa fa-save" aria-hidden="true"></i></div>
+            <div class="nav_btn" title="放弃更改" data-do='ignore'><i class="fa fa-times" aria-hidden="true"></i></div>
+            <div class="nav_btn" title="刷新" data-do='refresh'><i class="fa fa-refresh" aria-hidden="true"></i></div>
+            <div class="nav_btn" title="设置" data-do='setting'><i class="fa fa-cog" aria-hidden="true"></i></div>
+            <div class="nav_btn" title="操作提示" data-do='info'><i class="fa fa-info-circle" aria-hidden="true"></i></div>
         </div>
     </nav>
     </div>
@@ -150,9 +151,7 @@
                             Serial Number
                         </div>
                         <div class="edit_control">
-                            <div class="edit_control">
-                                <input type="text" class="form-control" id="SerialNumber" placeholder="">
-                            </div>
+                            <input type="text" class="form-control" id="SerialNumber" placeholder="">
                         </div>
                     </div>
                 </div>
@@ -212,11 +211,16 @@
                 </div>
                 <div class="panel-body">
                     <div style="display: inline;">
-                        <button type="button" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> 添加图片</button>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-times" aria-hidden="true"></i> 删除图片</button>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-folder-open" aria-hidden="true"></i> 替换图片</button>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-arrow-up" aria-hidden="true"></i> 上移图片</button>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-arrow-down" aria-hidden="true"></i> 下移图片</button>
+                        <button type="button" class="btn btn-primary pic_btn" data-do="add"><i class="fa fa-plus"
+                                aria-hidden="true"></i> 添加图片</button>
+                        <button type="button" class="btn btn-primary pic_btn" data-do="del"><i class="fa fa-times"
+                                aria-hidden="true"></i> 删除图片</button>
+                        <button type="button" class="btn btn-primary pic_btn" data-do="replace"><i
+                                class="fa fa-folder-open" aria-hidden="true"></i> 替换图片</button>
+                        <button type="button" class="btn btn-primary pic_btn" data-do="up"><i class="fa fa-arrow-up"
+                                aria-hidden="true"></i> 上移图片</button>
+                        <button type="button" class="btn btn-primary pic_btn" data-do="down"><i class="fa fa-arrow-down"
+                                aria-hidden="true"></i> 下移图片</button>
                     </div>
                     <div class="edit_item">
                         <div class="edit_title">
@@ -237,7 +241,8 @@
                             Preview
                         </div>
                         <div class="edit_control">
-                            <div class="info_box_pics manage" id="main_pic" style="background-image: url('../static/img/preview_img_2.png');"></div>
+                            <div class="info_box_pics manage" id="main_pic"
+                                style="background-image: url('../static/img/preview_img_2.png');"></div>
                         </div>
                     </div>
                 </div>

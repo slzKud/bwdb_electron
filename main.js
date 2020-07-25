@@ -112,7 +112,7 @@ function createManageMainWindow() {
     minWidth: 700,
     width: 1009,
     height: 679,
-    show: false,
+    show:true,
     webPreferences: {
       nodeIntegration: true
     }
@@ -371,7 +371,7 @@ ipcMain.on('getbuildinfo', (event, args) => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    //console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
+    console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
     contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID=" + args[0] + " and ID=" + args[1] + " ORDER BY ID");
     arr = contents[0].values;
     arr_sys = [];
@@ -593,10 +593,8 @@ ipcMain.on('editbuild', (event, args) => {
       return new Promise(resolve => {
         initSqlJs().then(SQL => {
           // 创建数据库
-          db.run('BEGIN;');
           db = new SQL.Database(data);
-          db.exec("insert into 'Build' values (null, " + proid + ", '" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "', '" + args[8] + "', '" + args[9] + "', '" + args[6] + "', '" + args[7] + "', '" + args[10].myReplace("'", "''") + "', '" + args[11].myReplace("'", "''") + "','" + row[12].myReplace("'", "''") + "');");
-          db.run('COMMIT;');
+          db.exec("insert into 'Build' values (null, " + proid + ", '" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "', '" + args[8] + "', '" + args[9] + "', '" + args[6] + "', '" + args[7] + "', '" + args[10].myReplace("'", "''") + "', '" + args[11].myReplace("'", "''") + "','" +args[12].myReplace("'", "''") + "');");
           data = db.export();
           contents = db.exec("select ID from Build where Version='" + args[2] + "' and Stage='" + args[3] + "' and BuildTag='" + args[4] + "' and ProductID=" + proid);
           arr = contents[0].values;
@@ -607,6 +605,7 @@ ipcMain.on('editbuild', (event, args) => {
           }
         });
       }).then(val => {
+        buildid=val;
         return(val);
       });
       //如果Build不存在
