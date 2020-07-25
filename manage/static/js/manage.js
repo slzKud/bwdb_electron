@@ -294,6 +294,38 @@ function save_build() {
     console.log(s);
     ipcRenderer.send('editbuild', s);
 }
+function write_picjson(){
+    var s=[];
+    var i=0;
+    var main_pic=-1;
+    $('#screenshotlist').children('option').each(function(){
+        var s1={
+            "screenshotid": i,
+            "screenshothash": $(this).attr('data-pic-hash'),
+            "screenshottitle": $(this).html(),
+            "parentid": now_buildid
+        };
+        s.push(s1);
+        t=$(this).html();
+        if(t.toLowerCase()=="version" || (t.toLowerCase()=="interface 1" && main_pic==-1) ){
+            main_pic=i;
+        }
+        i=i+1;
+    });
+    if(main_pic==-1){
+        main_pic=0;
+    }
+    var j={
+        "productid": now_proid,
+        "buildid": now_buildid,
+        "main_pic":main_pic,
+        "screenshot": s
+    };
+    return(j);
+}
+function make_screen_zip(){
+    //todo
+}
 ipcRenderer.on('syslist', function (event, arg) {
     console.log(arg);
     var s = JSON.parse(arg);
@@ -599,6 +631,27 @@ $(document).on('click', '.pic_btn', function () {
                             $("#screenshotlist").append("<option data-pic=" + "-1" + " data-pic-hash='" + picdo.base642hash(s) + "' data-pic-base64='" + s + "' >" + r + "</option>");
                             alert('添加成功！');
                         }
+                    }
+                })
+                .catch(console.error);
+
+            break;
+        case "edit":
+            if($("#screenshotlist").find("option:selected").length==0){
+                return -1;
+            }
+            prompt({
+                title: '请输入新的截图名',
+                label: '截图名:',
+                value: $("#screenshotlist").find("option:selected").html(),
+                inputAttrs: {
+                    type: 'text'
+                },
+                type: 'input'
+            })
+                .then((r) => {
+                    if (r != null) {
+                        $("#screenshotlist").find("option:selected").html(r);
                     }
                 })
                 .catch(console.error);
