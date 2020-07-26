@@ -15,6 +15,7 @@ var fs = require("fs");
 var picdo = require("./moudles/picdo");
 const { now } = require('jquery');
 const prompt = require('electron-prompt');
+const { resolve } = require('path');
 function get_build_info(proid, buildid) {
     console.log([proid, buildid])
     console.log("clearD" + selectflag);
@@ -294,37 +295,52 @@ function save_build() {
     console.log(s);
     ipcRenderer.send('editbuild', s);
 }
-function write_picjson(){
-    var s=[];
-    var i=0;
-    var main_pic=-1;
-    $('#screenshotlist').children('option').each(function(){
-        var s1={
+function write_picjson() {
+    var s = [];
+    var i = 0;
+    var main_pic = -1;
+    $('#screenshotlist').children('option').each(function () {
+        var s1 = {
             "screenshotid": i,
             "screenshothash": $(this).attr('data-pic-hash'),
             "screenshottitle": $(this).html(),
             "parentid": now_buildid
         };
         s.push(s1);
-        t=$(this).html();
-        if(t.toLowerCase()=="version" || (t.toLowerCase()=="interface 1" && main_pic==-1) ){
-            main_pic=i;
+        t = $(this).html();
+        if (t.toLowerCase() == "version" || (t.toLowerCase() == "interface 1" && main_pic == -1)) {
+            main_pic = i;
         }
-        i=i+1;
+        i = i + 1;
     });
-    if(main_pic==-1){
-        main_pic=0;
+    if (main_pic == -1) {
+        main_pic = 0;
     }
-    var j={
+    var j = {
         "productid": now_proid,
         "buildid": now_buildid,
-        "main_pic":main_pic,
+        "main_pic": main_pic,
         "screenshot": s
     };
-    return(j);
+    return (j);
 }
-function make_screen_zip(){
-    //todo
+function make_screen_zip(buildid) {
+    var picjson = JSON.stringify(write_picjson());
+    var zip_new = new AdmZip();
+    $('#screenshotlist').children('option').each(function () {
+        if ($(this).attr('data-pic') == '-1') {
+            //新图
+            var s = $(this).attr('data-pic-base64');
+            var d = new Buffer(s, 'base64');
+        } else {
+            //老图
+            var d = loadpic(now_buildid, $(this).attr('data-pic'));
+        }
+        zip_new.addFile($(this).attr('data-pic-hash') + ".png", d, $(this).attr('data-pic-hash') + ".png");
+    });
+    zip_new.addFile("pic.json", Buffer.alloc(picjson.length, picjson), "pic.json");
+    zip_new.writeZip(process.cwd() + "/gallery/" + buildid + ".zip");
+    zip_new = null;
 }
 ipcRenderer.on('syslist', function (event, arg) {
     console.log(arg);
@@ -459,6 +475,9 @@ ipcRenderer.on('newbuildid', function (event, arg) {
     console.log(arg);
     now_proid = arg[0];
     now_buildid = arg[1];
+    make_screen_zip(now_buildid);
+    //remote.dialog.showMessageBoxSync();
+    alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
     $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
     $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
@@ -580,8 +599,8 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
             save_build();
             break;
         case "new":
-            now_buildid=-1;
-            now_proid=-1;
+            now_buildid = -1;
+            now_proid = -1;
             $("#productname").val('');
             $("#stage").val('');
             $("#vername").val('');
@@ -599,6 +618,13 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
             s1 = "url('static/images/no_image_preview.png')";
             $('#main_pic').css('background-image', s1);
             $('.title_bar').html('New Build');
+        case "refresh":
+            if (now_buildid != -1) {
+                ipcRenderer.send('getsyslistA', 'ping');
+                ipcRenderer.send('getbuildstage', now_proid);
+                get_build_info(now_proid, now_buildid);
+            }
+            break;
 
     }
 });
@@ -637,7 +663,7 @@ $(document).on('click', '.pic_btn', function () {
 
             break;
         case "edit":
-            if($("#screenshotlist").find("option:selected").length==0){
+            if ($("#screenshotlist").find("option:selected").length == 0) {
                 return -1;
             }
             prompt({

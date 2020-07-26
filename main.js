@@ -647,7 +647,6 @@ ipcMain.on('editbuild', (event, args) => {
         // 被创建数据库名称
     var filename = './DataBase.db';
     fs.writeFileSync(filename, buffer);
-    dialog.showMessageBoxSync(win, { title: '修改完成！', message: '修改完成!' });
     win.webContents.send('newbuildid',[proid,buildid]);
   }).catch(err => {
     console.log(err);
