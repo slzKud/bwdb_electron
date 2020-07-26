@@ -86,11 +86,21 @@ function ifzipfileexist(zip, entryname) {
 }
 function movelist(selector, flag) {
     if ($(selector).children("option:selected").prev().length == 0 && flag == true) {
-        alert('你不能再往上移动');
+        remote.dialog.showMessageBox({
+            type:'info',
+            title: '提示',
+            message: '你不能再往上移动'
+        });
+        //alert('你不能再往上移动');
         return -1;
     }
     if ($(selector).children("option:selected").next().length == 0 && flag == false) {
-        alert('你不能再往下移动');
+        remote.dialog.showMessageBox({
+            type:'info',
+            title: '提示',
+            message: '你不能再往下移动'
+        });
+        //alert('你不能再往下移动');
         return -1;
     }
     a = $(selector).find("option:selected").prop("outerHTML");
@@ -477,7 +487,12 @@ ipcRenderer.on('newbuildid', function (event, arg) {
     now_buildid = arg[1];
     make_screen_zip(now_buildid);
     //remote.dialog.showMessageBoxSync();
-    alert('修改成功');
+    remote.dialog.showMessageBox({
+        type:'info',
+        title: '修改数据成功',
+        message: '修改数据成功'
+    });
+    //alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
     $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
     $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
@@ -655,7 +670,12 @@ $(document).on('click', '.pic_btn', function () {
                             console.log(fp);
                             var s = picdo.waterimg2base64(fp);
                             $("#screenshotlist").append("<option data-pic=" + "-1" + " data-pic-hash='" + picdo.base642hash(s) + "' data-pic-base64='" + s + "' >" + r + "</option>");
-                            alert('添加成功！');
+                            //alert('添加成功！');
+                            remote.dialog.showMessageBox({
+                                type:'info',
+                                title: '添加截图成功',
+                                message: '添加截图成功'
+                            });
                         }
                     }
                 })
@@ -703,7 +723,11 @@ $(document).on('click', '.pic_btn', function () {
                 //$("#screenshotlist").children("[data-pic="+checkValue+"]").attr('data-pic','-1');
                 s1 = "url(data:image/png;base64," + s + ')';
                 $('#main_pic').css('background-image', s1);
-                alert('替换成功！');
+                remote.dialog.showMessageBox({
+                    type:'info',
+                    title: '替换截图成功',
+                    message: '替换截图成功'
+                });
             }
             break;
         case "del":
