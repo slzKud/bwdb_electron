@@ -20,6 +20,7 @@
         var now_buildid = -1;
         var zipflag = 0;
         var verflag = 0;
+        var manflag = 0;
         const ipcRenderer = require('electron').ipcRenderer;
         const remote = require('electron').remote;
         const { Menu, MenuItem } = remote;
@@ -104,7 +105,9 @@
                     $("#verinfobox").show();
                     $("#homeinfobox").hide();
                 }
+
                 $('.bwdb_sidebarA').scrollTop(0 - $('.bwdb_sidebarA').scrollTop);
+
             });
             $(".bwdb_content").click(function () {
                 if (slideflag == 1) {
@@ -151,6 +154,7 @@
                 $('.bwdb_infobox_textarea').hide();
                 $('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
                 console.log($(this).attr('data-id'));
+                manflag = 1;
                 if ($('.bw_sidebar_info_box').css('display') == 'none') {
                     get_build_info($('.search_box_title').attr('data-id'), $(this).attr('data-id'));
                 } else {
@@ -457,14 +461,18 @@
 
             console.log(verflag);
             if (verflag == 1) { verflag = 0; return 0; }
-            var i = $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').index();
-            console.log('元素索引：' + i);
-            if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().length == 0) { return 0; }
-            if (i == 0) {
-                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parents('.build_list').prev().offset().top - $(".bwdb_sidebarA").offset().top);
-            } else {
-                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().offset().top - $(".bwdb_sidebarA").offset().top);
+            if (manflag == 0) {
+                var i = $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').index();
+                console.log('元素索引：' + i);
+                if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().length == 0) { return 0; }
+                if (i == 0) {
+                    $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parents('.build_list').prev().offset().top - $(".bwdb_sidebarA").offset().top);
+                } else {
+                    $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().offset().top - $(".bwdb_sidebarA").offset().top);
+                }
             }
+            manflag=0;
+
             //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])
             //添加相关的代码
         });
@@ -610,7 +618,7 @@
             <div class="Version_Title">
                 <div style="display: inline-flex;width:100%">
                     <h2 id="ver_name">1.0 Alpha</h2> <a title="查看BetaWorld Wiki页面" id="wiki_link"
-                        style="margin-top: -5px;margin-left: 10px;font-size:1.8rem;cursor: pointer;"
+                        style="margin-top: -5px;margin-left: 10px;margin-right: 25px;font-size:1.8rem;cursor: pointer;"
                         onclick="open_wiki_link();"> <img src="./static/img/bwWikiLogo.png" /></a>
                 </div>
                 <span id="ver_smalltag">Codename "Interface Manager" - Alpha</span>

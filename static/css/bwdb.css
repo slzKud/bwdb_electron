@@ -244,6 +244,7 @@ body{
     display: flex;
     height: 30px;
     margin-bottom: 3px;
+    margin-right: 15px;
 }
 .info_box_items_title{
     min-width:187.25px;

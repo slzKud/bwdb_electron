@@ -405,6 +405,7 @@
       $('.img_listbox').fadeOut();
     });
     $(document).on('click', '.left_btn', function () {
+      now_picid=Number(now_picid);
       now_picid -= 1;
       if (now_picid < 0) {
         now_picid = pic_num - 1;
@@ -412,6 +413,7 @@
       showpic(s.buildid, now_picid);
     });
     $(document).on('click', '.right_btn', function () {
+      now_picid=Number(now_picid);
       now_picid += 1;
       if (now_picid >= pic_num) {
         now_picid = 0;
@@ -419,6 +421,7 @@
       showpic(s.buildid, now_picid);
     });
     $(document).on('click', '.img_listitem', function () {
+      //alert($(this).attr('data-index'));
       now_picid = $(this).attr('data-index');
       showpic(s.buildid, now_picid);
       $('.img_listbox').hide();
@@ -458,6 +461,7 @@
       var keyNum = event.which;  //获取键值
       switch (keyNum) { //判断按键
         case 37:
+          now_picid=Number(now_picid);
           now_picid -= 1;
           if (now_picid < 0) {
             now_picid = pic_num - 1;
@@ -465,10 +469,12 @@
           showpic(s.buildid, now_picid);
           break;
         case 39:
+          now_picid=Number(now_picid);
           now_picid += 1;
           if (now_picid >= pic_num) {
             now_picid = 0;
           }
+          //alert(now_picid);
           showpic(s.buildid, now_picid);
           break;
         default:
