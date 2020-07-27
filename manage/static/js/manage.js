@@ -693,6 +693,14 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
         case "setting":
             ipcRenderer.send('openmanagesetting','');
             break;
+        case "info":
+            remote.dialog.showMessageBoxSync(
+                {
+                    type:"info",
+                    title:"编辑说明",
+                    message:"暂时还没有说明哦~"
+                }
+            )
     }
 });
 $(document).on('click', '.pic_btn', function () {

@@ -6,9 +6,9 @@ BetaWorld Library的Electron版本，以SQLite3为基本数据架构。
 * 查找Build
 * 关于和贡献者
 * 图片浏览
+* 管理平台
 
 ## 未完成的功能
-* 管理平台
 * 多语言支持
 * 高级查找筛选
 * 对于Windows 10 Arm的适配
