@@ -6,6 +6,7 @@ const dialog = require('electron').dialog;
 const fs = require("fs");
 const { promises } = require('dns');
 const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
+const { resourceUsage } = require('process');
 try {
   var data = fs.readFileSync('./DataBase.db');
 } catch{
@@ -112,7 +113,7 @@ function createManageMainWindow() {
     minWidth: 700,
     width: 1009,
     height: 679,
-    show:true,
+    show: true,
     webPreferences: {
       nodeIntegration: true
     }
@@ -371,7 +372,7 @@ ipcMain.on('getbuildinfo', (event, args) => {
     // 创建数据库
     db = new SQL.Database(data);
     // 运行查询而不读取结果
-    console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID="+args[0]+" and ID="+args[1]+" ORDER BY ID");
+    console.log("SELECT ID,Stage,Version,Buildtag,Architecture,Edition,Language,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID=" + args[0] + " and ID=" + args[1] + " ORDER BY ID");
     contents = db.exec("SELECT ID,Stage,Version,Architecture,Edition,Language,Buildtag,Date,Serial,Notes,NotesEN,CodeName FROM Build where ProductID=" + args[0] + " and ID=" + args[1] + " ORDER BY ID");
     arr = contents[0].values;
     arr_sys = [];
@@ -548,7 +549,7 @@ ipcMain.on('editbuild', (event, args) => {
           }
         })
       }).then(val => {
-        return(val);
+        return (val);
       });
 
     } else {
@@ -560,16 +561,16 @@ ipcMain.on('editbuild', (event, args) => {
           contents = db.exec("SELECT ID,CodeName from 'Product' where ID=" + proid + "");
           arr = contents[0].values;
           try {
-            x=arr[0][1];
-            x1=x.split(",");
-            if(x1.indexOf(codename)==-1){
-              if(x1[0]!=""){
+            x = arr[0][1];
+            x1 = x.split(",");
+            if (x1.indexOf(codename) == -1) {
+              if (x1[0] != "") {
                 x1.push(codename);
-              }else{
-                x1[0]=codename;
+              } else {
+                x1[0] = codename;
               }
-              x2=x1.join();
-              sql=`UPDATE 'Product' SET CodeName = '${x2}' WHERE ID=${proid}`;
+              x2 = x1.join();
+              sql = `UPDATE 'Product' SET CodeName = '${x2}' WHERE ID=${proid}`;
               console.log(sql);
               db.run(sql);
             }
@@ -594,7 +595,7 @@ ipcMain.on('editbuild', (event, args) => {
         initSqlJs().then(SQL => {
           // 创建数据库
           db = new SQL.Database(data);
-          db.exec("insert into 'Build' values (null, " + proid + ", '" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "', '" + args[8] + "', '" + args[9] + "', '" + args[6] + "', '" + args[7] + "', '" + args[10].myReplace("'", "''") + "', '" + args[11].myReplace("'", "''") + "','" +args[12].myReplace("'", "''") + "');");
+          db.exec("insert into 'Build' values (null, " + proid + ", '" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "', '" + args[8] + "', '" + args[9] + "', '" + args[6] + "', '" + args[7] + "', '" + args[10].myReplace("'", "''") + "', '" + args[11].myReplace("'", "''") + "','" + args[12].myReplace("'", "''") + "');");
           data = db.export();
           contents = db.exec("select ID from Build where Version='" + args[2] + "' and Stage='" + args[3] + "' and BuildTag='" + args[4] + "' and ProductID=" + proid);
           arr = contents[0].values;
@@ -605,11 +606,11 @@ ipcMain.on('editbuild', (event, args) => {
           }
         });
       }).then(val => {
-        buildid=val;
-        return(val);
+        buildid = val;
+        return (val);
       });
       //如果Build不存在
-     
+
     } else {
       //如果存在
       return new Promise(resolve => {
@@ -622,8 +623,8 @@ ipcMain.on('editbuild', (event, args) => {
             db.run('BEGIN;');
             l = args[i + 2];
             l = l.toString().replace("'", "''");
-            if(l==""){
-              l="N/A";
+            if (l == "") {
+              l = "N/A";
             }
             console.log(l);
             sql = `UPDATE 'Build' SET ${update_list[i]} = '${l}' WHERE ID=${buildid}`;
@@ -638,17 +639,51 @@ ipcMain.on('editbuild', (event, args) => {
           resolve(buildid);
         });
       }).then(val => {
-        return(val);
+        return (val);
       });
-      
+
     }
   }).then(val => {
     var buffer = Buffer.from(data, 'binary');
-        // 被创建数据库名称
+    // 被创建数据库名称
     var filename = './DataBase.db';
     fs.writeFileSync(filename, buffer);
-    win.webContents.send('newbuildid',[proid,buildid]);
+    win.webContents.send('newbuildid', [proid, buildid]);
   }).catch(err => {
     console.log(err);
   })
+});
+ipcMain.on('deletebuild', (event, args) => {
+  //todo
+  //先删除build 如果productid存在且数量为0，也删除，同时删除changelog里面的。
+  console.log(args);
+  return new Promise(resolve => {
+    initSqlJs().then(SQL => {
+      proid = args[0];
+      buildid = args[1];
+      db = new SQL.Database(data);
+      db.run("delete from Build Where ID=" + buildid);
+      db.run("delete from ChangeLog Where BuildID=" + buildid);
+      db.exec("select count(*) as c from Build Where ProductID=" + proid);
+      arr = contents[0].values;
+      count = arr[0][0];
+      if (count == 0) {
+        db.run("delete from Product Where ID=" + proid);
+      }
+      resolve(0);
+    });
+  }).then(val => {
+    var buffer = Buffer.from(data, 'binary');
+    // 被创建数据库名称
+    var filename = './DataBase.db';
+    fs.writeFileSync(filename, buffer);
+    try {
+      fs.unlinkSync(process.cwd() + "/gallery/" + args[1] + ".zip");
+    } catch{
+      console.log('screenshot file invild!');
+    }
+    win.webContents.send('delbuildid', [1, 1]);
+  }).catch(err => {
+    console.log(err);
+  });
 });

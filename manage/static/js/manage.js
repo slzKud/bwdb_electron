@@ -86,8 +86,8 @@ function ifzipfileexist(zip, entryname) {
 }
 function movelist(selector, flag) {
     if ($(selector).children("option:selected").prev().length == 0 && flag == true) {
-        remote.dialog.showMessageBox({
-            type:'info',
+        remote.dialog.showMessageBoxSync({
+            type: 'info',
             title: '提示',
             message: '你不能再往上移动'
         });
@@ -95,8 +95,8 @@ function movelist(selector, flag) {
         return -1;
     }
     if ($(selector).children("option:selected").next().length == 0 && flag == false) {
-        remote.dialog.showMessageBox({
-            type:'info',
+        remote.dialog.showMessageBoxSync({
+            type: 'info',
             title: '提示',
             message: '你不能再往下移动'
         });
@@ -487,10 +487,29 @@ ipcRenderer.on('newbuildid', function (event, arg) {
     now_buildid = arg[1];
     make_screen_zip(now_buildid);
     //remote.dialog.showMessageBoxSync();
-    remote.dialog.showMessageBox({
-        type:'info',
+    remote.dialog.showMessageBoxSync({
+        type: 'info',
         title: '修改数据成功',
         message: '修改数据成功'
+    });
+    //alert('修改成功');
+    $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
+    $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
+    $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
+    verflag = 0;
+    ipcRenderer.send('getsyslistA', 'ping');
+    ipcRenderer.send('getbuildstage', now_proid);
+    get_build_info(now_proid, now_buildid);
+});
+ipcRenderer.on('delbuildid', function (event, arg) {
+    console.log(arg);
+    now_proid = arg[0];
+    now_buildid = arg[1];
+    //remote.dialog.showMessageBoxSync();
+    remote.dialog.showMessageBoxSync({
+        type: 'info',
+        title: '删除Build成功',
+        message: '删除Build成功'
     });
     //alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
@@ -640,7 +659,37 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
                 get_build_info(now_proid, now_buildid);
             }
             break;
+        case "delete":
+            remote.dialog.showMessageBox({
+                type: 'question',
+                title: '确认删除？',
+                message: '确认删除这个build吗？',
+                buttons: ['确认', '取消']
+            }).then((index) => {
+                if (index.response === 0) {
+                    ipcRenderer.send('deletebuild', [now_proid, now_buildid]);
+                }
+            });;
+            break;
+        case "ignore":
+            let t = remote.dialog.showMessageBoxSync({
+                type: 'question',
+                title: '确认放弃修改？',
+                message: '确认放弃修改吗？这会退出当前编辑状态。',
+                buttons: ['确认', '取消']
+            })
+            if (t == 0) {
+                if (now_proid == -1) {
+                    now_buildid = 1
+                    now_proid = 1
+                }
+                ipcRenderer.send('getsyslistA', 'ping');
+                ipcRenderer.send('getbuildstage', now_proid);
+                get_build_info(now_proid, now_buildid);
+                $('.title_bar').html('DataBase Manage');
+            }
 
+            break;
     }
 });
 $(document).on('click', '.pic_btn', function () {
@@ -671,8 +720,8 @@ $(document).on('click', '.pic_btn', function () {
                             var s = picdo.waterimg2base64(fp);
                             $("#screenshotlist").append("<option data-pic=" + "-1" + " data-pic-hash='" + picdo.base642hash(s) + "' data-pic-base64='" + s + "' >" + r + "</option>");
                             //alert('添加成功！');
-                            remote.dialog.showMessageBox({
-                                type:'info',
+                            remote.dialog.showMessageBoxSync({
+                                type: 'info',
                                 title: '添加截图成功',
                                 message: '添加截图成功'
                             });
@@ -723,8 +772,8 @@ $(document).on('click', '.pic_btn', function () {
                 //$("#screenshotlist").children("[data-pic="+checkValue+"]").attr('data-pic','-1');
                 s1 = "url(data:image/png;base64," + s + ')';
                 $('#main_pic').css('background-image', s1);
-                remote.dialog.showMessageBox({
-                    type:'info',
+                remote.dialog.showMessageBoxSync({
+                    type: 'info',
                     title: '替换截图成功',
                     message: '替换截图成功'
                 });
