@@ -69,3 +69,7 @@
 .info_box_pics.manage{
     margin: unset !important;
 }
+#edit_pic_toolbar button{
+    margin-bottom: 15px;
+    margin-right: 5px;
+}
