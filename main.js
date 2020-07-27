@@ -122,7 +122,7 @@ function createManageMainWindow() {
 
   // 并且为你的应用加载index.html
   win.loadFile('manage/main.html');
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 }
 function createManageSettingWindow() {
   Menu.setApplicationMenu(null);
