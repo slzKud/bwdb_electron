@@ -212,6 +212,65 @@ $(document).on('click', '.bwdb_sidebar_item', function () {
     }
 
 });
+$(document).keydown(function (event) {
+    var keyNum = event.which;  //获取键值
+    console.log(keyNum);
+    console.log("now:"+document.activeElement.type);
+    if(document.activeElement.type=="text" ||document.activeElement.type=="input" || document.activeElement.type=="date" || document.activeElement.type=="textarea" || document.activeElement.type=="select-multiple" ){
+        return -1;
+    }
+    switch (keyNum) { //判断按键
+        case 38:
+            //alert('a');
+            //先判断相同层级的
+            previd=-1;
+            if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().length == 0) {
+                //接着判断上一个层级 
+                if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').prev().prev().length == 0) {
+                    //到顶了
+                    remote.dialog.showMessageBoxSync({
+                        type: 'info',
+                        title: '提示',
+                        message: '你不能再往上移动'
+                    });
+                    return -1;
+                } else {
+                   if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').prev().prev().children('div:last').length!=0){
+                       previd=$('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').prev().prev().children('div:last').attr('data-id');
+                   } 
+                }
+            } else {
+                previd=$('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().attr('data-id');
+            }
+            console.log(previd);
+            $('.bwdb_sidebar_item[data-id="' + previd + '"]').click();
+            break;
+        case 40:
+            //alert('b');
+            nextid=-1;
+            if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').next().length == 0) {
+                if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().length==0){
+                    remote.dialog.showMessageBoxSync({
+                        type: 'info',
+                        title: '提示',
+                        message: '你不能再往下移动'
+                    });
+                    return -1;
+                }else{
+                    if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().children('div:first').length!=0){
+                       nextid=$('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().children('div:first').attr('data-id');
+                   } 
+                }
+            }else{
+                nextid=$('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').next().attr('data-id');
+            }
+            console.log(nextid);
+            $('.bwdb_sidebar_item[data-id="' + nextid + '"]').click();
+            break;
+        default:
+            break;
+    }
+});
 $(document).on('keypress', '.bwdb_nav_search_text', function (e) {
     if (e.keyCode == 13) {
         console.log($(this).val());
