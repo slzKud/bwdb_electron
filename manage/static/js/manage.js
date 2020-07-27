@@ -118,6 +118,8 @@ $(window).ready(function () {
     now_width = document.documentElement.clientWidth - 355;
     $('.bwdb_sidebar').css('max-height', now_height);
     $('.bwdb_sidebar').css('height', now_height);
+    $('.bwdb_infobox').css('max-height', now_height);
+    $('.bwdb_infobox').css('height', now_height);
     if ($('.bw_sidebar_info_box').css('display') == 'none') {
         $('.bwdb_sidebarA').css('max-height', now_height);
         $('.bwdb_sidebarA').css('height', now_height);
