@@ -690,6 +690,9 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
             }
 
             break;
+        case "setting":
+            ipcRenderer.send('openmanagesetting','');
+            break;
     }
 });
 $(document).on('click', '.pic_btn', function () {

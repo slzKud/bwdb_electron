@@ -18,7 +18,7 @@ String.prototype.myReplace = function (f, e) {//吧f替换成e
   return this.replace(reg, e);
 }
 ////console.log(db);
-var win, aboutWindow, authorwindow, gallerywindow;
+var win, aboutWindow, authorwindow, gallerywindow,settingwindow;
 var picjson;
 function createWindow() {
   // 创建浏览器窗口
@@ -113,15 +113,32 @@ function createManageMainWindow() {
     minWidth: 700,
     width: 1009,
     height: 679,
-    show: true,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
   });
+  
 
   // 并且为你的应用加载index.html
   win.loadFile('manage/main.html');
   win.webContents.openDevTools();
+}
+function createManageSettingWindow() {
+  Menu.setApplicationMenu(null);
+  settingwindow = new BrowserWindow({
+    minHeight: 690,
+    minWidth: 363,
+    width: 690,
+    height: 400,
+    resizable: false,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  settingwindow.loadFile('manage/settings.html');
+  //settingwindow.webContents.openDevTools();
 }
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
@@ -168,6 +185,10 @@ ipcMain.on('show-win', (event, args) => {
   }
   if (args == "gallery") {
     gallerywindow.show();
+    return 0;
+  }
+  if (args == "managesetting") {
+    settingwindow.show();
     return 0;
   }
 });
@@ -422,12 +443,23 @@ ipcMain.on('getbwdbversion', (event, args) => {
     //console.log(arr_sys);
     var json1 = JSON.stringify(arr_sys);
     //console.log([json1]);
+    switch(args){
+      case "about":
+        aboutWindow.webContents.send('bwdbversion', [json1]);
+        break;
+      case "managesetting":
+        settingwindow.webContents.send('bwdbversion', [json1]);
+        break;
+      default:
+        win.webContents.send('bwdbversion', [json1]);
+    }
+    /*
     if (args == "") {
       win.webContents.send('bwdbversion', [json1]);
     } else {
       aboutWindow.webContents.send('bwdbversion', [json1]);
     }
-
+    */
     //console.log('message sent.');
     db.close();
   });
@@ -512,6 +544,10 @@ ipcMain.on('openabout', (event, args) => {
 ipcMain.on('openauthor', (event, args) => {
   aboutWindow.close();
   createAuthorWindow();
+
+});
+ipcMain.on('openmanagesetting', (event, args) => {
+  createManageSettingWindow();
 
 });
 ipcMain.on('closeabout', (event, args) => {
@@ -683,6 +719,62 @@ ipcMain.on('deletebuild', (event, args) => {
       console.log('screenshot file invild!');
     }
     win.webContents.send('delbuildid', [1, 1]);
+  }).catch(err => {
+    console.log(err);
+  });
+});
+ipcMain.on('cleanchangelog', (event, args) => {
+  console.log(args);
+  return new Promise(resolve => {
+    initSqlJs().then(SQL => {
+      db = new SQL.Database(data);
+      db.run("delete from ChangeLog");
+      resolve(0);
+    });
+  }).then(val => {
+    var buffer = Buffer.from(data, 'binary');
+    // 被创建数据库名称
+    var filename = './DataBase.db';
+    fs.writeFileSync(filename, buffer);
+    dialog.showMessageBoxSync({
+      type:'info',
+      title:"清除Changelog完成",
+      message:"清除Changelog完成!"
+    })
+  }).catch(err => {
+    console.log(err);
+  });
+});
+ipcMain.on('changeversion', (event, args) => {
+  console.log(args);
+  return new Promise(resolve => {
+    initSqlJs().then(SQL => {
+      db = new SQL.Database(data);
+      //db.run("delete from ChangeLog");
+      db.run("update Version set Version='"+args[0]+"'");
+      db.run("update Version set Date='"+args[1]+"'");
+      db.run("update Version set UpdateURL='"+args[2]+"'");
+      switch(dialog.showMessageBoxSync({type:'question',title:'ChangeLOG的处理',message:"版本号已经被更改，请选择ChangeLOG的处理方式：",buttons:['清空ChangeLOG','更改ChageLOG中所有条目的版本（推荐）','不做任何处理']})){
+        case 0:
+          db.run("delete from ChangeLog");
+          break;
+        case 1:
+          db.run("update ChangeLog Set Version='"+args[0]+"'");
+          break;
+      }
+      resolve(0);
+    });
+  }).then(val => {
+    var buffer = Buffer.from(data, 'binary');
+    // 被创建数据库名称
+    var filename = './DataBase.db';
+    fs.writeFileSync(filename, buffer);
+    dialog.showMessageBoxSync({
+      type:'info',
+      title:"数据库版本修改完成",
+      message:"数据库版本修改完成!"
+    });
+    settingwindow.close();
   }).catch(err => {
     console.log(err);
   });

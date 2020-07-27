@@ -1,0 +1,100 @@
+<head>
+    <meta charset="UTF-8">
+    <title>数据库设置</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/bwdb.css">
+    <link rel="stylesheet" href="static/css/manage.css">
+    <link rel="stylesheet" href="static/css/jquery-editable-select.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="static/js/jquery-editable-select.min.js"></script>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+        const remote = require('electron').remote;
+        $(document).ready(function () {
+            ipcRenderer.send('getbwdbversion', 'managesetting');
+            //alert('ok');
+        });
+        ipcRenderer.on('bwdbversion', function (event, arg) {
+            console.log(arg);
+            var s = JSON.parse(arg);
+            //alert(s);
+            //$("#basedb_version").html('DataBase V'+s[0][0]+' - '+s[0][1]+'');
+            $("#dbver").val(s[0][0]);
+            $("#dbtime").val(s[0][1]);
+            $("#dbaddress").val(s[0][2]);
+            ipcRenderer.send('show-win', 'managesetting');
+        });
+        function save_settings() {
+            if ($("#dbver").val() == "") {
+                remote.dialog.showMessageBoxSync({
+                    type: 'info',
+                    title: '提示',
+                    message: '版本号不能为空'
+                });
+                return 0;
+            }
+            if ($("#dbtime").val() == "") {
+                remote.dialog.showMessageBoxSync({
+                    type: 'info',
+                    title: '提示',
+                    message: '更新时间不能为空'
+                });
+                return 0;
+            }
+            var s = [$("#dbver").val(), $("#dbtime").val(), $("#dbaddress").val()];
+            ipcRenderer.send('changeversion',s);
+        }
+    </script>
+</head>
+
+<body style="margin: 0;overflow: hidden;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">数据库基本设置</h3>
+        </div>
+        <div class="panel-body">
+            <div class="edit_item">
+                <div class="edit_title">
+                    数据库版本
+                </div>
+                <div class="edit_control">
+                    <input type="text" class="form-control" id="dbver" placeholder="">
+                </div>
+            </div>
+            <div class="edit_item">
+                <div class="edit_title">
+                    更新日期
+                </div>
+                <div class="edit_control">
+                    <input type="date" class="form-control" id="dbtime" placeholder="">
+                </div>
+            </div>
+            <div class="edit_item">
+                <div class="edit_title">
+                    数据库更新地址
+                </div>
+                <div class="edit_control">
+                    <input type="url" class="form-control" id="dbaddress" placeholder="">
+                </div>
+            </div>
+            <div class="edit_item">
+                <div class="edit_title">
+                    清空ChangeLog
+                </div>
+                <div class="edit_control">
+                    <button type="button" class="btn btn-primary pic_btn"
+                        onclick="ipcRenderer.send('cleanchangelog','');"><i class="fa fa-trash" aria-hidden="true"></i>
+                        清空</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-bottom: 5px;margin-top: 5px;margin-right: 15px;float:right;">
+        <button type="button" class="btn btn-primary pic_btn" onclick="save_settings();"><i class="fa fa-save"
+                aria-hidden="true"></i> 保存</button>
+    </div>
+</body>
