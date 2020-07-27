@@ -236,18 +236,20 @@ body{
 }
 .infobox_sub_title{
     margin-bottom: 0.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
     user-select: none;
 }
 .info_box_items{
     display: flex;
-    height: 35px;
-    margin-bottom: 10px;
+    height: 30px;
+    margin-bottom: 3px;
 }
 .info_box_items_title{
     min-width:187.25px;
     max-width: 200px;
     user-select: none;
+    font-size: 1.05rem;
 }
 .info_box_items_text{
     flex-basis: 65%;
@@ -255,6 +257,7 @@ body{
     overflow-y: hidden;
     overflow-x: hidden;
     white-space: nowrap;
+    font-size: 1.05rem;
 }
 .info_box_items_btn{
     width:50px;
@@ -281,10 +284,12 @@ body{
     max-width: 70%;
     height:unset;
     overflow-y: auto;
-    white-space:unset;
+    white-space:unset !important;
+    word-wrap: break-word; 
+    word-break: normal;
 }
 .info_box_pics{
-	height: 150px;
+	height: 130px;
 	width: 200px;
     background-color: #fff;
     background-size:contain;
