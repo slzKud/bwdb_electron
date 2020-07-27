@@ -631,10 +631,14 @@ ipcMain.on('editbuild', (event, args) => {
         initSqlJs().then(SQL => {
           // 创建数据库
           db = new SQL.Database(data);
+          contents_version = db.exec("SELECT * FROM Version");
+          arr_version = contents_version[0].values;
+          dbversion=arr_version[0][0];
           db.exec("insert into 'Build' values (null, " + proid + ", '" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "', '" + args[8] + "', '" + args[9] + "', '" + args[6] + "', '" + args[7] + "', '" + args[10].myReplace("'", "''") + "', '" + args[11].myReplace("'", "''") + "','" + args[12].myReplace("'", "''") + "');");
-          data = db.export();
           contents = db.exec("select ID from Build where Version='" + args[2] + "' and Stage='" + args[3] + "' and BuildTag='" + args[4] + "' and ProductID=" + proid);
           arr = contents[0].values;
+          db.run("insert into ChangeLog values ('"+dbversion+"',"+arr[0][0]+")");
+          data = db.export();
           try {
             resolve(arr[0][0]);
           } catch{
@@ -653,6 +657,9 @@ ipcMain.on('editbuild', (event, args) => {
         console.log("proidV:" + proid);
         initSqlJs().then(SQL => {
           update_list = ['Version', 'Stage', 'BuildTag', 'Architecture', 'Date', 'Serial', 'Edition', 'Language', 'Notes', 'NotesEN', 'CodeName'];
+          contents_version = db.exec("SELECT * FROM Version");
+          arr_version = contents_version[0].values;
+          dbversion=arr_version[0][0];
           sql = `UPDATE 'Build' SET ProductID = '${proid}' WHERE ID=${buildid}`;
           db.exec(sql);
           for (let i = 0; i < update_list.length; i++) {
@@ -669,6 +676,7 @@ ipcMain.on('editbuild', (event, args) => {
             db.run(sql);
             db.run('COMMIT;');
           }
+          db.run("insert into ChangeLog values ('"+dbversion+"',"+buildid+")");
           //dialog.showErrorBox('发生致命错误', '1');
           data = db.export();
           //dialog.showErrorBox('发生致命错误', '2');
@@ -700,12 +708,13 @@ ipcMain.on('deletebuild', (event, args) => {
       db = new SQL.Database(data);
       db.run("delete from Build Where ID=" + buildid);
       db.run("delete from ChangeLog Where BuildID=" + buildid);
-      db.exec("select count(*) as c from Build Where ProductID=" + proid);
+      contents=db.exec("select count(*) as c from Build Where ProductID=" + proid);
       arr = contents[0].values;
       count = arr[0][0];
       if (count == 0) {
         db.run("delete from Product Where ID=" + proid);
       }
+      data=db.export();
       resolve(0);
     });
   }).then(val => {
@@ -762,6 +771,7 @@ ipcMain.on('changeversion', (event, args) => {
           db.run("update ChangeLog Set Version='"+args[0]+"'");
           break;
       }
+      data=db.export();
       resolve(0);
     });
   }).then(val => {
