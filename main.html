@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>BetaWorld Library Electron Version</title>
-    <link rel="stylesheet" type="text/css" href="static/css/bwdb.css" /> 
+    <link rel="stylesheet" type="text/css" href="static/css/bwdb.css" />
     <script>window.$ = window.jQuery = require('jquery');</script>
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/css/font-awesome.min.css">
@@ -11,14 +12,14 @@
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <script>
-        var slideflag=0;
-        var textflag=0;
-        var picflag=0;
-        var firstid=0;
-        var now_proid=-1;
-        var now_buildid=-1;
-        var zipflag=0;
-        var verflag=0;
+        var slideflag = 0;
+        var textflag = 0;
+        var picflag = 0;
+        var firstid = 0;
+        var now_proid = -1;
+        var now_buildid = -1;
+        var zipflag = 0;
+        var verflag = 0;
         const ipcRenderer = require('electron').ipcRenderer;
         const remote = require('electron').remote;
         const { Menu, MenuItem } = remote;
@@ -26,7 +27,7 @@
         menu.append(new MenuItem({ label: '仅显示有截图的Build', type: 'checkbox', click() { console.log('item 1 clicked') } }));
         menu.append(new MenuItem({ type: 'separator' }));
         menu.append(new MenuItem({ label: 'Language' }));
-        menu.append(new MenuItem({ label: '关于' , click() { ipcRenderer.send('openabout','');}}));
+        menu.append(new MenuItem({ label: '关于', click() { ipcRenderer.send('openabout', ''); } }));
         var AdmZip = require('adm-zip');
         var fs = require("fs");
         /*
@@ -38,488 +39,496 @@
         }
         */
         //alert(tmpobj.Name);
+        String.prototype.replaceAll = function (s1, s2) {
+            return this.replace(new RegExp(s1, "gm"), s2);
+        }
         const shell = require('electron').shell;
-        function hide_pic(){
+        function hide_pic() {
             $(".info_box_pics").hide();
-            $('#infobox_1').attr('class','info_listbox info_no_pic');
-            $('.notice_text').css('flex-basis','65%');
+            $('#infobox_1').attr('class', 'info_listbox info_no_pic');
+            $('.notice_text').css('flex-basis', '65%');
         }
-        function show_pic(){
+        function show_pic() {
             $(".info_box_pics").show();
-            $('#infobox_1').attr('class','info_listbox info_have_pic');
-            $('.notice_text').css('flex-basis','75%');
+            $('#infobox_1').attr('class', 'info_listbox info_have_pic');
+            $('.notice_text').css('flex-basis', '75%');
         }
-        function getpar_height(sel){
-            var w=0;
-			$(sel).each(function(){
-				w=w+parseInt($(this).height());//获取宽度。并累加
+        function getpar_height(sel) {
+            var w = 0;
+            $(sel).each(function () {
+                w = w + parseInt($(this).height());//获取宽度。并累加
             });
             return w;
         }
-        $(document).ready(function(){
-            now_height=document.documentElement.clientHeight-55;
-            now_width=document.documentElement.clientWidth-355;
-            notice_text=document.documentElement.clientHeight-$('.install_notice_text').offset()['top']-25;
-            $('.bwdb_sidebar').css('min-height',now_height);
-            $('.bwdb_infobox').css('min-width',now_width);
-            $('.bwdb_infobox').css('max-height',now_height);
-            $('.install_notice_text').css('min-height',notice_text);
-            if($('.bw_sidebar_info_box').css('display')=='none'){
-                $('.bwdb_sidebarA').css('max-height',now_height);
-                $('.bwdb_sidebarA').css('height',now_height);
-            }else{
-                $('.bwdb_sidebarA').css('max-height',now_height-$('.bw_sidebar_info_box').height);
-                $('.bwdb_sidebarA').css('height',now_height-$('.bw_sidebar_info_box').height);
+        $(document).ready(function () {
+            now_height = document.documentElement.clientHeight - 55;
+            now_width = document.documentElement.clientWidth - 355;
+            notice_text = document.documentElement.clientHeight - $('.install_notice_text').offset()['top'] - 25;
+            $('.bwdb_sidebar').css('min-height', now_height);
+            $('.bwdb_infobox').css('min-width', now_width);
+            $('.bwdb_infobox').css('max-height', now_height);
+            $('.install_notice_text').css('min-height', notice_text);
+            if ($('.bw_sidebar_info_box').css('display') == 'none') {
+                $('.bwdb_sidebarA').css('max-height', now_height);
+                $('.bwdb_sidebarA').css('height', now_height);
+            } else {
+                $('.bwdb_sidebarA').css('max-height', now_height - $('.bw_sidebar_info_box').height);
+                $('.bwdb_sidebarA').css('height', now_height - $('.bw_sidebar_info_box').height);
             }
             console.log(document.documentElement.clientWidth);
             hide_pic();
-            picflag=1;
-            if(document.documentElement.clientWidth>975 && picflag==0){
+            picflag = 1;
+            if (document.documentElement.clientWidth > 975 && picflag == 0) {
                 show_pic();
-            }else{
+            } else {
                 hide_pic();
             }
             ipcRenderer.send('getsyslist', 'ping');
-            ipcRenderer.send('getbwdbversion','');
-            ipcRenderer.send('getupdatelist','');
+            ipcRenderer.send('getbwdbversion', '');
+            ipcRenderer.send('getupdatelist', '');
             //$(".bwdb_select_item").click(function(){
-            $(document).on('click', '.bwdb_select_item', function() {
+            $(document).on('click', '.bwdb_select_item', function () {
                 console.log($(this).html());
                 $(".search_box_title").html($(this).html());
-                $(".search_box_title").attr('data-id',$(this).attr('data-id'));
-                $(".search_box_title").attr('data-id-codename',$(this).attr('data-id-codename'));
+                $(".search_box_title").attr('data-id', $(this).attr('data-id'));
+                $(".search_box_title").attr('data-id-codename', $(this).attr('data-id-codename'));
                 console.log($(this).attr('data-id'));
-                now_buildid=-1;
-                now_proid=-1;
+                now_buildid = -1;
+                now_proid = -1;
                 ipcRenderer.send('getbuildstage', $(this).attr('data-id'));
-                if(slideflag==1){
+                if (slideflag == 1) {
                     $("#bwdb_nav_select_bar").hide();
-                    slideflag=0; 
+                    slideflag = 0;
                 }
-                if($("#homeinfobox").css('display')!='none'){
+                if ($("#homeinfobox").css('display') != 'none') {
                     $("#verinfobox").show();
                     $("#homeinfobox").hide();
                 }
-                $('.bwdb_sidebarA').scrollTop(0-$('.bwdb_sidebarA').scrollTop);
+                $('.bwdb_sidebarA').scrollTop(0 - $('.bwdb_sidebarA').scrollTop);
             });
-            $(".bwdb_content").click(function(){
-                if(slideflag==1){
+            $(".bwdb_content").click(function () {
+                if (slideflag == 1) {
                     $("#bwdb_nav_select_bar").slideUp('100ms');
-                    slideflag=0; 
+                    slideflag = 0;
                 }
             });
-            $(".info_box_items_btn").click(function(){
-               console.log($(this).parent('.info_box_items').children('.info_box_items_text').html());
-               if($('.bwdb_infobox_textarea').css('display')!='none'){
+            $(".info_box_items_btn").click(function () {
+                console.log($(this).parent('.info_box_items').children('.info_box_items_text').html());
+                if ($('.bwdb_infobox_textarea').css('display') != 'none') {
                     $('.bwdb_infobox_textarea').hide();
-                    $(this).children('.info_box_items_btn_text').attr('class','info_box_items_btn_text');
+                    $(this).children('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
                     return 0;
-               }
-               $('.bwdb_infobox_textarea').hide()
-               $('.bwdb_infobox_textarea').css('top',$(this).parent('.info_box_items').children('.info_box_items_text').offset()['top']);
-               $('.bwdb_infobox_textarea').css('left',$(this).parent('.info_box_items').children('.info_box_items_text').offset()['left']);
-               $('.bwdb_infobox_textarea').width($(this).parent('.info_box_items').children('.info_box_items_text').width());
-               $('.bwdb_infobox_textarea').children('textarea').html($(this).parent('.info_box_items').children('.info_box_items_text').html().replace(';',';\n'));
-               $(this).children('.info_box_items_btn_text').attr('class','info_box_items_btn_text active');
-               $('.bwdb_infobox_textarea').show();
+                }
+                $('.bwdb_infobox_textarea').hide()
+                $('.bwdb_infobox_textarea').css('top', $(this).parent('.info_box_items').children('.info_box_items_text').offset()['top']);
+                $('.bwdb_infobox_textarea').css('left', $(this).parent('.info_box_items').children('.info_box_items_text').offset()['left']);
+                $('.bwdb_infobox_textarea').width($(this).parent('.info_box_items').children('.info_box_items_text').width());
+                if ($(this).parent('.info_box_items').children('.info_box_items_title').html() == "版本") {
+                    $('.bwdb_infobox_textarea').children('textarea').html($(this).parent('.info_box_items').children('.info_box_items_text').html().replace(/;/g, '\n').replace(/,/g, '\n').replace(/\n /g, '\n'));
+                } else {
+                    $('.bwdb_infobox_textarea').children('textarea').html($(this).parent('.info_box_items').children('.info_box_items_text').html().replace(/\);/g, ')\n').replace(/\),/g, ')\n').replace(/\n /g, '\n'));
+                }
+
+                $(this).children('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text active');
+                $('.bwdb_infobox_textarea').show();
             });
             //$(".big_stage_item").hover(function(){
-            $(document).on('mouseenter', '.big_stage_item', function() {
-                $(this).children('.big_stage_text').css('background-color','#d4e2ee');
+            $(document).on('mouseenter', '.big_stage_item', function () {
+                $(this).children('.big_stage_text').css('background-color', '#d4e2ee');
             });
             //$(".big_stage_item").mouseleave(function(){
-            $(document).on('mouseleave', '.big_stage_item', function() {
-                $(this).children('.big_stage_text').css('background-color','#ececec');
+            $(document).on('mouseleave', '.big_stage_item', function () {
+                $(this).children('.big_stage_text').css('background-color', '#ececec');
             });
-            
+
             //$(".bwdb_sidebar_item").click(function(){
-            $(document).on('click', '.bwdb_sidebar_item', function() {   
-                verflag=1; 
-                $('.bwdb_sidebar_item').css('background-color','unset');
-                $('.bwdb_sidebar_item').css('color','unset');
-                $(this).css('background-color','#19478a');
-                $(this).css('color','#fff');
+            $(document).on('click', '.bwdb_sidebar_item', function () {
+                verflag = 1;
+                $('.bwdb_sidebar_item').css('background-color', 'unset');
+                $('.bwdb_sidebar_item').css('color', 'unset');
+                $(this).css('background-color', '#19478a');
+                $(this).css('color', '#fff');
                 $('.bwdb_infobox_textarea').hide();
-                $('.info_box_items_btn_text').attr('class','info_box_items_btn_text');
+                $('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
                 console.log($(this).attr('data-id'));
-                if($('.bw_sidebar_info_box').css('display')=='none'){
-                    get_build_info($('.search_box_title').attr('data-id'),$(this).attr('data-id'));
-                }else{
+                if ($('.bw_sidebar_info_box').css('display') == 'none') {
+                    get_build_info($('.search_box_title').attr('data-id'), $(this).attr('data-id'));
+                } else {
                     console.log($(this).attr('data-id-proid'));
-                    get_build_info($(this).attr('data-id-proid'),$(this).attr('data-id'));
+                    get_build_info($(this).attr('data-id-proid'), $(this).attr('data-id'));
                 }
-                if($("#homeinfobox").css('display')!='none'){
+                if ($("#homeinfobox").css('display') != 'none') {
                     $("#verinfobox").show();
                     $("#homeinfobox").hide();
                 }
-                
+
             });
-            $(document).on('click', '.update_list_item', function() {
-                $('.update_list_item').css('background-color','unset');
-                $('.update_list_item').css('color','unset');
-                $(this).css('background-color','#19478a');
-                $(this).css('color','#fff');
+            $(document).on('click', '.update_list_item', function () {
+                $('.update_list_item').css('background-color', 'unset');
+                $('.update_list_item').css('color', 'unset');
+                $(this).css('background-color', '#19478a');
+                $(this).css('color', '#fff');
                 console.log($(this).attr('data-id'));
                 console.log($(this).attr('data-id-proid'));
-                get_build_info($(this).attr('data-id-proid'),$(this).attr('data-id'));
-                $(".search_box_title").html($(".bwdb_select_item[data-id='"+now_proid+"']").html());
-                $(".search_box_title").attr('data-id',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id'));
-                $(".search_box_title").attr('data-id-codename',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id-codename'));
+                get_build_info($(this).attr('data-id-proid'), $(this).attr('data-id'));
+                $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
+                $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
+                $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
                 ipcRenderer.send('getbuildstage', now_proid);
-                if($("#homeinfobox").css('display')!='none'){
+                if ($("#homeinfobox").css('display') != 'none') {
                     $("#verinfobox").show();
                     $("#homeinfobox").hide();
                 }
             });
-            $(window).resize(function(){
-                now_height=document.documentElement.clientHeight-55;
-                now_width=document.documentElement.clientWidth-355;
-                notice_text=document.documentElement.clientHeight-$('.install_notice_text').offset()['top']-25;
-                $('.bwdb_sidebar').css('max-height',now_height);
-                $('.bwdb_sidebar').css('height',now_height);
-                $('.bwdb_infobox').css('min-width',now_width);
-                $('.bwdb_infobox').css('max-height',now_height);
-                $('.install_notice_text').css('min-height',notice_text);
-                if($('.bw_sidebar_info_box').css('display')=='none'){
-                    $('.bwdb_sidebarA').css('max-height',now_height);
-                    $('.bwdb_sidebarA').css('height',now_height);
-                }else{
-                    $('.bwdb_sidebarA').css('max-height',now_height-$('.bw_sidebar_info_box').height);
-                    $('.bwdb_sidebarA').css('height',now_height-$('.bw_sidebar_info_box').height);
+            $(window).resize(function () {
+                now_height = document.documentElement.clientHeight - 55;
+                now_width = document.documentElement.clientWidth - 355;
+                notice_text = document.documentElement.clientHeight - $('.install_notice_text').offset()['top'] - 25;
+                $('.bwdb_sidebar').css('max-height', now_height);
+                $('.bwdb_sidebar').css('height', now_height);
+                $('.bwdb_infobox').css('min-width', now_width);
+                $('.bwdb_infobox').css('max-height', now_height);
+                $('.install_notice_text').css('min-height', notice_text);
+                if ($('.bw_sidebar_info_box').css('display') == 'none') {
+                    $('.bwdb_sidebarA').css('max-height', now_height);
+                    $('.bwdb_sidebarA').css('height', now_height);
+                } else {
+                    $('.bwdb_sidebarA').css('max-height', now_height - $('.bw_sidebar_info_box').height);
+                    $('.bwdb_sidebarA').css('height', now_height - $('.bw_sidebar_info_box').height);
                 }
-                if(getpar_height('.bwdb_sidebarA')>$('.bwdb_sidebarA').css('max-height')){
-                    $('.bwdb_sidebarA').css('overflow-y','scroll');
-                }else{
-                    $('.bwdb_sidebarA').css('overflow-y','auto');
+                if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
+                    $('.bwdb_sidebarA').css('overflow-y', 'scroll');
+                } else {
+                    $('.bwdb_sidebarA').css('overflow-y', 'auto');
                 }
                 console.log(document.documentElement.clientWidth);
-                if(document.documentElement.clientWidth>975  && picflag==0){
+                if (document.documentElement.clientWidth > 975 && picflag == 0) {
                     show_pic();
-                }else{
+                } else {
                     hide_pic();
                 }
                 $('.bwdb_infobox_textarea').hide();
-                $('.info_box_items_btn_text').attr('class','info_box_items_btn_text');
+                $('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
             });
-            $('.bwdb_nav_search_text').keypress(function (e){
- 　　           if(e.keyCode == 13){
-                   console.log($(this).val());
-                   ipcRenderer.send('searchbuildlist',$(this).val());
-　　　          }
-            });  
+            $('.bwdb_nav_search_text').keypress(function (e) {
+                if (e.keyCode == 13) {
+                    console.log($(this).val());
+                    ipcRenderer.send('searchbuildlist', $(this).val());
+                }
+            });
         });
-        function slide_select(){
-            if(slideflag==0){
+        function slide_select() {
+            if (slideflag == 0) {
                 $("#bwdb_nav_select_bar").slideDown('100ms');
-                slideflag=1;
-            }else{
+                slideflag = 1;
+            } else {
                 $("#bwdb_nav_select_bar").slideUp('100ms');
-                slideflag=0;
+                slideflag = 0;
             }
         }
-        function show_search_textbox(){
-            if(slideflag==1){
-                    $("#bwdb_nav_select_bar").slideUp('100ms');
-                    slideflag=0; 
+        function show_search_textbox() {
+            if (slideflag == 1) {
+                $("#bwdb_nav_select_bar").slideUp('100ms');
+                slideflag = 0;
             }
-            if(textflag==0){
-                $('.search_btn').css('border','#fff 2px solid');
+            if (textflag == 0) {
+                $('.search_btn').css('border', '#fff 2px solid');
                 $('.bwdb_nav_search_text').val('');
                 $(".bwdb_nav_search").show();
                 $(".bw_sidebar_info_box").html('按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。')
                 $(".bw_sidebar_info_box").show();
                 $(".bwdb_sidebarA").hide();
-                verflag=1;
-                textflag=1;
-            }else{
-                $('.search_btn').css('border','unset');
+                verflag = 1;
+                textflag = 1;
+            } else {
+                $('.search_btn').css('border', 'unset');
                 $(".bwdb_nav_search").hide();
                 $(".bw_sidebar_info_box").hide();
                 $(".bwdb_sidebarA").show();
-                if($(".bw_sidebar_info_box").html().indexOf('按回车键开始搜索') == -1){
-                $(".search_box_title").html($(".bwdb_select_item[data-id='"+now_proid+"']").html());
-                $(".search_box_title").attr('data-id',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id'));
-                $(".search_box_title").attr('data-id-codename',$(".bwdb_select_item[data-id='"+now_proid+"']").attr('data-id-codename'));
-                verflag=0;
-                ipcRenderer.send('getbuildstage', now_proid);
+                if ($(".bw_sidebar_info_box").html().indexOf('按回车键开始搜索') == -1) {
+                    $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
+                    $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
+                    $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
+                    verflag = 0;
+                    ipcRenderer.send('getbuildstage', now_proid);
                 }
-                textflag=0;
+                textflag = 0;
             }
         }
-        function setting_btn_do(){
+        function setting_btn_do() {
             menu.popup({ window: remote.getCurrentWindow() });
         }
-        function changeinfotext(infoid,show_text){
-            if(show_text==null){
-                $("#"+infoid).children('.info_box_items_text').text('N/A');
-            }else{
-                var r=show_text.replace(/(\r\n)|(\n)/g,'<br>')
-                $("#"+infoid).children('.info_box_items_text').html(r);
+        function changeinfotext(infoid, show_text) {
+            if (show_text == null) {
+                $("#" + infoid).children('.info_box_items_text').text('N/A');
+            } else {
+                var r = show_text.replace(/(\r\n)|(\n)/g, '<br>')
+                $("#" + infoid).children('.info_box_items_text').html(r);
             }
-            notice_text=document.documentElement.clientHeight-$('.install_notice_text').offset()['top']-25;
-            $('.install_notice_text').css('min-height',notice_text);
-            
-            
+            notice_text = document.documentElement.clientHeight - $('.install_notice_text').offset()['top'] - 25;
+            $('.install_notice_text').css('min-height', notice_text);
+
+
         }
-        function switch_home(){
-            if($("#homeinfobox").css('display')!='none'){
+        function switch_home() {
+            if ($("#homeinfobox").css('display') != 'none') {
                 $("#verinfobox").show();
                 $("#homeinfobox").hide();
-                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('background-color','#19478a');
-                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('color','#fff');
-            }else{
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
+            } else {
                 $("#verinfobox").hide();
                 $("#homeinfobox").show();
-                $('.bwdb_sidebar_item').css('background-color','unset');
-                $('.bwdb_sidebar_item').css('color','unset');
-                $('.update_list_item').css('background-color','unset');
-                $('.update_list_item').css('color','unset');
+                $('.bwdb_sidebar_item').css('background-color', 'unset');
+                $('.bwdb_sidebar_item').css('color', 'unset');
+                $('.update_list_item').css('background-color', 'unset');
+                $('.update_list_item').css('color', 'unset');
             }
-            
+
         }
         function main_pic_click() {
             console.log($('#main_pic').attr('class'));
-            if ($('#main_pic').attr('class')=='info_box_pics have_pic'){
+            if ($('#main_pic').attr('class') == 'info_box_pics have_pic') {
                 console.log('a');
-                var zip = new AdmZip("./gallery/"+now_buildid+".zip");
-                if(ifzipfileexist(zip,'pic.json')==1){
-                var info=zip.readAsText("pic.json");
-                if(info!=""){
-                    ipcRenderer.send('opengallery',info);
-                }
-                zip=null;
+                var zip = new AdmZip("./gallery/" + now_buildid + ".zip");
+                if (ifzipfileexist(zip, 'pic.json') == 1) {
+                    var info = zip.readAsText("pic.json");
+                    if (info != "") {
+                        ipcRenderer.send('opengallery', info);
+                    }
+                    zip = null;
                 }
             }
         }
     </script>
     <script>
         //node
-        function ifzipfileexist(zip,entryname){
+        function ifzipfileexist(zip, entryname) {
             console.log(entryname);
-            if(zipflag!=0){return -1;}
-            try{
-                var decompressedData = zip.readFile(entryname); 
+            if (zipflag != 0) { return -1; }
+            try {
+                var decompressedData = zip.readFile(entryname);
                 return 1;
-            }catch{
+            } catch{
                 return -1;
             }
         }
-        ipcRenderer.on('test1', function(event, arg) {
+        ipcRenderer.on('test1', function (event, arg) {
             alert(arg); // prints "pong"
         });
-        ipcRenderer.on('syslist', function(event, arg) {
+        ipcRenderer.on('syslist', function (event, arg) {
             console.log(arg);
-            var s=JSON.parse(arg);
+            var s = JSON.parse(arg);
             $('#bwdb_nav_select_bar').html('');
-            for(var i = 0; i < s.length; i++) {
+            for (var i = 0; i < s.length; i++) {
                 console.log(s[i]);
-                var s1=s[i][1];
-                s1=s1.replace('\"','&quot');
-                $("#bwdb_nav_select_bar").append('<div class="bwdb_select_item"'+ 'data-id="'+s[i][0]+'" data-id-codename="'+s[i][2]+'">'+s1+'</div>');
+                var s1 = s[i][1];
+                s1 = s1.replace('\"', '&quot');
+                $("#bwdb_nav_select_bar").append('<div class="bwdb_select_item"' + 'data-id="' + s[i][0] + '" data-id-codename="' + s[i][2] + '">' + s1 + '</div>');
             };
             //默认配置
-            $('.search_box_title').attr('data-id-codename',$(".bwdb_select_item[data-id='1']").attr('data-id-codename'));
-            $('.search_box_title').attr('data-id','1');
+            $('.search_box_title').attr('data-id-codename', $(".bwdb_select_item[data-id='1']").attr('data-id-codename'));
+            $('.search_box_title').attr('data-id', '1');
             $('.search_box_title').html(s[0][1]);
             ipcRenderer.send('getbuildstage', 1);
-            get_build_info(1,1);
-            
+            get_build_info(1, 1);
+
         });
-        ipcRenderer.on('stagelist', function(event, arg) {
+        ipcRenderer.on('stagelist', function (event, arg) {
             console.log(arg);
             console.log($('.search_box_title').attr('data-id'));
-            var s=JSON.parse(arg[1]);
+            var s = JSON.parse(arg[1]);
             $('.bwdb_sidebarA').html('');
-            for(var i = 0; i < s.length; i++) {
+            for (var i = 0; i < s.length; i++) {
                 console.log(s[i]);
-                if(s[i].length>30){
-                    var s1=s[i].substring(0,30)+'...'
-                }else{
-                    var s1=s[i]
+                if (s[i].length > 30) {
+                    var s1 = s[i].substring(0, 30) + '...'
+                } else {
+                    var s1 = s[i]
                 }
-                $(".bwdb_sidebarA").append('<div class="big_stage_divider non_search"><div class="big_stage_item"><span class="big_stage_text" title="'+s[i]+'">'+s1+'</span></div></div><div class="build_list" data-id="'+s[i]+'" data-type="build_stage" >');
-                ipcRenderer.send('getbuildlist', [arg[0],s[i]]);
+                $(".bwdb_sidebarA").append('<div class="big_stage_divider non_search"><div class="big_stage_item"><span class="big_stage_text" title="' + s[i] + '">' + s1 + '</span></div></div><div class="build_list" data-id="' + s[i] + '" data-type="build_stage" >');
+                ipcRenderer.send('getbuildlist', [arg[0], s[i]]);
             };
             ipcRenderer.send('show-win', 'win');
             //添加相关的代码
         });
-        ipcRenderer.on('buildlist', function(event, arg) {
+        ipcRenderer.on('buildlist', function (event, arg) {
             console.log(arg);
             console.log($('.search_box_title').attr('data-id'));
-            var s=JSON.parse(arg[2]);
-            $("[data-type='build_stage'][data-id='"+arg[1]+"']").html('');
-            for(var i = 0; i < s.length; i++) {
+            var s = JSON.parse(arg[2]);
+            $("[data-type='build_stage'][data-id='" + arg[1] + "']").html('');
+            for (var i = 0; i < s.length; i++) {
                 console.log(s[i]);
-                $("[data-type='build_stage'][data-id='"+arg[1]+"']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="'+s[i][0]+'" data-type="build_item">'+s[i][1]+'</div>');
+                $("[data-type='build_stage'][data-id='" + arg[1] + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + s[i][0] + '" data-type="build_item">' + s[i][1] + '</div>');
             };
             //添加相关的代码
             //alert(s[s.length-1][0]);
-            if(firstid!=$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id')  && now_proid==-1){
-                get_build_info(arg[0],$(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id'));
-            } 
-            if(now_buildid>0 && $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').length>0){
-                if($("#homeinfobox").css('display')=='none'){
-                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('background-color','#19478a');
-                $('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').css('color','#fff');
+            if (firstid != $(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id') && now_proid == -1) {
+                get_build_info(arg[0], $(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id'));
+            }
+            if (now_buildid > 0 && $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').length > 0) {
+                if ($("#homeinfobox").css('display') == 'none') {
+                    $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
+                    $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
                 }
-                get_build_info(now_proid,now_buildid);
+                get_build_info(now_proid, now_buildid);
                 //$('.bwdb_sidebar').scrollTop(0);
             }
-            if(getpar_height('.bwdb_sidebarA')>$('.bwdb_sidebarA').css('max-height')){
-                $('.bwdb_sidebarA').css('overflow-y','scroll');
-            }else{
-                $('.bwdb_sidebarA').css('overflow-y','auto');
+            if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
+                $('.bwdb_sidebarA').css('overflow-y', 'scroll');
+            } else {
+                $('.bwdb_sidebarA').css('overflow-y', 'auto');
             }
         });
-        ipcRenderer.on('buildinfo', function(event, arg) {
+        ipcRenderer.on('buildinfo', function (event, arg) {
             console.log(arg);
             console.log($('.search_box_title').attr('data-id'));
-            var s=JSON.parse(arg[2]);
+            var s = JSON.parse(arg[2]);
             console.log(s);
             console.log(s[0][2]);
             $("#ver_name").text(s[0][2]);
-            var arrlist=['ver_archlist','ver_verlist','ver_langlist','ver_tag','install_bios_date','install_sn','install_notice'];
-            for(var i = 0; i < arrlist.length; i++){
+            var arrlist = ['ver_archlist', 'ver_verlist', 'ver_langlist', 'ver_tag', 'install_bios_date', 'install_sn', 'install_notice'];
+            for (var i = 0; i < arrlist.length; i++) {
                 //$("#"+arrlist[i]).html(s[2+i]);
-                changeinfotext(arrlist[i],s[0][3+i]);
+                changeinfotext(arrlist[i], s[0][3 + i]);
             }
-            if($('.bw_sidebar_info_box').css('display')=='none'){
-                var x=$('.search_box_title').attr('data-id-codename');
-                var y=$('.search_box_title').html();
-            }else{
-                var x=$('.bwdb_select_item[data-id="'+arg[0]+'"]').attr('data-id-codename');
-                var y=$('.bwdb_select_item[data-id="'+arg[0]+'"]').html();
+            if ($('.bw_sidebar_info_box').css('display') == 'none') {
+                var x = $('.search_box_title').attr('data-id-codename');
+                var y = $('.search_box_title').html();
+            } else {
+                var x = $('.bwdb_select_item[data-id="' + arg[0] + '"]').attr('data-id-codename');
+                var y = $('.bwdb_select_item[data-id="' + arg[0] + '"]').html();
             }
-            if(s[0][11]!="" && s[0][11]!="N/A" ){
-                x=s[0][11];
+            if (s[0][11] != "" && s[0][11] != "N/A") {
+                x = s[0][11];
             }
-            if(x=="null" || x==null || x==""){
-                $("#ver_smalltag").text(y+' - '+s[0][1]);
-            }else{
-                $("#ver_smalltag").text('Codename "'+x+'" - '+s[0][1]);
+            if (x == "null" || x == null || x == "") {
+                $("#ver_smalltag").text(y + ' - ' + s[0][1]);
+            } else {
+                $("#ver_smalltag").text('Codename "' + x + '" - ' + s[0][1]);
             }
             //隐藏图片
             hide_pic();
-            picflag=1;
-            try{
-                zip = new AdmZip("./gallery/"+now_buildid+".zip");
-                if(ifzipfileexist(zip,'pic.json')==1){
-                var info=zip.readAsText("pic.json");
-                console.log(info);
-                if(info!=""){
-                var s=JSON.parse(info);
-                /*
-                if(s.productid!=now_proid ||s.buildid!=now_buildid){
-                    alert('当前截图库 产品/Build ID不一致！请检查。');
-                }else{
-                    */
-                    mainpicid=s.main_pic;
-                    console.log(mainpicid)
-                    try{
-                        var decompressedData = zip.readFile(s.screenshot[mainpicid].screenshothash+".png");
-                        $('#main_pic').css('background-image',"url(data:image/png;base64," + decompressedData.toString('base64')+')');
-                        $('#main_pic').attr('class','info_box_pics have_pic');
-                        $('#main_pic').attr('title','点击查看截图');
-                    }catch{
-                        alert('在读取头图中发生错误。');
+            picflag = 1;
+            try {
+                zip = new AdmZip("./gallery/" + now_buildid + ".zip");
+                if (ifzipfileexist(zip, 'pic.json') == 1) {
+                    var info = zip.readAsText("pic.json");
+                    console.log(info);
+                    if (info != "") {
+                        var s = JSON.parse(info);
+                        /*
+                        if(s.productid!=now_proid ||s.buildid!=now_buildid){
+                            alert('当前截图库 产品/Build ID不一致！请检查。');
+                        }else{
+                            */
+                        mainpicid = s.main_pic;
+                        console.log(mainpicid)
+                        try {
+                            var decompressedData = zip.readFile(s.screenshot[mainpicid].screenshothash + ".png");
+                            $('#main_pic').css('background-image', "url(data:image/png;base64," + decompressedData.toString('base64') + ')');
+                            $('#main_pic').attr('class', 'info_box_pics have_pic');
+                            $('#main_pic').attr('title', '点击查看截图');
+                        } catch{
+                            alert('在读取头图中发生错误。');
+                        }
+                        /*
+                        }
+                        */
+                        picflag = 0;
+                        show_pic();
+                        zip = null;
+                    } else {
+                        $('#main_pic').css('background-image', "unset");
+                        $('#main_pic').attr('class', 'info_box_pics');
+                        $('#main_pic').attr('title', '');
                     }
-                /*
+                } else {
+                    $('#main_pic').css('background-image', "unset");
+                    $('#main_pic').attr('class', 'info_box_pics');
+                    $('#main_pic').attr('title', '');
                 }
-                */
-                picflag=0;
-                show_pic();
-                zip=null;
-                }else{
-                    $('#main_pic').css('background-image',"unset");
-                    $('#main_pic').attr('class','info_box_pics');
-                    $('#main_pic').attr('title','');
-                }
-            }else{
-                $('#main_pic').css('background-image',"unset");
-                $('#main_pic').attr('class','info_box_pics');
-                $('#main_pic').attr('title','');
-            }
-            }catch{
+            } catch{
                 hide_pic();
-                $('#main_pic').css('background-image',"unset");
-                $('#main_pic').attr('class','info_box_pics');
-                $('#main_pic').attr('title','');  
+                $('#main_pic').css('background-image', "unset");
+                $('#main_pic').attr('class', 'info_box_pics');
+                $('#main_pic').attr('title', '');
             }
-            
+
             console.log(verflag);
-            if(verflag==1){verflag=0;return 0;}
-            var i=$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').index();
-            console.log('元素索引：'+i);
-            if($('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().length==0){return 0;}
-            if(i==0){
-                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').parents('.build_list').prev().offset().top- $(".bwdb_sidebarA").offset().top);
-            }else{
-                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()+$('.bwdb_sidebar_item[data-id="'+now_buildid+'"]').prev().offset().top- $(".bwdb_sidebarA").offset().top);
+            if (verflag == 1) { verflag = 0; return 0; }
+            var i = $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').index();
+            console.log('元素索引：' + i);
+            if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().length == 0) { return 0; }
+            if (i == 0) {
+                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parents('.build_list').prev().offset().top - $(".bwdb_sidebarA").offset().top);
+            } else {
+                $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().offset().top - $(".bwdb_sidebarA").offset().top);
             }
             //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])
             //添加相关的代码
         });
-        ipcRenderer.on('searchlist', function(event, arg) {
+        ipcRenderer.on('searchlist', function (event, arg) {
             console.log(arg);
-            var s=JSON.parse(arg[1]);
+            var s = JSON.parse(arg[1]);
             console.log(s);
             $('.bwdb_sidebarA').html('');
-            for(var i = 0; i < s.length; i++){
-                var proid=s[i][1];
-                var proname=$('.bwdb_select_item[data-id="'+proid+'"]').html()
-                var buildid=s[i][0];
-                var buildver=s[i][3];
-                if($(".bwdb_sidebarA").children('.build_list[data-id="'+proname+'"]').length==0){
-                    if(proname.length>30){
-                        var s1=proname.substring(0,30)+'...';
-                    }else{
-                        var s1=proname;
+            for (var i = 0; i < s.length; i++) {
+                var proid = s[i][1];
+                var proname = $('.bwdb_select_item[data-id="' + proid + '"]').html()
+                var buildid = s[i][0];
+                var buildver = s[i][3];
+                if ($(".bwdb_sidebarA").children('.build_list[data-id="' + proname + '"]').length == 0) {
+                    if (proname.length > 30) {
+                        var s1 = proname.substring(0, 30) + '...';
+                    } else {
+                        var s1 = proname;
                     }
-                    $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text" title="'+proname+'">'+s1+'</span></div></div><div class="build_list" data-id="'+proname+'" data-type="build_stage" >');
+                    $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text" title="' + proname + '">' + s1 + '</span></div></div><div class="build_list" data-id="' + proname + '" data-type="build_stage" >');
                 }
-                $("[data-type='build_stage'][data-id='"+proname+"']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="'+buildid+'" data-id-proid="'+proid+'" data-type="build_item">'+buildver+'</div>');
+                $("[data-type='build_stage'][data-id='" + proname + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="build_item">' + buildver + '</div>');
             }
-            $(".bw_sidebar_info_box").html('共找到'+s.length+'项。');
+            $(".bw_sidebar_info_box").html('共找到' + s.length + '项。');
             $(".bw_sidebar_info_box").show();
             $(".bwdb_sidebarA").show();
-            if(getpar_height('.bwdb_sidebarA')>$('.bwdb_sidebarA').css('max-height')){
-                $('.bwdb_sidebarA').css('overflow-y','scroll');
-            }else{
-                $('.bwdb_sidebarA').css('overflow-y','auto');
+            if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
+                $('.bwdb_sidebarA').css('overflow-y', 'scroll');
+            } else {
+                $('.bwdb_sidebarA').css('overflow-y', 'auto');
             }
-            $('.bwdb_sidebarA').scrollTop(0-$('.bwdb_sidebarA').scrollTop);
+            $('.bwdb_sidebarA').scrollTop(0 - $('.bwdb_sidebarA').scrollTop);
         });
-        ipcRenderer.on('bwdbversion', function(event, arg) {
+        ipcRenderer.on('bwdbversion', function (event, arg) {
             console.log(arg);
-            var s=JSON.parse(arg);
+            var s = JSON.parse(arg);
             console.log(s);
-            $("#basedb_version").html('基础数据库版本：V'+s[0][0]+' ,更新于'+s[0][1]+'。');
-            if(fs.existsSync('./gallery/info.json')==true){
+            $("#basedb_version").html('基础数据库版本：V' + s[0][0] + ' ,更新于' + s[0][1] + '。');
+            if (fs.existsSync('./gallery/info.json') == true) {
                 var data = fs.readFileSync('./gallery/info.json');
-                var info=data.toString();
-                if(info!=""){
-                    var s1=JSON.parse(info);
-                    $("#gallerypak_version").html('图片数据库版本：V'+s1.GalleryVersion+' ,更新于'+s1.GalleryUpdateTime+'。');
+                var info = data.toString();
+                if (info != "") {
+                    var s1 = JSON.parse(info);
+                    $("#gallerypak_version").html('图片数据库版本：V' + s1.GalleryVersion + ' ,更新于' + s1.GalleryUpdateTime + '。');
                 }
             }
-            });
-        ipcRenderer.on('updatelist', function(event, arg) {
+        });
+        ipcRenderer.on('updatelist', function (event, arg) {
             console.log(arg);
             //alert(arg);
-            var s=JSON.parse(arg);
+            var s = JSON.parse(arg);
             console.log(s);
             //alert(s);
             $('#update_list').html('');
-            for(var i = 0; i < s.length; i++){
-                var proid=s[i][1];
-                var proname=$('.bwdb_select_item[data-id="'+proid+'"]').html()
-                var buildid=s[i][0];
-                var buildver=s[i][2];
-                var things_html='<div class="update_list_item" data-id="'+buildid+'" data-id-proid="'+proid+'" data-type="update_list_items" title="点击跳转到对应版本" >'+proname+' - '+buildver+'</div>';
-                $('#update_list').append(things_html);  
+            for (var i = 0; i < s.length; i++) {
+                var proid = s[i][1];
+                var proname = $('.bwdb_select_item[data-id="' + proid + '"]').html()
+                var buildid = s[i][0];
+                var buildver = s[i][2];
+                var things_html = '<div class="update_list_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="update_list_items" title="点击跳转到对应版本" >' + proname + ' - ' + buildver + '</div>';
+                $('#update_list').append(things_html);
             }
         });
-        function test1(){
+        function test1() {
             //var decompressedData = zip.readFile("1/1.png");
             //console.log(zip.readAsText("1/pic.json")); 
             //console.log(decompressedData.toString('base64')); 
@@ -528,131 +537,157 @@
             //$('#main_pic').attr('class','info_box_pics have_pic');
             //$('#main_pic').attr('title','点击查看截图');
         }
-        function get_build_info(proid,buildid){
-            console.log([proid,buildid])
-            now_proid=proid;
-            now_buildid=buildid;
-            ipcRenderer.send('getbuildinfo',[proid,buildid]);
+        function get_build_info(proid, buildid) {
+            console.log([proid, buildid])
+            now_proid = proid;
+            now_buildid = buildid;
+            ipcRenderer.send('getbuildinfo', [proid, buildid]);
         }
-        function open_wiki_link(){
-            var link=encodeURI('https://wiki.betaworld.org/index.php?search='+$('.search_box_title').html()+':'+$("#ver_tag").children('.info_box_items_text').html().replace('#',''));
+        function open_wiki_link() {
+            var link = encodeURI('https://wiki.betaworld.org/index.php?search=' + $('.search_box_title').html() + ':' + $("#ver_tag").children('.info_box_items_text').html().replace('#', ''));
             console.log(link);
             shell.openExternal(link);
         }
     </script>
-  </head>
-  <body>
+</head>
+
+<body>
     <nav class="navbar navbar-expand-lg navbar-light bwdb_toolbar">
         <div class="nav_search_1">
-        <div class="nav_search" onclick="slide_select();">
-            <div class="search_box">
-                <div class="search_box_title">Windows 1.0</div>  
+            <div class="nav_search" onclick="slide_select();">
+                <div class="search_box">
+                    <div class="search_box_title">Windows 1.0</div>
+                </div>
+                <div class="search_box_down"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+
             </div>
-            <div class="search_box_down"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
-            
-        </div>
-            <div class="search_btn" onclick="show_search_textbox();"><i class="fa fa-search" aria-hidden="true"></i></div>
+            <div class="search_btn" onclick="show_search_textbox();"><i class="fa fa-search" aria-hidden="true"></i>
+            </div>
         </div>
         <div class="nav_right_btn">
             <div class="nav_btn" onclick="switch_home();"><i class="fa fa-home" aria-hidden="true"></i></div>
             <div class="nav_btn" onclick="setting_btn_do();"><i class="fa fa-cog" aria-hidden="true"></i></div>
         </div>
     </nav>
-    
-    <div class="bwdb_content">
-    <div class="bwdb_sidebar">
-        <div class="bw_sidebar_info_box">
-            按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。
-        </div>
-        <div class="bwdb_sidebarA">
 
+    <div class="bwdb_content">
+        <div class="bwdb_sidebar">
+            <div class="bw_sidebar_info_box">
+                按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。
+            </div>
+            <div class="bwdb_sidebarA">
+
+            </div>
         </div>
-    </div>
-    <div class="bwdb_infobox" id="homeinfobox">
-        <div class="home_title">
-            <div><h5>感谢您使用BetaWorld Library!</h5><button class="btn btn-primary" style="float:right;margin-right:25px;position: relative;display: block;width: 30%;min-width: 60px;background-color: #19478a;border:#19478a;max-width: 220px;"><i class="fa fa-cloud-download" aria-hidden="true"></i> 检查数据库更新</button></div>
-            <div class="version_info" id="basedb_version">基础数据库版本：V16.66，更新于2020/01/01日</div>
-            <div class="version_info" id="gallerypak_version">图片数据库版本：V16.66，更新于2020/01/01日</div>
-        </div>
-        <div class="update_info">
-            
-            <h5>更新日志</h5>
-            <div class="update_listbox">
-                <div id="update_list">
-                    <div class="update_list_item">A</div>
-                    <div class="update_list_item">A</div>
-                    <div class="update_list_item">A</div>
-                    <div class="update_list_item">A</div>
-                    <div class="update_list_item">A</div>
-                    <div class="update_list_item">A</div>
-                    <div class="update_list_item">A</div>
-                    <div class="update_list_item">A</div>
+        <div class="bwdb_infobox" id="homeinfobox">
+            <div class="home_title">
+                <div>
+                    <h5>感谢您使用BetaWorld Library!</h5><button class="btn btn-primary"
+                        style="float:right;margin-right:25px;position: relative;display: block;width: 30%;min-width: 60px;background-color: #19478a;border:#19478a;max-width: 220px;"><i
+                            class="fa fa-cloud-download" aria-hidden="true"></i> 检查数据库更新</button>
+                </div>
+                <div class="version_info" id="basedb_version">基础数据库版本：V16.66，更新于2020/01/01日</div>
+                <div class="version_info" id="gallerypak_version">图片数据库版本：V16.66，更新于2020/01/01日</div>
+            </div>
+            <div class="update_info">
+
+                <h5>更新日志</h5>
+                <div class="update_listbox">
+                    <div id="update_list">
+                        <div class="update_list_item">A</div>
+                        <div class="update_list_item">A</div>
+                        <div class="update_list_item">A</div>
+                        <div class="update_list_item">A</div>
+                        <div class="update_list_item">A</div>
+                        <div class="update_list_item">A</div>
+                        <div class="update_list_item">A</div>
+                        <div class="update_list_item">A</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="bwdb_infobox" id="verinfobox" style="display: none;">
-        <div class="Version_Title">
-            <div style="display: inline-flex;width:100%"><h2 id="ver_name">1.0 Alpha</h2> <a title="查看BetaWorld Wiki页面" id="wiki_link" style="margin-top: -5px;margin-left: 10px;font-size:1.8rem;cursor: pointer;" onclick="open_wiki_link();"> <img src="./static/img/bwWikiLogo.png" /></a></div>
-            <span id="ver_smalltag">Codename "Interface Manager" - Alpha</span>
-        </div>
-        <div class="infobox_sub_title">基本信息</div>
-        <div class="version_info_box" style="display: flex;">
-            <div class="info_listbox info_have_pic" id="infobox_1">
-            <div class="info_box_items" id="ver_archlist">
-                <div class="info_box_items_title" >架构</div>
-                <div class="info_box_items_text">16-Bits</div>
-                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
+        <div class="bwdb_infobox" id="verinfobox" style="display: none;">
+            <div class="Version_Title">
+                <div style="display: inline-flex;width:100%">
+                    <h2 id="ver_name">1.0 Alpha</h2> <a title="查看BetaWorld Wiki页面" id="wiki_link"
+                        style="margin-top: -5px;margin-left: 10px;font-size:1.8rem;cursor: pointer;"
+                        onclick="open_wiki_link();"> <img src="./static/img/bwWikiLogo.png" /></a>
+                </div>
+                <span id="ver_smalltag">Codename "Interface Manager" - Alpha</span>
             </div>
-            <div class="info_box_items" id="ver_verlist">
-                <div class="info_box_items_title" >版本</div>
-                <div class="info_box_items_text">Professional</div>
-                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
+            <div class="infobox_sub_title">基本信息</div>
+            <div class="version_info_box" style="display: flex;">
+                <div class="info_listbox info_have_pic" id="infobox_1">
+                    <div class="info_box_items" id="ver_archlist">
+                        <div class="info_box_items_title">架构</div>
+                        <div class="info_box_items_text">16-Bits</div>
+                        <div class="info_box_items_btn">
+                            <div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info_box_items" id="ver_verlist">
+                        <div class="info_box_items_title">版本</div>
+                        <div class="info_box_items_text">Professional</div>
+                        <div class="info_box_items_btn">
+                            <div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info_box_items" id="ver_langlist">
+                        <div class="info_box_items_title">语言</div>
+                        <div class="info_box_items_text">English (United States)</div>
+                        <div class="info_box_items_btn">
+                            <div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info_box_items" id="ver_tag">
+                        <div class="info_box_items_title">版本字符串</div>
+                        <div class="info_box_items_text">5.0.2202.1.ntvbl06.000202-1835</div>
+                        <div class="info_box_items_btn">
+                            <div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info_box_pics" id="main_pic" onclick="main_pic_click();"></div>
             </div>
-            <div class="info_box_items"  id="ver_langlist">
-                <div class="info_box_items_title" >语言</div>
-                <div class="info_box_items_text">English (United States)</div>
-                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
-            </div>
-            <div class="info_box_items"  id="ver_tag">
-                <div class="info_box_items_title" >版本字符串</div>
-                <div class="info_box_items_text">5.0.2202.1.ntvbl06.000202-1835</div>
-                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
-            </div>
-            </div>
-            <div class="info_box_pics" id="main_pic" onclick="main_pic_click();"></div>
-        </div>
-        <br>
-        <div class="infobox_sub_title">安装信息</div>
-        <div class="version_info_box">
-            <div class="info_box_items" id="install_bios_date">
-                <div class="info_box_items_title">BIOS日期</div>
-                <div class="info_box_items_text notice_text">16-Bits</div>
-                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
-            </div>
-            <div class="info_box_items" id="install_sn">
-                <div class="info_box_items_title">序列号</div>
-                <div class="info_box_items_text notice_text">English (United States)</div>
-                <div class="info_box_items_btn"><div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div></div>
-            </div>
-            <div class="info_box_items" id="install_notice">
-                <div class="info_box_items_title">注意事项</div>
-                <div class="info_box_items_text install_notice_text">
-                    使用启动软盘进行安装。硬盘设置为SCSI。<br>
-                    <br>
-                    反馈按钮<br>
-                    Windows Registry Editor Version 5.00<br>
-                    <br>
-                    [HKEY_CURRENT_USER\Control Panel\Desktop]<br>
-                    "LameButtonEnadled"=dword:00000001<br>
-                    "LameButtonText"="Comments?"<br>
+            <br>
+            <div class="infobox_sub_title">安装信息</div>
+            <div class="version_info_box">
+                <div class="info_box_items" id="install_bios_date">
+                    <div class="info_box_items_title">BIOS日期</div>
+                    <div class="info_box_items_text notice_text">16-Bits</div>
+                    <div class="info_box_items_btn">
+                        <div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+                <div class="info_box_items" id="install_sn">
+                    <div class="info_box_items_title">序列号</div>
+                    <div class="info_box_items_text notice_text">English (United States)</div>
+                    <div class="info_box_items_btn">
+                        <div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+                <div class="info_box_items" id="install_notice">
+                    <div class="info_box_items_title">注意事项</div>
+                    <div class="info_box_items_text install_notice_text">
+                        使用启动软盘进行安装。硬盘设置为SCSI。<br>
+                        <br>
+                        反馈按钮<br>
+                        Windows Registry Editor Version 5.00<br>
+                        <br>
+                        [HKEY_CURRENT_USER\Control Panel\Desktop]<br>
+                        "LameButtonEnadled"=dword:00000001<br>
+                        "LameButtonText"="Comments?"<br>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <div class="bwdb_nav_select" id='bwdb_nav_select_bar'>
-        
+
     </div>
     <div class="bwdb_nav_search">
         <input type="text" id="email" placeholder="在这里搜索" class="bwdb_nav_search_text">
@@ -661,5 +696,6 @@
         <textarea row=40 style="resize:none"></textarea>
     </div>
     <!--如果在主进程中，则用var initSqlJs=require('sql-wasm.js')-->
-  </body>
+</body>
+
 </html>
