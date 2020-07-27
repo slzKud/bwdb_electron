@@ -572,10 +572,12 @@ ipcMain.on('editbuild', (event, args) => {
         initSqlJs().then(SQL => {
           // 创建数据库
           db = new SQL.Database(data);
-          db.run('BEGIN;');
-          db.exec("insert into 'Product' values (null, '" + proname + "', '" + codename + "');");
-          db.run('COMMIT;');
+          //db.run('BEGIN;');
+          console.log("insert into 'Product' values (null, '" + proname + "', '" + codename + "');");
+          db.run("insert into 'Product' values (null, '" + proname + "', '" + codename + "');");
+          //db.run('COMMIT;');
           data = db.export();
+          console.log("SELECT ID from 'Product' where Name='" + proname + "'");
           contents = db.exec("SELECT ID from 'Product' where Name='" + proname + "'");
           arr = contents[0].values;
           try {
@@ -585,7 +587,7 @@ ipcMain.on('editbuild', (event, args) => {
           }
         })
       }).then(val => {
-        return (val);
+        resolve (val);
       });
 
     } else {
@@ -623,7 +625,7 @@ ipcMain.on('editbuild', (event, args) => {
     //检验产品是否存在
     proid = val;
     //防止ID传错
-    if (proid != args[0]) {
+    if (proid != args[0] && args[0]!=-1) {
       throw new Error('invild pro id');
     }
     if (buildid == -1) {

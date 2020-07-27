@@ -528,6 +528,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
     var s = JSON.parse(arg[2]);
     console.log(s);
     console.log(s[0][2]);
+    $('.title_bar').html('Now BuildID:'+now_buildid);
     //$("#ver_name").text(s[0][2]);
     var arrlist = ['ver_archlist', 'ver_verlist', 'ver_langlist', 'ver_tag', 'install_bios_date', 'install_sn', 'install_notice', 'install_notice_en', 'Codename'];
     if ($('.bw_sidebar_info_box').css('display') == 'none') {
