@@ -390,6 +390,9 @@
                 var x=$('.bwdb_select_item[data-id="'+arg[0]+'"]').attr('data-id-codename');
                 var y=$('.bwdb_select_item[data-id="'+arg[0]+'"]').html();
             }
+            if(s[0][11]!="" && s[0][11]!="N/A" ){
+                x=s[0][11];
+            }
             if(x=="null" || x==null || x==""){
                 $("#ver_smalltag").text(y+' - '+s[0][1]);
             }else{
