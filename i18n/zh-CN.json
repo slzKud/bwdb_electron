@@ -697,6 +697,10 @@
             {
                 "ori_text": "更新时间不能为空",
                 "translate_text": "更新时间不能为空"
+            },
+            {
+                "ori_text": "数据库设置",
+                "translate_text": "数据库设置"
             }
         ]
     },
@@ -724,6 +728,10 @@
             {
                 "ori_text": "语言设置成功。点击确定后会立即刷新。",
                 "translate_text": "语言设置成功。点击确定后会立即刷新。"
+            },
+            {
+                "ori_text": "语言设置",
+                "translate_text": "语言设置"
             }
         ]
     }

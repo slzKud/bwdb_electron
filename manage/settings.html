@@ -17,6 +17,7 @@
         const remote = require('electron').remote;
         $(document).ready(function () {
             change_static_element(get_lang_now());
+            $('title').html(convert_dymstrlist_to_string("数据库设置",get_lang_now()));
             ipcRenderer.send('getbwdbversion', 'managesetting');
             //alert('ok');
         });

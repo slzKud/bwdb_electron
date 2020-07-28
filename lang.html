@@ -29,6 +29,7 @@
                     }
 
                 }
+                $('title').html(convert_dymstrlist_to_string("语言设置",get_lang_now()));
                 ipcRenderer.send('show-win', 'langsetting');
             });
         });
