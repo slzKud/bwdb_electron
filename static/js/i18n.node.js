@@ -10,6 +10,9 @@ function convert_dymstrlist_to_string(str,langcode,modulename){
             break;
         }
     }
+    if(s==undefined){
+        return str;
+    }
     //console.log(s);
     for(let i=0;i<s.dymstr.length;i++){
         //console.log(s.dymstr[i].ori_text);
@@ -28,6 +31,9 @@ function convert_dymstrlist_to_string_include_array(str,langcode,modulename,arr)
             var s=s2[i];
             break;
         }
+    }
+    if(s==undefined){
+        return str;
     }
     var s1="";
     //console.log(s);

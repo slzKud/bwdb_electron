@@ -1,8 +1,8 @@
 [
     {
         "modulename": "langinfo.json",
-        "langstdnamd": "简体中文",
-        "langaauthor": "BetaWorld"
+        "langstdnamd": "English(United States)",
+        "langaauthor": "Macadmin"
     },
     {
         "modulename": "main.js",
@@ -10,67 +10,67 @@
         "dymstr": [
             {
                 "ori_text": "基本数据库不存在",
-                "translate_text": "基本数据库不存在"
+                "translate_text": "Basic Database doesn't exist"
             },
             {
                 "ori_text": "基本数据库不存在，程序将退出。",
-                "translate_text": "基本数据库不存在，程序将退出。"
+                "translate_text": "Basic Database doesn't exist, the program will be closed."
             },
             {
                 "ori_text": "找不到数据",
-                "translate_text": "找不到数据"
+                "translate_text": "Data not found."
             },
             {
                 "ori_text": "你查找的“%1”找不到条目。",
-                "translate_text": "你查找的“%1”找不到条目。"
+                "translate_text": "The item '%1' requested could not be found.'。"
             },
             {
                 "ori_text": "清除Changelog完成",
-                "translate_text": "清除Changelog完成"
+                "translate_text": "Changelog has been cleaned."
             },
             {
                 "ori_text": "清除Changelog完成!",
-                "translate_text": "清除Changelog完成!"
+                "translate_text": "Changelog has been cleaned!"
             },
             {
                 "ori_text": "ChangeLOG的处理",
-                "translate_text": "ChangeLOG的处理"
+                "translate_text": "The management to ChangeLOG"
             },
             {
                 "ori_text": "版本号已经被更改，请选择ChangeLOG的处理方式：",
-                "translate_text": "版本号已经被更改，请选择ChangeLOG的处理方式："
+                "translate_text": "Version number changed successfully, please choose the management about the ChangeLOG:"
             },
             {
                 "ori_text": "清空ChangeLOG",
-                "translate_text": "清空ChangeLOG"
+                "translate_text": "Clean up the ChangeLOG"
             },
             {
                 "ori_text": "更改ChageLOG中所有条目的版本（推荐）",
-                "translate_text": "更改ChageLOG中所有条目的版本（推荐）"
+                "translate_text": "Change the version number of all items in the ChageLOG (Recommended)"
             },
             {
                 "ori_text": "不做任何处理",
-                "translate_text": "不做任何处理"
+                "translate_text": "Do not change anything"
             },
             {
                 "ori_text": "数据库版本修改完成",
-                "translate_text": "数据库版本修改完成"
+                "translate_text": "Database version number changed successfully"
             },
             {
                 "ori_text": "数据库版本修改完成!",
-                "translate_text": "数据库版本修改完成!"
+                "translate_text": "Database version number changed successfully!"
             },
             {
                 "ori_text": "请选择图片保存的路径：",
-                "translate_text": "请选择图片保存的路径："
+                "translate_text": "Please choose the folder you want to save the image:"
             },
             {
                 "ori_text": "请选择要导入/替换的图片：",
-                "translate_text": "请选择要导入/替换的图片："
+                "translate_text": "please choose the image you want to add/replace:"
             },
             {
                 "ori_text": "图片文件(*.png)",
-                "translate_text": "图片文件(*.png)"
+                "translate_text": "Image File(*.png)"
             }
         ]
     },
@@ -80,98 +80,98 @@
             {
                 "strtype": "html",
                 "ori_text": "基本信息",
-                "translate_text": "基本信息",
+                "translate_text": "Basic Information",
                 "classStr": "infobox_sub_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "架构",
-                "translate_text": "架构",
+                "translate_text": "Arch",
                 "classStr": "info_box_items_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "版本",
-                "translate_text": "版本",
+                "translate_text": "SKU",
                 "classStr": "info_box_items_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "语言",
-                "translate_text": "语言",
+                "translate_text": "Language",
                 "classStr": "info_box_items_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "版本字符串",
-                "translate_text": "版本字符串",
+                "translate_text": "BuildTag",
                 "classStr": "info_box_items_title"
             },
             {
                 "strtype": "title",
                 "ori_text": "查看BetaWorld Wiki页面",
-                "translate_text": "查看BetaWorld Wiki页面",
+                "translate_text": "View this Build on BetaWorld Wiki",
                 "id": "wiki_link"
             },
             {
                 "strtype": "html",
                 "ori_text": "安装信息",
-                "translate_text": "安装信息",
+                "translate_text": "Setup Information",
                 "classStr": "infobox_sub_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "序列号",
-                "translate_text": "序列号",
+                "translate_text": "Serial Number",
                 "classStr": "info_box_items_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "BIOS日期",
-                "translate_text": "BIOS日期",
+                "translate_text": "BIOS Date",
                 "classStr": "info_box_items_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "注意事项",
-                "translate_text": "注意事项",
+                "translate_text": "Fixes",
                 "classStr": "info_box_items_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。",
-                "translate_text": "按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。",
+                "translate_text": "Press Enter to start search<br>Click Magnifier Button to close search box.",
                 "classStr": "bw_sidebar_info_box"
             },
             {
                 "strtype": "html",
                 "ori_text": "感谢您使用BetaWorld Library!",
-                "translate_text": "感谢您使用BetaWorld Library!",
+                "translate_text": "Thank you for using BetaWorld Library!",
                 "classStr": "bw_welcome"
             },
             {
                 "strtype": "html",
                 "ori_text": "更新日志",
-                "translate_text": "更新日志",
+                "translate_text": "Update Log",
                 "classStr": "bw_welcome"
             },
             {
                 "strtype": "placeholder",
                 "ori_text": "在这里搜索",
-                "translate_text": "在这里搜索",
+                "translate_text": "Search here.",
                 "classStr": "bwdb_nav_search_text"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-cloud-download\" aria-hidden=\"true\"></i> 检查数据库更新",
-                "translate_text": "<i class=\"fa fa-cloud-download\" aria-hidden=\"true\"></i> 检查数据库更新",
+                "translate_text": "<i class=\"fa fa-cloud-download\" aria-hidden=\"true\"></i> Check for database update",
                 "classStr": "btn.btn-primary"
             }
         ],
         "dymstr": [
             {
                 "ori_text": "仅显示有截图的Build",
-                "translate_text": "仅显示有截图的Build"
+                "translate_text": "Display Builds with ScreenShots only."
             },
             {
                 "ori_text": "Language",
@@ -179,63 +179,63 @@
             },
             {
                 "ori_text": "关于",
-                "translate_text": "关于"
+                "translate_text": "About"
             },
             {
                 "ori_text": "提示",
-                "translate_text": "提示"
+                "translate_text": "Message"
             },
             {
                 "ori_text": "你不能再往上移动",
-                "translate_text": "你不能再往上移动"
+                "translate_text": "You cannot move up further"
             },
             {
                 "ori_text": "你不能再往下移动",
-                "translate_text": "你不能再往下移动"
+                "translate_text": "You cannot move down further"
             },
             {
                 "ori_text": "单击放大镜按钮以关闭搜索工具。",
-                "translate_text": "单击放大镜按钮以关闭搜索工具。"
+                "translate_text": "Click Magnifier Button to close search box."
             },
             {
                 "ori_text": "按回车键开始搜索",
-                "translate_text": "按回车键开始搜索"
+                "translate_text": "Press Enter to start search"
             },
             {
                 "ori_text": "当前截图库 产品/Build ID不一致！请检查。",
-                "translate_text": "当前截图库 产品/Build ID不一致！请检查。"
+                "translate_text": "ScreenShots Library and Production/Build ID currently opened is not match! Please check it at once."
             },
             {
                 "ori_text": "点击查看截图",
-                "translate_text": "点击查看截图"
+                "translate_text": "Click here to open ScreenShot"
             },
             {
                 "ori_text": "在读取头图中发生错误。",
-                "translate_text": "在读取头图中发生错误。"
+                "translate_text": "An error has been occurred when read head thumb."
             },
             {
                 "ori_text": "共找到%1项。",
-                "translate_text": "共找到%1项。"
+                "translate_text": "Found %1 item(s)."
             },
             {
                 "ori_text": "基础数据库版本：V%1,更新于%2。",
-                "translate_text": "基础数据库版本：V%1,更新于%2。"
+                "translate_text": "Basic database version:V%1, update at %2."
             },
             {
                 "ori_text": "图片数据库版本：V%1,更新于%2。",
-                "translate_text": "图片数据库版本：V%1,更新于%2。"
+                "translate_text": "ScreenShots database version:V%1, update at %2."
             },
             {
                 "ori_text": "点击跳转到对应版本",
-                "translate_text": "点击跳转到对应版本"
+                "translate_text": "Click here to go to the matched build"
             },
             {
                 "ori_text": "在读取头图中发生错误。",
-                "translate_text": "在读取头图中发生错误。"
+                "translate_text": "An error has been occurred when read head thumb."
             },
             {
                 "ori_text": "版本",
-                "translate_text": "版本"
+                "translate_text": "SKU"
             }
         ]
     },
@@ -245,55 +245,55 @@
             {
                 "strtype": "title",
                 "ori_text": "关闭窗口",
-                "translate_text": "关闭窗口",
+                "translate_text": "Close window",
                 "classStr": "close_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "上一张",
-                "translate_text": "上一张",
+                "translate_text": "Previous One",
                 "classStr": "close_btn.left_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "下一张",
-                "translate_text": "下一张",
+                "translate_text": "Next One",
                 "classStr": "close_btn.right_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "刷新",
-                "translate_text": "刷新",
+                "translate_text": "Refresh",
                 "classStr": "toolbar_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "保存图片",
-                "translate_text": "保存图片",
+                "translate_text": "Save Image",
                 "classStr": "toolbar_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "复制",
-                "translate_text": "复制",
+                "translate_text": "Copy",
                 "classStr": "toolbar_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "图片列表",
-                "translate_text": "图片列表",
+                "translate_text": "Image List",
                 "classStr": "toolbar_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "放大",
-                "translate_text": "放大",
+                "translate_text": "Zoom in",
                 "classStr": "toolbar_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "缩小",
-                "translate_text": "缩小",
+                "translate_text": "Zoom out",
                 "classStr": "toolbar_btn"
             },
             {
@@ -305,34 +305,34 @@
             {
                 "strtype": "title",
                 "ori_text": "返回",
-                "translate_text": "返回",
+                "translate_text": "Back",
                 "classStr": "close_btn"
             }
         ],
         "dymstr": [
             {
                 "ori_text": "请选择图片保存的路径：",
-                "translate_text": "请选择图片保存的路径："
+                "translate_text": "Please choose the folder you want to save the image:"
             },
             {
                 "ori_text": "图片文件(*.png)",
-                "translate_text": "图片文件(*.png)"
+                "translate_text": "Image File(*.png)"
             },
             {
                 "ori_text": "在读取图片中发生错误。",
-                "translate_text": "在读取图片中发生错误。"
+                "translate_text": "An error has been occurred when read image."
             },
             {
                 "ori_text": "保存图片时发生错误：",
-                "translate_text": "保存图片时发生错误："
+                "translate_text": "An error has been occurred when save image."
             },
             {
                 "ori_text": "您选择的图片已复制！",
-                "translate_text": "您选择的图片已复制！"
+                "translate_text": "The image choosed copied successfully!"
             },
             {
                 "ori_text": "保存成功！",
-                "translate_text": "保存成功！"
+                "translate_text": "Saved successfully!"
             }
         ]
     },
@@ -342,7 +342,7 @@
         "dymstr": [
             {
                 "ori_text": "贡献者名单",
-                "translate_text": "贡献者名单"
+                "translate_text": "Contributors"
             }
         ]
     },
@@ -352,19 +352,19 @@
         "dymstr": [
             {
                 "ori_text": "点击以静音/恢复",
-                "translate_text": "点击以静音/恢复"
+                "translate_text": "Click to Mute/UnMute"
             },
             {
                 "ori_text": "感谢以下同志对BetaWorld的支持",
-                "translate_text": "感谢以下同志对BetaWorld的支持"
+                "translate_text": "Thanks to the person below for their supports for BetaWorld."
             },
             {
                 "ori_text": "网址：WWW.BetaWorld.ORG",
-                "translate_text": "网址：WWW.BetaWorld.ORG"
+                "translate_text": "Website: WWW.BetaWorld.ORG"
             },
             {
                 "ori_text": "交流群：479234331",
-                "translate_text": "交流群：479234331"
+                "translate_text": "QQ Group:479234331"
             }
         ]
     },
@@ -374,37 +374,37 @@
             {
                 "strtype": "title",
                 "ori_text": "新建项目",
-                "translate_text": "新建项目",
+                "translate_text": "Create new project",
                 "classStr": "nav_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "保存更改",
-                "translate_text": "保存更改",
+                "translate_text": "Save your changes",
                 "classStr": "nav_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "放弃更改",
-                "translate_text": "放弃更改",
+                "translate_text": "Undo the changes.",
                 "classStr": "nav_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "刷新",
-                "translate_text": "刷新",
+                "translate_text": "Refresh",
                 "classStr": "nav_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "设置",
-                "translate_text": "设置",
+                "translate_text": "Settings",
                 "classStr": "nav_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "操作提示",
-                "translate_text": "操作提示",
+                "translate_text": "Tips for use",
                 "classStr": "nav_btn"
             },
             {
@@ -445,8 +445,8 @@
             },
             {
                 "strtype": "html",
-                "ori_text": "Version",
-                "translate_text": "Version",
+                "ori_text": "Build",
+                "translate_text": "Build",
                 "classStr": "edit_title"
             },
             {
@@ -506,13 +506,13 @@
             {
                 "strtype": "html",
                 "ori_text": "编辑版本信息",
-                "translate_text": "编辑版本信息",
+                "translate_text": "Edit Build Information",
                 "id": "ver_name"
             },
             {
                 "strtype": "placeholder",
                 "ori_text": "在这里搜索",
-                "translate_text": "在这里搜索",
+                "translate_text": "Search here",
                 "classStr": "bwdb_nav_search_text"
             },
             {
@@ -530,112 +530,112 @@
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-plus\" aria-hidden=\"true\"></i> 添加图片",
-                "translate_text": "<i class=\"fa fa-plus\" aria-hidden=\"true\"></i> 添加图片",
+                "translate_text": "<i class=\"fa fa-plus\" aria-hidden=\"true\"></i> Add image",
                 "classStr": "btn.btn-primary.pic_btn"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-times\" aria-hidden=\"true\"></i> 删除图片",
-                "translate_text": "<i class=\"fa fa-times\" aria-hidden=\"true\"></i> 删除图片",
+                "translate_text": "<i class=\"fa fa-times\" aria-hidden=\"true\"></i> Delete image",
                 "classStr": "btn.btn-primary.pic_btn"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> 编辑图片标题",
-                "translate_text": "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> 编辑图片标题",
+                "translate_text": "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> Edit the title of the image",
                 "classStr": "btn.btn-primary.pic_btn"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-folder-open\" aria-hidden=\"true\"></i> 替换图片",
-                "translate_text": "<i class=\"fa fa-folder-open\" aria-hidden=\"true\"></i> 替换图片",
+                "translate_text": "<i class=\"fa fa-folder-open\" aria-hidden=\"true\"></i> Replace image",
                 "classStr": "btn.btn-primary.pic_btn"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-arrow-up\" aria-hidden=\"true\"></i> 上移图片",
-                "translate_text": "<i class=\"fa fa-arrow-up\" aria-hidden=\"true\"></i> 上移图片",
+                "translate_text": "<i class=\"fa fa-arrow-up\" aria-hidden=\"true\"></i> Upload image",
                 "classStr": "btn.btn-primary.pic_btn"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-arrow-down\" aria-hidden=\"true\"></i> 下移图片",
-                "translate_text": "<i class=\"fa fa-arrow-down\" aria-hidden=\"true\"></i> 下移图片",
+                "translate_text": "<i class=\"fa fa-arrow-down\" aria-hidden=\"true\"></i> Move down image",
                 "classStr": "btn.btn-primary.pic_btn"
             }
         ],
         "dymstr": [
             {
                 "ori_text": "编辑说明",
-                "translate_text": "编辑说明"
+                "translate_text": "Editing guide"
             },
             {
                 "ori_text": "暂时还没有说明哦~",
-                "translate_text": "暂时还没有说明哦~"
+                "translate_text": "There is not an instruction here currently."
             },
             {
                 "ori_text": "提示",
-                "translate_text": "提示"
+                "translate_text": "Message"
             },
             {
                 "ori_text": "你不能再往上移动",
-                "translate_text": "你不能再往上移动"
+                "translate_text": "You cannot move up further"
             },
             {
                 "ori_text": "你不能再往下移动",
-                "translate_text": "你不能再往下移动"
+                "translate_text": "You cannot move down further"
             },
             {
                 "ori_text": "按回车键开始搜索",
-                "translate_text": "按回车键开始搜索"
+                "translate_text": "Press Enter to start search"
             },
             {
                 "ori_text": "单击放大镜按钮以关闭搜索工具。",
-                "translate_text": "单击放大镜按钮以关闭搜索工具。"
+                "translate_text": "Click Magnifier Button to close search box."
             },
             {
                 "ori_text": "共找到%1项。",
-                "translate_text": "共找到%1项。"
+                "translate_text": "Found %1 item(s)."
             },
             {
                 "ori_text": "修改数据成功",
-                "translate_text": "修改数据成功"
+                "translate_text": "Data edited successfully"
             },
             {
                 "ori_text": "添加截图成功",
-                "translate_text": "添加截图成功"
+                "translate_text": "ScreenShot added successfully"
             },
             {
                 "ori_text": "替换截图成功",
-                "translate_text": "替换截图成功"
+                "translate_text": "ScreenShot replaced successfully"
             },
             {
                 "ori_text": "确认删除？",
-                "translate_text": "确认删除？"
+                "translate_text": "Confirm delete?"
             },
             {
                 "ori_text": "确认删除这个build吗？",
-                "translate_text": "确认删除这个build吗？"
+                "translate_text": "Confirm delete this Build?"
             },
             {
                 "ori_text": "确认",
-                "translate_text": "确认"
+                "translate_text": "OK"
             },
             {
                 "ori_text": "取消",
-                "translate_text": "取消"
+                "translate_text": "Cancel"
             },
             {
                 "ori_text": "请输入截图名",
-                "translate_text": "请输入截图名"
+                "translate_text": "Please enter the name of ScreenShot"
             },
             {
                 "ori_text": "请输入新的截图名",
-                "translate_text": "请输入新的截图名"
+                "translate_text": "Please enter new name of ScrrenShot"
             },
             {
                 "ori_text": "截图名:",
-                "translate_text": "截图名:"
+                "translate_text": "ScreenShot Name:"
             }
         ]
     },
@@ -645,85 +645,85 @@
             {
                 "strtype": "html",
                 "ori_text": "数据库基本设置",
-                "translate_text": "数据库基本设置",
+                "translate_text": "Basic settings of Database",
                 "classStr": "panel-title"
             },
             {
                 "strtype": "html",
                 "ori_text": "数据库版本",
-                "translate_text": "数据库版本",
+                "translate_text": "Database Version",
                 "classStr": "edit_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "更新日期",
-                "translate_text": "更新日期",
+                "translate_text": "Update Date",
                 "classStr": "edit_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "数据库更新地址",
-                "translate_text": "数据库更新地址",
+                "translate_text": "Database update link",
                 "classStr": "edit_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "清空ChangeLog",
-                "translate_text": "清空ChangeLog",
+                "translate_text": "Clear ChangeLog",
                 "classStr": "edit_title"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                        清空",
-                "translate_text": "<i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                        清空",
+                "translate_text": "<i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                        Clear",
                 "classStr": "btn.btn-primary.pic_btn"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-save\" aria-hidden=\"true\"></i> 保存",
-                "translate_text": "<i class=\"fa fa-save\" aria-hidden=\"true\"></i> 保存",
+                "translate_text": "<i class=\"fa fa-save\" aria-hidden=\"true\"></i> Save",
                 "classStr": "btn.btn-primary.pic_btn"
             }
         ],
         "dymstr": [
             {
                 "ori_text": "提示",
-                "translate_text": "提示"
+                "translate_text": "Message"
             },
             {
                 "ori_text": "版本号不能为空",
-                "translate_text": "版本号不能为空"
+                "translate_text": "The Build number cannot be empty."
             },
             {
                 "ori_text": "更新时间不能为空",
-                "translate_text": "更新时间不能为空"
+                "translate_text": "The update time cannot be empty."
             }
         ]
     },
-    {
+	{
         "modulename": "lang.html",
         "staticlangstr": [
             {
                 "strtype": "html",
                 "ori_text": "语言设置",
-                "translate_text": "语言设置",
+                "translate_text": "Language Settings",
                 "classStr": "lang_text"
             },
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-save\" aria-hidden=\"true\"></i> 保存",
-                "translate_text": "<i class=\"fa fa-save\" aria-hidden=\"true\"></i> 保存",
+                "translate_text": "<i class=\"fa fa-save\" aria-hidden=\"true\"></i> Save",
                 "classStr": "btn.btn-primary.pic_btn"
             }
         ],
         "dymstr": [
             {
                 "ori_text": "设置成功！",
-                "translate_text": "设置成功！"
+                "translate_text": "Language set successfully!"
             },
             {
                 "ori_text": "语言设置成功。点击确定后会立即刷新。",
-                "translate_text": "语言设置成功。点击确定后会立即刷新。"
+                "translate_text": "Language set successfully. The software will refresh as soon as you click \"OK\"."
             }
         ]
     }

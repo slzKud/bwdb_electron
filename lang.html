@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>语言设置</title>
+    <link rel="stylesheet" href="static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="static/js/i18n.tools.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+        const remote = require('electron').remote;
+        $(document).ready(function () {
+            change_static_element(get_lang_now());
+            //get_all_html_element();
+            //ipcRenderer.send('getbwdbversion', 'about');
+            //alert('ok');
+            scan_lang_list().then(val => {
+                console.log(val);
+                for (let i = 0; i < val.length; i++) {
+                    console.log(val[i])
+                    if (get_lang_now() == val[i].langcode) {
+                        $('#lang_list').append('<option data-lang="' + val[i].langcode + '" selected >' + val[i].langname + '</option');
+                    } else {
+                        $('#lang_list').append('<option data-lang="' + val[i].langcode + '" >' + val[i].langname + '</option');
+                    }
+
+                }
+                ipcRenderer.send('show-win', 'langsetting');
+            });
+        });
+        function savesetting() {
+            var l=$("#lang_list").find("option:selected").attr('data-lang');
+            if(l==undefined){
+                return -1;
+            }
+            setlang(l);
+            remote.dialog.showMessageBoxSync({
+                type: 'info',
+                title: convert_dymstrlist_to_string("设置成功！",get_lang_now()),
+                message: convert_dymstrlist_to_string("语言设置成功。点击确定后会立即刷新。",get_lang_now())
+            });
+            ipcRenderer.send('refreshwindow','');
+        }
+
+    </script>
+    <style>
+        body {
+            background-color: #ececec;
+        }
+
+        .lang_text {
+            align-items: flex-start;
+            margin: 15px;
+            user-select: none;
+            color: rgb(57, 96, 192);
+            font-size: 1.2rem;
+        }
+    </style>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+
+<body style="display: flex;flex-direction: column;">
+    <div class="lang_title">
+        <p class="lang_text">语言设置</p>
+    </div>
+    <div
+        style="margin: 0;overflow: hidden;display:flex;justify-content: center;align-items: center;flex-direction: column;">
+        <div class="lang_title">
+            <select id="lang_list" size='10' class="form-control" style="width: 100%;min-width: 250px;">
+
+            </select>
+        </div>
+    </div>
+    <div><button type="button" class="btn btn-primary pic_btn" style="margin-right:15px;margin-top: 15px;float: right;"
+            onclick="savesetting();"><i class="fa fa-save" aria-hidden="true"></i> 保存</button></div>
+</body>
+
+</html>

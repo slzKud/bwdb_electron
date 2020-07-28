@@ -19,7 +19,7 @@ String.prototype.myReplace = function (f, e) {//吧f替换成e
   return this.replace(reg, e);
 }
 ////console.log(db);
-var win, aboutWindow, authorwindow, gallerywindow,settingwindow;
+var win, aboutWindow, authorwindow, gallerywindow,settingwindow,langwindow;
 var picjson;
 function createWindow() {
   // 创建浏览器窗口
@@ -141,6 +141,21 @@ function createManageSettingWindow() {
   settingwindow.loadFile('manage/settings.html');
   //settingwindow.webContents.openDevTools();
 }
+function createLangSettingWindow() {
+  Menu.setApplicationMenu(null);
+  langwindow = new BrowserWindow({
+    width: 325,
+    height: 400,
+    resizable:false,
+    maximizable:false,
+    show:false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  langwindow.loadFile('lang.html');
+  //langwindow.webContents.openDevTools();
+}
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
 function app_ready_do() {
@@ -190,6 +205,10 @@ ipcMain.on('show-win', (event, args) => {
   }
   if (args == "managesetting") {
     settingwindow.show();
+    return 0;
+  }
+  if (args == "langsetting") {
+    langwindow.show();
     return 0;
   }
 });
@@ -551,6 +570,10 @@ ipcMain.on('openmanagesetting', (event, args) => {
   createManageSettingWindow();
 
 });
+ipcMain.on('openlangsetting', (event, args) => {
+  createLangSettingWindow();
+
+});
 ipcMain.on('closeabout', (event, args) => {
   aboutWindow.close();
 });
@@ -791,4 +814,15 @@ ipcMain.on('changeversion', (event, args) => {
   }).catch(err => {
     console.log(err);
   });
+});
+ipcMain.on('refreshwindow', (event, args) => {
+  win.reload();
+  if(gallerywindow!=null){
+    gallerywindow.reload();
+  }
+  if(settingwindow!=null){
+    settingwindow.reload();
+  }
+  langwindow.close();
+
 });

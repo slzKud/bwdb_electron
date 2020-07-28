@@ -28,7 +28,7 @@
         const menu = new Menu()
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string('仅显示有截图的Build' ,get_lang_now()), type: 'checkbox', click() { console.log('item 1 clicked') } }));
         menu.append(new MenuItem({ type: 'separator' }));
-        menu.append(new MenuItem({ label: convert_dymstrlist_to_string('Language' ,get_lang_now())}));
+        menu.append(new MenuItem({ label: convert_dymstrlist_to_string('Language' ,get_lang_now()), click() { ipcRenderer.send('openlangsetting', ''); }}));
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string('关于' ,get_lang_now()), click() { ipcRenderer.send('openabout', ''); } }));
         var AdmZip = require('adm-zip');
         var fs = require("fs");
