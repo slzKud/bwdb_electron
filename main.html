@@ -452,6 +452,9 @@
             console.log(s[0][2]);
             $("#ver_name").text(s[0][2]);
             var arrlist = ['ver_archlist', 'ver_verlist', 'ver_langlist', 'ver_tag', 'install_bios_date', 'install_sn', 'install_notice'];
+            if(get_lang_now()!="zh-CN"){
+                var arrlist = ['ver_archlist', 'ver_verlist', 'ver_langlist', 'ver_tag', 'install_bios_date', 'install_sn', 'install_notice', 'install_notice'];
+            }
             for (var i = 0; i < arrlist.length; i++) {
                 //$("#"+arrlist[i]).html(s[2+i]);
                 changeinfotext(arrlist[i], s[0][3 + i]);
