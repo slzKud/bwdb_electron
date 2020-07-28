@@ -1,22 +1,23 @@
 const { remote } = require("electron");
 const crypto=require("crypto");
 var water=require("../water");
+const i18n = require('../../../static/js/i18n.node');
 function openSaveDialog() {
     var path = remote.dialog.showSaveDialogSync({
-      title: "请选择图片保存的路径：",
+      title: i18n.convert_dymstrlist_to_string("请选择图片保存的路径：",i18n.get_lang_now(),'main.js'),
       properties: ['showOverwriteConfirmation'],
       filters: [
-        { name: '图片文件(*.png)', extensions: ['png'] }
+        { name: i18n.convert_dymstrlist_to_string('图片文件(*.png)',i18n.get_lang_now(),'main.js'), extensions: ['png'] }
       ]
     });
     return (path);
   }
 function openOpenDialog() {
     var path = remote.dialog.showOpenDialogSync({
-      title: "请选择要导入/替换的图片：",
+      title:i18n.convert_dymstrlist_to_string("请选择要导入/替换的图片：",i18n.get_lang_now(),'main.js') ,
       properties: ['showOverwriteConfirmation'],
       filters: [
-        { name: '图片文件(*.png)', extensions: ['png'] }
+        { name: i18n.convert_dymstrlist_to_string('图片文件(*.png)',i18n.get_lang_now(),'main.js'), extensions: ['png'] }
       ]
     });
     return (path[0]);

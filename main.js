@@ -7,10 +7,11 @@ const fs = require("fs");
 const { promises } = require('dns');
 const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 const { resourceUsage } = require('process');
+const i18n = require('./static/js/i18n.node');
 try {
   var data = fs.readFileSync('./DataBase.db');
 } catch{
-  dialog.showErrorBox('基本数据库不存在', '基本数据库不存在，程序将退出。');
+  dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库不存在',i18n.get_lang_now(),'main.js'), i18n.convert_dymstrlist_to_string('基本数据库不存在，程序将退出。',i18n.get_lang_now(),'main.js'));
   app.quit();
 }
 String.prototype.myReplace = function (f, e) {//吧f替换成e
@@ -326,7 +327,7 @@ ipcMain.on(newLocal, (event, args) => {
     //console.log("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
     contents = db.exec("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%" + args + "%' ORDER BY ID,Date");
     if (contents.length == 0) {
-      dialog.showErrorBox('找不到数据', '你查找的"' + args + '"找不到条目。');
+      dialog.showErrorBox(i18n.convert_dymstrlist_to_string('找不到数据',i18n.get_lang_now(),'main.js'), i18n.convert_dymstrlist_to_string_include_array("你查找的“%1”找不到条目。",i18n.get_lang_now(),'main.js',[args]));
       var json1 = JSON.stringify([]);
       //console.log(json1);
       win.webContents.send('searchlist', [args, json1]);
@@ -749,8 +750,8 @@ ipcMain.on('cleanchangelog', (event, args) => {
     fs.writeFileSync(filename, buffer);
     dialog.showMessageBoxSync({
       type:'info',
-      title:"清除Changelog完成",
-      message:"清除Changelog完成!"
+      title:i18n.convert_dymstrlist_to_string("清除Changelog完成",i18n.get_lang_now(),'main.js'),
+      message:i18n.convert_dymstrlist_to_string("清除Changelog完成!",i18n.get_lang_now(),'main.js')
     })
   }).catch(err => {
     console.log(err);
@@ -765,7 +766,7 @@ ipcMain.on('changeversion', (event, args) => {
       db.run("update Version set Version='"+args[0]+"'");
       db.run("update Version set Date='"+args[1]+"'");
       db.run("update Version set UpdateURL='"+args[2]+"'");
-      switch(dialog.showMessageBoxSync({type:'question',title:'ChangeLOG的处理',message:"版本号已经被更改，请选择ChangeLOG的处理方式：",buttons:['清空ChangeLOG','更改ChageLOG中所有条目的版本（推荐）','不做任何处理']})){
+      switch(dialog.showMessageBoxSync({type:'question',title:i18n.convert_dymstrlist_to_string('ChangeLOG的处理',i18n.get_lang_now(),'main.js'),message:i18n.convert_dymstrlist_to_string("版本号已经被更改，请选择ChangeLOG的处理方式：",i18n.get_lang_now(),'main.js'),buttons:[i18n.convert_dymstrlist_to_string('清空ChangeLOG',i18n.get_lang_now(),'main.js'),i18n.convert_dymstrlist_to_string('更改ChageLOG中所有条目的版本（推荐）',i18n.get_lang_now(),'main.js'),i18n.convert_dymstrlist_to_string('不做任何处理',i18n.get_lang_now(),'main.js')]})){
         case 0:
           db.run("delete from ChangeLog");
           break;
@@ -783,8 +784,8 @@ ipcMain.on('changeversion', (event, args) => {
     fs.writeFileSync(filename, buffer);
     dialog.showMessageBoxSync({
       type:'info',
-      title:"数据库版本修改完成",
-      message:"数据库版本修改完成!"
+      title:i18n.convert_dymstrlist_to_string("数据库版本修改完成",i18n.get_lang_now(),'main.js'),
+      message:i18n.convert_dymstrlist_to_string("数据库版本修改完成!",i18n.get_lang_now(),'main.js')
     });
     settingwindow.close();
   }).catch(err => {
