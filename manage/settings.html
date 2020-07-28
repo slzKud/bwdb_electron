@@ -16,7 +16,7 @@
         const ipcRenderer = require('electron').ipcRenderer;
         const remote = require('electron').remote;
         $(document).ready(function () {
-            change_static_element('zh-CN');
+            change_static_element(get_lang_now());
             ipcRenderer.send('getbwdbversion', 'managesetting');
             //alert('ok');
         });
@@ -34,16 +34,16 @@
             if ($("#dbver").val() == "") {
                 remote.dialog.showMessageBoxSync({
                     type: 'info',
-                    title: convert_dymstrlist_to_string('提示','zh-CN'),
-                    message: convert_dymstrlist_to_string('版本号不能为空','zh-CN')
+                    title: convert_dymstrlist_to_string('提示',get_lang_now()),
+                    message: convert_dymstrlist_to_string('版本号不能为空',get_lang_now())
                 });
                 return 0;
             }
             if ($("#dbtime").val() == "") {
                 remote.dialog.showMessageBoxSync({
                     type: 'info',
-                    title: convert_dymstrlist_to_string('提示','zh-CN'),
-                    message: convert_dymstrlist_to_string('更新时间不能为空','zh-CN')
+                    title: convert_dymstrlist_to_string('提示',get_lang_now()),
+                    message: convert_dymstrlist_to_string('更新时间不能为空',get_lang_now())
                 });
                 return 0;
             }

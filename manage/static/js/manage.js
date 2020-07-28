@@ -88,8 +88,8 @@ function movelist(selector, flag) {
     if ($(selector).children("option:selected").prev().length == 0 && flag == true) {
         remote.dialog.showMessageBoxSync({
             type: 'info',
-            title: convert_dymstrlist_to_string('提示','zh-CN'),
-            message: convert_dymstrlist_to_string('你不能再往上移动','zh-CN')
+            title: convert_dymstrlist_to_string('提示',get_lang_now()),
+            message: convert_dymstrlist_to_string('你不能再往上移动',get_lang_now())
         });
         //alert('你不能再往上移动');
         return -1;
@@ -97,8 +97,8 @@ function movelist(selector, flag) {
     if ($(selector).children("option:selected").next().length == 0 && flag == false) {
         remote.dialog.showMessageBoxSync({
             type: 'info',
-            title: convert_dymstrlist_to_string('提示','zh-CN'),
-            message: convert_dymstrlist_to_string('你不能再往下移动','zh-CN')
+            title: convert_dymstrlist_to_string('提示',get_lang_now()),
+            message: convert_dymstrlist_to_string('你不能再往下移动',get_lang_now())
         });
         //alert('你不能再往下移动');
         return -1;
@@ -115,7 +115,7 @@ function movelist(selector, flag) {
 }
 $(window).ready(function () {
     //get_all_html_element();
-    change_static_element('zh-CN');
+    change_static_element(get_lang_now());
     now_height = document.documentElement.clientHeight - 55;
     now_width = document.documentElement.clientWidth - 355;
     $('.bwdb_sidebar').css('max-height', now_height);
@@ -232,8 +232,8 @@ $(document).keydown(function (event) {
                     //到顶了
                     remote.dialog.showMessageBoxSync({
                         type: 'info',
-                        title: convert_dymstrlist_to_string('提示','zh-CN'),
-                        message: convert_dymstrlist_to_string('你不能再往上移动','zh-CN')
+                        title: convert_dymstrlist_to_string('提示',get_lang_now()),
+                        message: convert_dymstrlist_to_string('你不能再往上移动',get_lang_now())
                     });
                     return -1;
                 } else {
@@ -254,8 +254,8 @@ $(document).keydown(function (event) {
                 if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().length==0){
                     remote.dialog.showMessageBoxSync({
                         type: 'info',
-                        title: convert_dymstrlist_to_string('提示','zh-CN'),
-                        message: convert_dymstrlist_to_string('你不能再往下移动','zh-CN')
+                        title: convert_dymstrlist_to_string('提示',get_lang_now()),
+                        message: convert_dymstrlist_to_string('你不能再往下移动',get_lang_now())
                     });
                     return -1;
                 }else{
@@ -297,7 +297,7 @@ function show_search_textbox() {
         $('.search_btn').css('border', '#fff 2px solid');
         $('.bwdb_nav_search_text').val('');
         $(".bwdb_nav_search").show();
-        $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string('按回车键开始搜索','zh-CN')+'<br>'+convert_dymstrlist_to_string('单击放大镜按钮以关闭搜索工具。','zh-CN'))
+        $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string('按回车键开始搜索',get_lang_now())+'<br>'+convert_dymstrlist_to_string('单击放大镜按钮以关闭搜索工具。',get_lang_now()))
         $(".bw_sidebar_info_box").show();
         $(".bwdb_sidebarA").hide();
         verflag = 1;
@@ -307,7 +307,7 @@ function show_search_textbox() {
         $(".bwdb_nav_search").hide();
         $(".bw_sidebar_info_box").hide();
         $(".bwdb_sidebarA").show();
-        if ($(".bw_sidebar_info_box").html().indexOf(convert_dymstrlist_to_string('按回车键开始搜索','zh-CN')) == -1) {
+        if ($(".bw_sidebar_info_box").html().indexOf(convert_dymstrlist_to_string('按回车键开始搜索',get_lang_now())) == -1) {
             $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
             $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
             $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
@@ -534,7 +534,7 @@ ipcRenderer.on('searchlist', function (event, arg) {
         }
         $("[data-type='build_stage'][data-id='" + proname + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="build_item">' + buildver + '</div>');
     }
-    $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string_include_array('共找到%1项。','zh-CN',[s.length]));
+    $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string_include_array('共找到%1项。',get_lang_now(),[s.length]));
     $(".bw_sidebar_info_box").show();
     $(".bwdb_sidebarA").show();
     if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
@@ -552,8 +552,8 @@ ipcRenderer.on('newbuildid', function (event, arg) {
     //remote.dialog.showMessageBoxSync();
     remote.dialog.showMessageBoxSync({
         type: 'info',
-        title: convert_dymstrlist_to_string('修改数据成功','zh-CN'),
-        message: convert_dymstrlist_to_string('修改数据成功','zh-CN')
+        title: convert_dymstrlist_to_string('修改数据成功',get_lang_now()),
+        message: convert_dymstrlist_to_string('修改数据成功',get_lang_now())
     });
     //alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
@@ -571,8 +571,8 @@ ipcRenderer.on('delbuildid', function (event, arg) {
     //remote.dialog.showMessageBoxSync();
     remote.dialog.showMessageBoxSync({
         type: 'info',
-        title: convert_dymstrlist_to_string('删除Build成功','zh-CN'),
-        message: convert_dymstrlist_to_string('删除Build成功','zh-CN')
+        title: convert_dymstrlist_to_string('删除Build成功',get_lang_now()),
+        message: convert_dymstrlist_to_string('删除Build成功',get_lang_now())
     });
     //alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
@@ -726,9 +726,9 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
         case "delete":
             remote.dialog.showMessageBox({
                 type: 'question',
-                title: convert_dymstrlist_to_string('确认删除？','zh-CN'),
-                message: convert_dymstrlist_to_string('确认删除这个build吗？','zh-CN'),
-                buttons: [convert_dymstrlist_to_string('确认','zh-CN'), convert_dymstrlist_to_string('取消','zh-CN')]
+                title: convert_dymstrlist_to_string('确认删除？',get_lang_now()),
+                message: convert_dymstrlist_to_string('确认删除这个build吗？',get_lang_now()),
+                buttons: [convert_dymstrlist_to_string('确认',get_lang_now()), convert_dymstrlist_to_string('取消',get_lang_now())]
             }).then((index) => {
                 if (index.response === 0) {
                     ipcRenderer.send('deletebuild', [now_proid, now_buildid]);
@@ -738,9 +738,9 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
         case "ignore":
             let t = remote.dialog.showMessageBoxSync({
                 type: 'question',
-                title: convert_dymstrlist_to_string('确认放弃修改？','zh-CN'),
-                message: convert_dymstrlist_to_string('确认放弃修改吗？这会退出当前编辑状态。','zh-CN'),
-                buttons: [convert_dymstrlist_to_string('确认','zh-CN'), convert_dymstrlist_to_string('取消','zh-CN')]
+                title: convert_dymstrlist_to_string('确认放弃修改？',get_lang_now()),
+                message: convert_dymstrlist_to_string('确认放弃修改吗？这会退出当前编辑状态。',get_lang_now()),
+                buttons: [convert_dymstrlist_to_string('确认',get_lang_now()), convert_dymstrlist_to_string('取消',get_lang_now())]
             })
             if (t == 0) {
                 if (now_proid == -1) {
@@ -761,8 +761,8 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
             remote.dialog.showMessageBoxSync(
                 {
                     type:"info",
-                    title:convert_dymstrlist_to_string("编辑说明",'zh-CN'),
-                    message:convert_dymstrlist_to_string("暂时还没有说明哦~",'zh-CN')
+                    title:convert_dymstrlist_to_string("编辑说明",get_lang_now()),
+                    message:convert_dymstrlist_to_string("暂时还没有说明哦~",get_lang_now())
                 }
             )
     }
@@ -778,8 +778,8 @@ $(document).on('click', '.pic_btn', function () {
             break;
         case "add":
             prompt({
-                title: convert_dymstrlist_to_string('请输入截图名','zh-CN'),
-                label: convert_dymstrlist_to_string('截图名:','zh-CN'),
+                title: convert_dymstrlist_to_string('请输入截图名',get_lang_now()),
+                label: convert_dymstrlist_to_string('截图名:',get_lang_now()),
                 value: '',
                 inputAttrs: {
                     type: 'text'
@@ -797,8 +797,8 @@ $(document).on('click', '.pic_btn', function () {
                             //alert('添加成功！');
                             remote.dialog.showMessageBoxSync({
                                 type: 'info',
-                                title: convert_dymstrlist_to_string('添加截图成功','zh-CN'),
-                                message: convert_dymstrlist_to_string('添加截图成功','zh-CN')
+                                title: convert_dymstrlist_to_string('添加截图成功',get_lang_now()),
+                                message: convert_dymstrlist_to_string('添加截图成功',get_lang_now())
                             });
                         }
                     }
@@ -811,8 +811,8 @@ $(document).on('click', '.pic_btn', function () {
                 return -1;
             }
             prompt({
-                title: convert_dymstrlist_to_string('请输入新的截图名','zh-CN'),
-                label: convert_dymstrlist_to_string('截图名:','zh-CN'),
+                title: convert_dymstrlist_to_string('请输入新的截图名',get_lang_now()),
+                label: convert_dymstrlist_to_string('截图名:',get_lang_now()),
                 value: $("#screenshotlist").find("option:selected").html(),
                 inputAttrs: {
                     type: 'text'
@@ -849,8 +849,8 @@ $(document).on('click', '.pic_btn', function () {
                 $('#main_pic').css('background-image', s1);
                 remote.dialog.showMessageBoxSync({
                     type: 'info',
-                    title: convert_dymstrlist_to_string('替换截图成功','zh-CN'),
-                    message: convert_dymstrlist_to_string('替换截图成功','zh-CN')
+                    title: convert_dymstrlist_to_string('替换截图成功',get_lang_now()),
+                    message: convert_dymstrlist_to_string('替换截图成功',get_lang_now())
                 });
             }
             break;

@@ -9,7 +9,7 @@
     <script>
         const ipcRenderer = require('electron').ipcRenderer;
         $(document).ready(function(){
-          //change_static_element('zh-CN');
+          //change_static_element(get_lang_now());
           //get_all_html_element();
           ipcRenderer.send('getbwdbversion','about');
           //alert('ok');
@@ -19,7 +19,7 @@
             var s=JSON.parse(arg);
             //alert(s);
             $("#basedb_version").html('DataBase V'+s[0][0]+' - '+s[0][1]+'');
-            $(".contributor").html(convert_dymstrlist_to_string("贡献者名单",'zh-CN'));
+            $(".contributor").html(convert_dymstrlist_to_string("贡献者名单",get_lang_now()));
             ipcRenderer.send('show-win', 'about');
         });
     </script>
