@@ -6,6 +6,7 @@
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <link rel="stylesheet" href="static/css/font-awesome.min.css">
     <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="static/js/i18n.tools.js"></script>
     <style>
         .aboutwindow {
             background-color: #19478a;
@@ -41,13 +42,13 @@
             console.log(arg);
             var s=JSON.parse(arg);
             //alert(s);
-            subtitle.push('感谢以下同志对BetaWorld的支持');
+            subtitle.push(convert_dymstrlist_to_string("感谢以下同志对BetaWorld的支持",'zh-CN'));
             //$("#basedb_version").html('DataBase V'+s[0][0]+' - '+s[0][1]+'');
             for(var i = 0; i < s.length; i++) {
                 subtitle.push(s[i][0]);
             }
-            subtitle.push('网址：WWW.BetaWorld.ORG');
-            subtitle.push('交流群：479234331');
+            subtitle.push(convert_dymstrlist_to_string('网址：WWW.BetaWorld.ORG','zh-CN'));
+            subtitle.push(convert_dymstrlist_to_string('交流群：479234331','zh-CN'));
             //subtitle.push('Windows 是微软公司的注册商标');
             subtitle.push('BetaWorld (c) 2020');
             audio_flag=1;
@@ -119,6 +120,8 @@
 
         $(document).ready(function(){
             audio_flag=0;
+            //get_all_html_element();
+            $(".mute_btn").attr('title',convert_dymstrlist_to_string("点击以静音/恢复",'zh-CN'));
             ipcRenderer.send('getauthorlist','about');
         });
         //$('.mute_btn').click(function(){

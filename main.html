@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/css/font-awesome.min.css">
     <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/i18n.tools.js"></script>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <script>
@@ -25,10 +26,10 @@
         const remote = require('electron').remote;
         const { Menu, MenuItem } = remote;
         const menu = new Menu()
-        menu.append(new MenuItem({ label: '仅显示有截图的Build', type: 'checkbox', click() { console.log('item 1 clicked') } }));
+        menu.append(new MenuItem({ label: convert_dymstrlist_to_string('仅显示有截图的Build' ,'zh-CN'), type: 'checkbox', click() { console.log('item 1 clicked') } }));
         menu.append(new MenuItem({ type: 'separator' }));
-        menu.append(new MenuItem({ label: 'Language' }));
-        menu.append(new MenuItem({ label: '关于', click() { ipcRenderer.send('openabout', ''); } }));
+        menu.append(new MenuItem({ label: convert_dymstrlist_to_string('Language' ,'zh-CN')}));
+        menu.append(new MenuItem({ label: convert_dymstrlist_to_string('关于' ,'zh-CN'), click() { ipcRenderer.send('openabout', ''); } }));
         var AdmZip = require('adm-zip');
         var fs = require("fs");
         /*
@@ -62,6 +63,7 @@
             return w;
         }
         $(document).ready(function () {
+            change_static_element('zh-CN');
             now_height = document.documentElement.clientHeight - 55;
             now_width = document.documentElement.clientWidth - 355;
             notice_text = document.documentElement.clientHeight - $('.install_notice_text').offset()['top'] - 25;
@@ -126,7 +128,7 @@
                 $('.bwdb_infobox_textarea').css('top', $(this).parent('.info_box_items').children('.info_box_items_text').offset()['top']);
                 $('.bwdb_infobox_textarea').css('left', $(this).parent('.info_box_items').children('.info_box_items_text').offset()['left']);
                 $('.bwdb_infobox_textarea').width($(this).parent('.info_box_items').children('.info_box_items_text').width());
-                if ($(this).parent('.info_box_items').children('.info_box_items_title').html() == "版本") {
+                if ($(this).parent('.info_box_items').children('.info_box_items_title').html() == convert_dymstrlist_to_string("版本" ,'zh-CN')) {
                     $('.bwdb_infobox_textarea').children('textarea').html($(this).parent('.info_box_items').children('.info_box_items_text').html().replace(/;/g, '\n').replace(/,/g, '\n').replace(/\n /g, '\n'));
                 } else {
                     $('.bwdb_infobox_textarea').children('textarea').html($(this).parent('.info_box_items').children('.info_box_items_text').html().replace(/\);/g, ')\n').replace(/\),/g, ')\n').replace(/\n /g, '\n'));
@@ -231,8 +233,8 @@
                                 //到顶了
                                 remote.dialog.showMessageBoxSync({
                                     type: 'info',
-                                    title: '提示',
-                                    message: '你不能再往上移动'
+                                    title: convert_dymstrlist_to_string('提示','zh-CN'),
+                                    message: convert_dymstrlist_to_string('你不能再往上移动','zh-CN')
                                 });
                                 return -1;
                             } else {
@@ -253,8 +255,8 @@
                             if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().length==0){
                                 remote.dialog.showMessageBoxSync({
                                     type: 'info',
-                                    title: '提示',
-                                    message: '你不能再往下移动'
+                                    title: convert_dymstrlist_to_string('提示','zh-CN'),
+                                    message: convert_dymstrlist_to_string('你不能再往下移动','zh-CN')
                                 });
                                 return -1;
                             }else{
@@ -297,7 +299,7 @@
                 $('.search_btn').css('border', '#fff 2px solid');
                 $('.bwdb_nav_search_text').val('');
                 $(".bwdb_nav_search").show();
-                $(".bw_sidebar_info_box").html('按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。')
+                $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string('按回车键开始搜索' ,'zh-CN')+'<br>'+convert_dymstrlist_to_string('单击放大镜按钮以关闭搜索工具。' ,'zh-CN'))
                 $(".bw_sidebar_info_box").show();
                 $(".bwdb_sidebarA").hide();
                 verflag = 1;
@@ -307,7 +309,7 @@
                 $(".bwdb_nav_search").hide();
                 $(".bw_sidebar_info_box").hide();
                 $(".bwdb_sidebarA").show();
-                if ($(".bw_sidebar_info_box").html().indexOf('按回车键开始搜索') == -1) {
+                if ($(".bw_sidebar_info_box").html().indexOf(convert_dymstrlist_to_string('按回车键开始搜索' ,'zh-CN')) == -1) {
                     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
                     $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
                     $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
@@ -490,9 +492,9 @@
                             var decompressedData = zip.readFile(s.screenshot[mainpicid].screenshothash + ".png");
                             $('#main_pic').css('background-image', "url(data:image/png;base64," + decompressedData.toString('base64') + ')');
                             $('#main_pic').attr('class', 'info_box_pics have_pic');
-                            $('#main_pic').attr('title', '点击查看截图');
+                            $('#main_pic').attr('title', convert_dymstrlist_to_string('点击查看截图','zh-CN'));
                         } catch{
-                            alert('在读取头图中发生错误。');
+                            alert(convert_dymstrlist_to_string('在读取头图中发生错误。' ,'zh-CN'));
                         }
                         /*
                         }
@@ -554,7 +556,7 @@
                 }
                 $("[data-type='build_stage'][data-id='" + proname + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="build_item">' + buildver + '</div>');
             }
-            $(".bw_sidebar_info_box").html('共找到' + s.length + '项。');
+            $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string_include_array('共找到%1项。','zh-CN',[s.length]));
             $(".bw_sidebar_info_box").show();
             $(".bwdb_sidebarA").show();
             if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
@@ -568,13 +570,13 @@
             console.log(arg);
             var s = JSON.parse(arg);
             console.log(s);
-            $("#basedb_version").html('基础数据库版本：V' + s[0][0] + ' ,更新于' + s[0][1] + '。');
+            $("#basedb_version").html(convert_dymstrlist_to_string_include_array('基础数据库版本：V%1,更新于%2。','zh-CN',[s[0][0],s[0][1]]));
             if (fs.existsSync('./gallery/info.json') == true) {
                 var data = fs.readFileSync('./gallery/info.json');
                 var info = data.toString();
                 if (info != "") {
                     var s1 = JSON.parse(info);
-                    $("#gallerypak_version").html('图片数据库版本：V' + s1.GalleryVersion + ' ,更新于' + s1.GalleryUpdateTime + '。');
+                    $("#gallerypak_version").html(convert_dymstrlist_to_string_include_array('图片数据库版本：V%1,更新于%2。','zh-CN',[s1.GalleryVersion,s1.GalleryUpdateTime]));
                 }
             }
         });
@@ -590,7 +592,7 @@
                 var proname = $('.bwdb_select_item[data-id="' + proid + '"]').html()
                 var buildid = s[i][0];
                 var buildver = s[i][2];
-                var things_html = '<div class="update_list_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="update_list_items" title="点击跳转到对应版本" >' + proname + ' - ' + buildver + '</div>';
+                var things_html = '<div class="update_list_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="update_list_items" title="'+ convert_dymstrlist_to_string('点击跳转到对应版本' ,'zh-CN')+'" >' + proname + ' - ' + buildver + '</div>';
                 $('#update_list').append(things_html);
             }
         });
@@ -648,7 +650,7 @@
         <div class="bwdb_infobox" id="homeinfobox">
             <div class="home_title">
                 <div>
-                    <h5>感谢您使用BetaWorld Library!</h5><button class="btn btn-primary"
+                    <h5 class="bw_welcome">感谢您使用BetaWorld Library!</h5><button class="btn btn-primary"
                         style="float:right;margin-right:25px;position: relative;display: block;width: 30%;min-width: 60px;background-color: #19478a;border:#19478a;max-width: 220px;"><i
                             class="fa fa-cloud-download" aria-hidden="true"></i> 检查数据库更新</button>
                 </div>
@@ -657,7 +659,7 @@
             </div>
             <div class="update_info">
 
-                <h5>更新日志</h5>
+                <h5 class="bw_welcome">更新日志</h5>
                 <div class="update_listbox">
                     <div id="update_list">
                         <div class="update_list_item">A</div>

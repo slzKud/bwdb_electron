@@ -88,8 +88,8 @@ function movelist(selector, flag) {
     if ($(selector).children("option:selected").prev().length == 0 && flag == true) {
         remote.dialog.showMessageBoxSync({
             type: 'info',
-            title: '提示',
-            message: '你不能再往上移动'
+            title: convert_dymstrlist_to_string('提示','zh-CN'),
+            message: convert_dymstrlist_to_string('你不能再往上移动','zh-CN')
         });
         //alert('你不能再往上移动');
         return -1;
@@ -97,8 +97,8 @@ function movelist(selector, flag) {
     if ($(selector).children("option:selected").next().length == 0 && flag == false) {
         remote.dialog.showMessageBoxSync({
             type: 'info',
-            title: '提示',
-            message: '你不能再往下移动'
+            title: convert_dymstrlist_to_string('提示','zh-CN'),
+            message: convert_dymstrlist_to_string('你不能再往下移动','zh-CN')
         });
         //alert('你不能再往下移动');
         return -1;
@@ -114,6 +114,8 @@ function movelist(selector, flag) {
     $(selector).find("option:selected[remove=1]").remove();
 }
 $(window).ready(function () {
+    //get_all_html_element();
+    change_static_element('zh-CN');
     now_height = document.documentElement.clientHeight - 55;
     now_width = document.documentElement.clientWidth - 355;
     $('.bwdb_sidebar').css('max-height', now_height);
@@ -230,8 +232,8 @@ $(document).keydown(function (event) {
                     //到顶了
                     remote.dialog.showMessageBoxSync({
                         type: 'info',
-                        title: '提示',
-                        message: '你不能再往上移动'
+                        title: convert_dymstrlist_to_string('提示','zh-CN'),
+                        message: convert_dymstrlist_to_string('你不能再往上移动','zh-CN')
                     });
                     return -1;
                 } else {
@@ -252,8 +254,8 @@ $(document).keydown(function (event) {
                 if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().length==0){
                     remote.dialog.showMessageBoxSync({
                         type: 'info',
-                        title: '提示',
-                        message: '你不能再往下移动'
+                        title: convert_dymstrlist_to_string('提示','zh-CN'),
+                        message: convert_dymstrlist_to_string('你不能再往下移动','zh-CN')
                     });
                     return -1;
                 }else{
@@ -295,7 +297,7 @@ function show_search_textbox() {
         $('.search_btn').css('border', '#fff 2px solid');
         $('.bwdb_nav_search_text').val('');
         $(".bwdb_nav_search").show();
-        $(".bw_sidebar_info_box").html('按回车键开始搜索<br>单击放大镜按钮以关闭搜索工具。')
+        $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string('按回车键开始搜索','zh-CN')+'<br>'+convert_dymstrlist_to_string('单击放大镜按钮以关闭搜索工具。','zh-CN'))
         $(".bw_sidebar_info_box").show();
         $(".bwdb_sidebarA").hide();
         verflag = 1;
@@ -305,7 +307,7 @@ function show_search_textbox() {
         $(".bwdb_nav_search").hide();
         $(".bw_sidebar_info_box").hide();
         $(".bwdb_sidebarA").show();
-        if ($(".bw_sidebar_info_box").html().indexOf('按回车键开始搜索') == -1) {
+        if ($(".bw_sidebar_info_box").html().indexOf(convert_dymstrlist_to_string('按回车键开始搜索','zh-CN')) == -1) {
             $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
             $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
             $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
@@ -532,7 +534,7 @@ ipcRenderer.on('searchlist', function (event, arg) {
         }
         $("[data-type='build_stage'][data-id='" + proname + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="build_item">' + buildver + '</div>');
     }
-    $(".bw_sidebar_info_box").html('共找到' + s.length + '项。');
+    $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string_include_array('共找到%1项。','zh-CN',[s.length]));
     $(".bw_sidebar_info_box").show();
     $(".bwdb_sidebarA").show();
     if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
@@ -550,8 +552,8 @@ ipcRenderer.on('newbuildid', function (event, arg) {
     //remote.dialog.showMessageBoxSync();
     remote.dialog.showMessageBoxSync({
         type: 'info',
-        title: '修改数据成功',
-        message: '修改数据成功'
+        title: convert_dymstrlist_to_string('修改数据成功','zh-CN'),
+        message: convert_dymstrlist_to_string('修改数据成功','zh-CN')
     });
     //alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
@@ -569,8 +571,8 @@ ipcRenderer.on('delbuildid', function (event, arg) {
     //remote.dialog.showMessageBoxSync();
     remote.dialog.showMessageBoxSync({
         type: 'info',
-        title: '删除Build成功',
-        message: '删除Build成功'
+        title: convert_dymstrlist_to_string('删除Build成功','zh-CN'),
+        message: convert_dymstrlist_to_string('删除Build成功','zh-CN')
     });
     //alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
@@ -724,9 +726,9 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
         case "delete":
             remote.dialog.showMessageBox({
                 type: 'question',
-                title: '确认删除？',
-                message: '确认删除这个build吗？',
-                buttons: ['确认', '取消']
+                title: convert_dymstrlist_to_string('确认删除？','zh-CN'),
+                message: convert_dymstrlist_to_string('确认删除这个build吗？','zh-CN'),
+                buttons: [convert_dymstrlist_to_string('确认','zh-CN'), convert_dymstrlist_to_string('取消','zh-CN')]
             }).then((index) => {
                 if (index.response === 0) {
                     ipcRenderer.send('deletebuild', [now_proid, now_buildid]);
@@ -736,9 +738,9 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
         case "ignore":
             let t = remote.dialog.showMessageBoxSync({
                 type: 'question',
-                title: '确认放弃修改？',
-                message: '确认放弃修改吗？这会退出当前编辑状态。',
-                buttons: ['确认', '取消']
+                title: convert_dymstrlist_to_string('确认放弃修改？','zh-CN'),
+                message: convert_dymstrlist_to_string('确认放弃修改吗？这会退出当前编辑状态。','zh-CN'),
+                buttons: [convert_dymstrlist_to_string('确认','zh-CN'), convert_dymstrlist_to_string('取消','zh-CN')]
             })
             if (t == 0) {
                 if (now_proid == -1) {
@@ -759,8 +761,8 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
             remote.dialog.showMessageBoxSync(
                 {
                     type:"info",
-                    title:"编辑说明",
-                    message:"暂时还没有说明哦~"
+                    title:convert_dymstrlist_to_string("编辑说明",'zh-CN'),
+                    message:convert_dymstrlist_to_string("暂时还没有说明哦~",'zh-CN')
                 }
             )
     }
@@ -776,8 +778,8 @@ $(document).on('click', '.pic_btn', function () {
             break;
         case "add":
             prompt({
-                title: '请输入截图名',
-                label: '截图名:',
+                title: convert_dymstrlist_to_string('请输入截图名','zh-CN'),
+                label: convert_dymstrlist_to_string('截图名:','zh-CN'),
                 value: '',
                 inputAttrs: {
                     type: 'text'
@@ -795,8 +797,8 @@ $(document).on('click', '.pic_btn', function () {
                             //alert('添加成功！');
                             remote.dialog.showMessageBoxSync({
                                 type: 'info',
-                                title: '添加截图成功',
-                                message: '添加截图成功'
+                                title: convert_dymstrlist_to_string('添加截图成功','zh-CN'),
+                                message: convert_dymstrlist_to_string('添加截图成功','zh-CN')
                             });
                         }
                     }
@@ -809,8 +811,8 @@ $(document).on('click', '.pic_btn', function () {
                 return -1;
             }
             prompt({
-                title: '请输入新的截图名',
-                label: '截图名:',
+                title: convert_dymstrlist_to_string('请输入新的截图名','zh-CN'),
+                label: convert_dymstrlist_to_string('截图名:','zh-CN'),
                 value: $("#screenshotlist").find("option:selected").html(),
                 inputAttrs: {
                     type: 'text'
@@ -847,8 +849,8 @@ $(document).on('click', '.pic_btn', function () {
                 $('#main_pic').css('background-image', s1);
                 remote.dialog.showMessageBoxSync({
                     type: 'info',
-                    title: '替换截图成功',
-                    message: '替换截图成功'
+                    title: convert_dymstrlist_to_string('替换截图成功','zh-CN'),
+                    message: convert_dymstrlist_to_string('替换截图成功','zh-CN')
                 });
             }
             break;

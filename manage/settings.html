@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="static/css/jquery-editable-select.min.css">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="../static/js/i18n.tools.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
     <script src="static/js/jquery-editable-select.min.js"></script>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
@@ -15,6 +16,7 @@
         const ipcRenderer = require('electron').ipcRenderer;
         const remote = require('electron').remote;
         $(document).ready(function () {
+            change_static_element('zh-CN');
             ipcRenderer.send('getbwdbversion', 'managesetting');
             //alert('ok');
         });
@@ -32,16 +34,16 @@
             if ($("#dbver").val() == "") {
                 remote.dialog.showMessageBoxSync({
                     type: 'info',
-                    title: '提示',
-                    message: '版本号不能为空'
+                    title: convert_dymstrlist_to_string('提示','zh-CN'),
+                    message: convert_dymstrlist_to_string('版本号不能为空','zh-CN')
                 });
                 return 0;
             }
             if ($("#dbtime").val() == "") {
                 remote.dialog.showMessageBoxSync({
                     type: 'info',
-                    title: '提示',
-                    message: '更新时间不能为空'
+                    title: convert_dymstrlist_to_string('提示','zh-CN'),
+                    message: convert_dymstrlist_to_string('更新时间不能为空','zh-CN')
                 });
                 return 0;
             }

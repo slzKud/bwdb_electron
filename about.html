@@ -5,9 +5,12 @@
     <title></title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="static/js/i18n.tools.js"></script>
     <script>
         const ipcRenderer = require('electron').ipcRenderer;
         $(document).ready(function(){
+          //change_static_element('zh-CN');
+          //get_all_html_element();
           ipcRenderer.send('getbwdbversion','about');
           //alert('ok');
         });
@@ -16,6 +19,7 @@
             var s=JSON.parse(arg);
             //alert(s);
             $("#basedb_version").html('DataBase V'+s[0][0]+' - '+s[0][1]+'');
+            $(".contributor").html(convert_dymstrlist_to_string("贡献者名单",'zh-CN'));
             ipcRenderer.send('show-win', 'about');
         });
     </script>
@@ -32,7 +36,7 @@
             </div>
             <div class="bottom_bar" style="height: 20px;margin-top: 25%;">
               <div style="float: left;margin-left: 10px;"><a style="font-size: 0.8rem;color:#000 ;" >(c) BetaWorld 2020</a></div>
-                <div style="float: right;margin-right: 10px;"><a style="font-size: 0.8rem;color:#19478a ;cursor: pointer;" onclick="ipcRenderer.send('openauthor', 'about');" >贡献者名单</a></div>
+                <div style="float: right;margin-right: 10px;"><a style="font-size: 0.8rem;color:#19478a ;cursor: pointer;" onclick="ipcRenderer.send('openauthor', 'about');" class="contributor">贡献者名单</a></div>
             </div>
         </div>
 
