@@ -15,7 +15,12 @@ function getFileName(data) {
     return data.substring(0, data.indexOf("."));
 }
 function get_the_filename() {
-    return self.location.href.replace('file://', '').replace(new RegExp('/', "gm"), "\\").replace(remote1.app.getAppPath(), "").replace('\\\\', '');
+    var s=decodeURI(self.location.href).replace('file://', '').replace(new RegExp('/', "gm"), "\\").replace(remote1.app.getAppPath().replace(new RegExp("/",'gm'),"\\")+'\\','');
+    if(s.substr(0,1)=='\\'){
+        return(s.substr(1,s.length-1));
+    }else{
+        return(s);
+    }
 }
 function get_all_html_element() {
     var a = [];
@@ -274,6 +279,13 @@ function convert_dymstrlist_to_string_include_array(str, langcode, arr) {
             var s = s2[i];
             break;
         }
+    }
+    if (s == undefined) {
+        s1=s;
+        for (let i = 0; i < arr.length; i++) {
+            s1 = s1.replace(new RegExp("%" + String(i + 1), "gm"), arr[i]);
+        }
+        return s1;
     }
     var s1 = "";
     //console.log(s);
