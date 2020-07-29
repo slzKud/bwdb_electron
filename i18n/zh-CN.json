@@ -304,6 +304,12 @@
             },
             {
                 "strtype": "title",
+                "ori_text": "手动输入比例",
+                "translate_text": "手动输入比例",
+                "classStr": "toolbar_btn"
+            },
+            {
+                "strtype": "title",
                 "ori_text": "返回",
                 "translate_text": "返回",
                 "classStr": "close_btn"
@@ -333,6 +339,18 @@
             {
                 "ori_text": "保存成功！",
                 "translate_text": "保存成功！"
+            },
+            {
+                "ori_text": "请输入缩放比例(%)",
+                "translate_text": "请输入缩放比例(%)"
+            },
+            {
+                "ori_text": "缩放比例(%):",
+                "translate_text": "缩放比例(%):"
+            },
+            {
+                "ori_text": "你输入的比例无效",
+                "translate_text": "你输入的比例无效"
             }
         ]
     },

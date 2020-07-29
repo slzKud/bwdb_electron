@@ -168,13 +168,14 @@
     var fs = require("fs");
     const clipboard = require('electron').clipboard
     const nativeImage = require('electron').nativeImage
+    const prompt = require('electron-prompt');
     const { remote } = require('electron');
     function openSaveDialog() {
       var path = remote.dialog.showSaveDialogSync({
-        title: convert_dymstrlist_to_string("请选择图片保存的路径：",get_lang_now()),
+        title: convert_dymstrlist_to_string("请选择图片保存的路径：", get_lang_now()),
         properties: ['showOverwriteConfirmation'],
         filters: [
-          { name: convert_dymstrlist_to_string('图片文件(*.png)',get_lang_now()), extensions: ['png'] }
+          { name: convert_dymstrlist_to_string('图片文件(*.png)', get_lang_now()), extensions: ['png'] }
         ]
       });
       return (path);
@@ -284,7 +285,7 @@
         zip = null;
         return decompressedData;
       } catch{
-        alert(convert_dymstrlist_to_string('在读取图片中发生错误。',get_lang_now()));
+        alert(convert_dymstrlist_to_string('在读取图片中发生错误。', get_lang_now()));
       }
       zip = null;
     }
@@ -387,9 +388,9 @@
           if (path != undefined) {
             fs.writeFile(path, loadpic(s.buildid, now_picid), function (err) {
               if (err) {
-                alert(convert_dymstrlist_to_string("保存图片时发生错误：",get_lang_now()) + err);
+                alert(convert_dymstrlist_to_string("保存图片时发生错误：", get_lang_now()) + err);
               } else {
-                alert(convert_dymstrlist_to_string("保存成功！",get_lang_now()));
+                alert(convert_dymstrlist_to_string("保存成功！", get_lang_now()));
               }
             });
           }
@@ -398,7 +399,34 @@
           var decompressedData = loadpic(s.buildid, now_picid);
           const image = nativeImage.createFromDataURL("data:image/png;base64," + decompressedData.toString('base64'));
           clipboard.writeImage(image);
-          alert(convert_dymstrlist_to_string("您选择的图片已复制！",get_lang_now()));
+          alert(convert_dymstrlist_to_string("您选择的图片已复制！", get_lang_now()));
+          break;
+        case "manual":
+          prompt({
+            title: convert_dymstrlist_to_string('请输入缩放比例(%)', get_lang_now()),
+            label: convert_dymstrlist_to_string('缩放比例(%):', get_lang_now()),
+            value: '',
+            inputAttrs: {
+              type: 'text'
+            },
+            type: 'input'
+          })
+            .then((r) => {
+              if (r != null) {
+                try {
+                  if (Number(r) <= 0) {
+                    alert(convert_dymstrlist_to_string("你输入的比例无效", get_lang_now()));
+                    return -1;
+                  }
+                } catch{
+                  alert(convert_dymstrlist_to_string("你输入的比例无效", get_lang_now()));
+                  return -1;
+                }
+                i1=Number(r)/100;
+                $("#pic_cat_1").css("transform", 'scale(' + i1 + ')');
+                $("#scale_label").html(parseInt(i1 * 100) + "%")
+              }
+            });
           break;
       }
 
@@ -407,7 +435,7 @@
       $('.img_listbox').fadeOut();
     });
     $(document).on('click', '.left_btn', function () {
-      now_picid=Number(now_picid);
+      now_picid = Number(now_picid);
       now_picid -= 1;
       if (now_picid < 0) {
         now_picid = pic_num - 1;
@@ -415,7 +443,7 @@
       showpic(s.buildid, now_picid);
     });
     $(document).on('click', '.right_btn', function () {
-      now_picid=Number(now_picid);
+      now_picid = Number(now_picid);
       now_picid += 1;
       if (now_picid >= pic_num) {
         now_picid = 0;
@@ -438,7 +466,7 @@
       try {
         var decompressedData = zip.readFile(s.screenshot[mainpic].screenshothash + ".png");
       } catch{
-        alert(convert_dymstrlist_to_string('在读取图片中发生错误。',get_lang_now()));
+        alert(convert_dymstrlist_to_string('在读取图片中发生错误。', get_lang_now()));
       }
 
       $('#pic_cat_1').css('background-image', "url(data:image/png;base64," + decompressedData.toString('base64') + ')');
@@ -463,7 +491,7 @@
       var keyNum = event.which;  //获取键值
       switch (keyNum) { //判断按键
         case 37:
-          now_picid=Number(now_picid);
+          now_picid = Number(now_picid);
           now_picid -= 1;
           if (now_picid < 0) {
             now_picid = pic_num - 1;
@@ -471,7 +499,7 @@
           showpic(s.buildid, now_picid);
           break;
         case 39:
-          now_picid=Number(now_picid);
+          now_picid = Number(now_picid);
           now_picid += 1;
           if (now_picid >= pic_num) {
             now_picid = 0;
@@ -500,11 +528,13 @@
       <div class="toolbar_btn" title="刷新" do="refresh"><i class="fa fa-refresh" aria-hidden="true"></i></div>
       <div class="toolbar_btn" title="保存图片" do="save"><i class="fa fa-save" aria-hidden="true"></i></div>
       <div class="toolbar_btn" title="复制" do="copy"><i class="fa fa-copy" aria-hidden="true"></i></div>
-      <div class="toolbar_btn" title="图片列表" do="piclist"><i class="fa fa-bars" aria-hidden="true"></i></div>
+      <div class="toolbar_btn" title="图片列表" do="piclist"><i class="fa fa-th" aria-hidden="true"></i></div>
       <div class="toolbar_btn" style="width: unset;" title="INTERFACE 1" id="pic_title_label">INTERFACE 1</div>
       <div class="toolbar_btn" title="放大" do="plus"><i class="fa fa-plus" aria-hidden="true"></i></div>
       <div class="toolbar_btn" title="1：1" id="scale_label" style="width: unset;" do="reshow">100%</div>
       <div class="toolbar_btn" title="缩小" do="minus"><i class="fa fa-minus" aria-hidden="true"></i></div>
+      <div class="toolbar_btn" title="手动输入比例" do="manual"><i class="fa fa-pencil-square-o"
+          aria-hidden="true"></i></div>
     </div>
     <div class="img_listbox"
       style="width: 100%;height: 100%;background: rgba(31,31,31,0.95); display:flex;justify-content: center;z-index: 1999;position:absolute;overflow:hidden;">
