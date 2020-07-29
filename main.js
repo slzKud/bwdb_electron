@@ -39,7 +39,7 @@ function createWindow() {
   win.loadFile('main.html');
 
   // 打开开发者工具
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
   //createAboutWindow();
   //import sqlite3Db from './nw/sqlite3_test'
 }
