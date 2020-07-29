@@ -623,6 +623,9 @@
         }
         function get_build_info(proid, buildid) {
             console.log([proid, buildid])
+            if(buildid==undefined || proid==undefined){
+                return -1;
+            }
             now_proid = proid;
             now_buildid = buildid;
             ipcRenderer.send('getbuildinfo', [proid, buildid]);
