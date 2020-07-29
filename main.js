@@ -114,7 +114,7 @@ function createManageMainWindow() {
     minWidth: 700,
     width: 1009,
     height: 679,
-    show: true,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
