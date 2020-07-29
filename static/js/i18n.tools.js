@@ -12,7 +12,7 @@ function isChn(str) {
     return true;
 }
 function getFileName(data) {
-    return data.substring(0,data.indexOf("."));
+    return data.substring(0, data.indexOf("."));
 }
 function get_the_filename() {
     return self.location.href.replace('file://', '').replace(new RegExp('/', "gm"), "\\").replace(remote1.app.getAppPath(), "").replace('\\\\', '');
@@ -165,7 +165,7 @@ function change_static_element(langcode) {
             break;
         }
     }
-    if(s==undefined){
+    if (s == undefined) {
         return -1;
     }
     console.log(s);
@@ -177,7 +177,7 @@ function change_static_element(langcode) {
         switch (s.staticlangstr[i].strtype) {
             case "html":
                 if (s.staticlangstr[i].id != undefined) {
-                    $('#' + s.staticlangstr[i].id).html(s.staticlangstr[i].translate_text + "!!!");
+                    $('#' + s.staticlangstr[i].id).html(s.staticlangstr[i].translate_text);
                 } else {
                     if (s.staticlangstr[i].classStr != undefined) {
                         console.log($('.' + s.staticlangstr[i].classStr).length)
@@ -186,36 +186,36 @@ function change_static_element(langcode) {
                         }
                         if ($('.' + s.staticlangstr[i].classStr).length == 1) {
                             console.log('找到1：' + s.staticlangstr[i].classStr)
-                            $('.' + s.staticlangstr[i].classStr).html(s.staticlangstr[i].translate_text + "!!!")
+                            $('.' + s.staticlangstr[i].classStr).html(s.staticlangstr[i].translate_text)
                         }
                         if ($('.' + s.staticlangstr[i].classStr).length > 1) {
                             console.log('找到N：' + s.staticlangstr[i].classStr)
                             $('.' + s.staticlangstr[i].classStr).each(function () {
                                 if ($(this).html().indexOf(s.staticlangstr[i].ori_text) != -1) {
-                                    $(this).html(s.staticlangstr[i].translate_text + "!!!")
+                                    $(this).html(s.staticlangstr[i].translate_text)
                                 }
                             });
                         }
 
-                        //$('.' + s.staticlangstr[i].classStr).find(':contains(' + s.staticlangstr[i].ori_text + ')').html(s.staticlangstr[i].translate_text + "!!!");
+                        //$('.' + s.staticlangstr[i].classStr).find(':contains(' + s.staticlangstr[i].ori_text + ')').html(s.staticlangstr[i].translate_text );
                     }
                 }
                 break;
             case "title":
                 if (s.staticlangstr[i].id != undefined) {
                     console.log('id');
-                    $('#' + s.staticlangstr[i].id).attr('title', s.staticlangstr[i].translate_text + "!!!");
+                    $('#' + s.staticlangstr[i].id).attr('title', s.staticlangstr[i].translate_text);
                 } else {
                     if (s.staticlangstr[i].classStr != undefined) {
-                        //$('.' + s.staticlangstr[i].classStr).find('[title="' + s.staticlangstr[i].ori_text + '"]').attr('title',s.staticlangstr[i].translate_text + "!!!");
+                        //$('.' + s.staticlangstr[i].classStr).find('[title="' + s.staticlangstr[i].ori_text + '"]').attr('title',s.staticlangstr[i].translate_text );
                         console.log($('.' + s.staticlangstr[i].classStr).length)
                         if ($('.' + s.staticlangstr[i].classStr).length == 1) {
-                            $('.' + s.staticlangstr[i].classStr).attr('title', s.staticlangstr[i].translate_text + "!!!")
+                            $('.' + s.staticlangstr[i].classStr).attr('title', s.staticlangstr[i].translate_text)
                         }
                         if ($('.' + s.staticlangstr[i].classStr).length > 1) {
                             $('.' + s.staticlangstr[i].classStr).each(function () {
                                 if ($(this).attr('title').indexOf(s.staticlangstr[i].ori_text) != -1) {
-                                    $(this).attr('title', s.staticlangstr[i].translate_text + "!!!")
+                                    $(this).attr('title', s.staticlangstr[i].translate_text)
                                 }
                             });
                         }
@@ -224,17 +224,17 @@ function change_static_element(langcode) {
                 break;
             case "placeholder":
                 if (s.staticlangstr[i].id != undefined) {
-                    $('#' + s.staticlangstr[i].id).attr('placeholder', s.staticlangstr[i].translate_text + "!!!");
+                    $('#' + s.staticlangstr[i].id).attr('placeholder', s.staticlangstr[i].translate_text);
                 } else {
                     if (s.staticlangstr[i].classStr != undefined) {
-                        //$('.' + s.staticlangstr[i].classStr + '[placeholder="' + s.staticlangstr[i].ori_text + '"]').attr('placeholder',s.staticlangstr[i].translate_text + "!!!");
+                        //$('.' + s.staticlangstr[i].classStr + '[placeholder="' + s.staticlangstr[i].ori_text + '"]').attr('placeholder',s.staticlangstr[i].translate_text );
                         if ($('.' + s.staticlangstr[i].classStr).length == 1) {
-                            $('.' + s.staticlangstr[i].classStr).attr('placeholder', s.staticlangstr[i].translate_text + "!!!")
+                            $('.' + s.staticlangstr[i].classStr).attr('placeholder', s.staticlangstr[i].translate_text)
                         }
                         if ($('.' + s.staticlangstr[i].classStr).length > 1) {
                             $('.' + s.staticlangstr[i].classStr).each(function () {
                                 if ($(this).attr('placeholder').indexOf(s.staticlangstr[i].ori_text) != -1) {
-                                    $(this).attr('placeholder', s.staticlangstr[i].translate_text + "!!!")
+                                    $(this).attr('placeholder', s.staticlangstr[i].translate_text)
                                 }
                             });
                         }
@@ -253,14 +253,14 @@ function convert_dymstrlist_to_string(str, langcode) {
             break;
         }
     }
-    if(s==undefined){
+    if (s == undefined) {
         return str;
     }
     //console.log(s);
     for (let i = 0; i < s.dymstr.length; i++) {
         //console.log(s.dymstr[i].ori_text);
         if (s.dymstr[i].ori_text == str) {
-            return s.dymstr[i].translate_text + "!!!"
+            return s.dymstr[i].translate_text
         }
     }
     console.log('找不到：' + str);
@@ -280,7 +280,7 @@ function convert_dymstrlist_to_string_include_array(str, langcode, arr) {
     for (let i = 0; i < s.dymstr.length; i++) {
         //console.log(s.dymstr[i].ori_text);
         if (s.dymstr[i].ori_text == str) {
-            s1 = s.dymstr[i].translate_text + "!!!"
+            s1 = s.dymstr[i].translate_text
         }
     }
     if (s1 == "") {
@@ -310,14 +310,14 @@ function get_lang_now() {
     } catch{
         langcode = remote1.getGlobal('syslang');
         if (!fs1.existsSync(process.cwd() + "/i18n/" + langcode + ".json")) {
-            langcode = "zh-CN";
+            langcode = "en-US";
         }
     }
     return langcode;
 }
 function scan_lang_list() {
-    var a=[];
-    return new Promise(resolve=>{
+    var a = [];
+    return new Promise(resolve => {
         fs1.readdir(process.cwd() + '/i18n', function (err, files) {
             files.forEach(function (filename) {
                 //获取当前文件的绝对路径
@@ -331,10 +331,10 @@ function scan_lang_list() {
                             break;
                         }
                     }
-                    if(s!=undefined){
-                        langname=s.langstdnamd;
-                        langcode= getFileName(filename);
-                        var d={langcode:langcode,langname:langname};
+                    if (s != undefined) {
+                        langname = s.langstdnamd;
+                        langcode = getFileName(filename);
+                        var d = { langcode: langcode, langname: langname };
                         console.log(d);
                         a.push(d);
                         console.log(a);
@@ -342,20 +342,20 @@ function scan_lang_list() {
                 }
             });
             resolve(0);
-        });     
-    }).then(resolve=>{
-        return(a);
+        });
+    }).then(resolve => {
+        return (a);
     });
-    
+
 }
-function setlang(langcode){
+function setlang(langcode) {
     try {
         var j = fs1.readFileSync(process.cwd() + "/settings.json").toString();
         var s = JSON.parse(j);
-        s.now_lang=langcode;
-        fs1.writeFileSync(process.cwd() + "/settings.json",JSON.stringify(s));
-    }catch{
-        var s={now_lang:langcode};
-        fs1.writeFileSync(process.cwd() + "/settings.json",JSON.stringify(s));
+        s.now_lang = langcode;
+        fs1.writeFileSync(process.cwd() + "/settings.json", JSON.stringify(s));
+    } catch{
+        var s = { now_lang: langcode };
+        fs1.writeFileSync(process.cwd() + "/settings.json", JSON.stringify(s));
     }
 }

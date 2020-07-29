@@ -385,6 +385,12 @@
             },
             {
                 "strtype": "title",
+                "ori_text": "删除此Build",
+                "translate_text": "删除此Build",
+                "classStr": "nav_btn"
+            },
+            {
+                "strtype": "title",
                 "ori_text": "放弃更改",
                 "translate_text": "放弃更改",
                 "classStr": "nav_btn"

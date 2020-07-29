@@ -17,7 +17,7 @@ function convert_dymstrlist_to_string(str,langcode,modulename){
     for(let i=0;i<s.dymstr.length;i++){
         //console.log(s.dymstr[i].ori_text);
         if(s.dymstr[i].ori_text==str){
-            return s.dymstr[i].translate_text+"!!!"
+            return s.dymstr[i].translate_text;
         }
     }
     console.log('找不到：'+str);
@@ -40,7 +40,7 @@ function convert_dymstrlist_to_string_include_array(str,langcode,modulename,arr)
     for(let i=0;i<s.dymstr.length;i++){
         //console.log(s.dymstr[i].ori_text);
         if(s.dymstr[i].ori_text==str){
-            s1=s.dymstr[i].translate_text+"!!!"
+            s1=s.dymstr[i].translate_text;
         }
     }
     if(s1==""){
@@ -62,7 +62,7 @@ function get_lang_now(){
     }catch{
         langcode=global.syslang;
         if(!fs1.existsSync(process.cwd() + "/i18n/" + langcode + ".json")){
-            langcode="zh-CN";
+            langcode="en-US";
         }
     }
     return langcode;

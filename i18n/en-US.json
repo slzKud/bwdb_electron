@@ -374,19 +374,19 @@
             {
                 "strtype": "title",
                 "ori_text": "新建项目",
-                "translate_text": "Create new project",
+                "translate_text": "Create new Build",
                 "classStr": "nav_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "保存更改",
-                "translate_text": "Save your changes",
+                "translate_text": "Save",
                 "classStr": "nav_btn"
             },
             {
                 "strtype": "title",
                 "ori_text": "放弃更改",
-                "translate_text": "Undo the changes.",
+                "translate_text": "Undo",
                 "classStr": "nav_btn"
             },
             {
@@ -403,8 +403,14 @@
             },
             {
                 "strtype": "title",
+                "ori_text": "删除此Build",
+                "translate_text": "Delete",
+                "classStr": "nav_btn"
+            },
+            {
+                "strtype": "title",
                 "ori_text": "操作提示",
-                "translate_text": "Tips for use",
+                "translate_text": "Tips",
                 "classStr": "nav_btn"
             },
             {
