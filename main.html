@@ -587,6 +587,8 @@
             var s = JSON.parse(arg);
             console.log(s);
             $("#basedb_version").html(convert_dymstrlist_to_string_include_array('基础数据库版本：V%1,更新于%2。',get_lang_now(),[s[0][0],s[0][1]]));
+            //alert(s[0][2]);
+            $("#check_btn").attr('data-url',s[0][2]);
             if (fs.existsSync('./gallery/info.json') == true) {
                 var data = fs.readFileSync('./gallery/info.json');
                 var info = data.toString();
@@ -594,7 +596,10 @@
                     var s1 = JSON.parse(info);
                     $("#gallerypak_version").html(convert_dymstrlist_to_string_include_array('图片数据库版本：V%1,更新于%2。',get_lang_now(),[s1.GalleryVersion,s1.GalleryUpdateTime]));
                 }
+            }else{
+                $("#gallerypak_version").hide();
             }
+
         });
         ipcRenderer.on('updatelist', function (event, arg) {
             console.log(arg);
@@ -635,6 +640,10 @@
             console.log(link);
             shell.openExternal(link);
         }
+        function show_update(){
+            //alert($("#check_btn").attr('data-url'));
+            shell.openExternal($("#check_btn").attr('data-url'));
+        }
     </script>
 </head>
 
@@ -670,7 +679,7 @@
             <div class="home_title">
                 <div>
                     <h5 class="bw_welcome">感谢您使用BetaWorld Library!</h5><button class="btn btn-primary"
-                        style="float:right;margin-right:25px;position: relative;display: block;width: 30%;min-width: 60px;background-color: #19478a;border:#19478a;max-width: 220px;"><i
+                        style="float:right;margin-right:25px;position: relative;display: block;width: 30%;min-width: 60px;background-color: #19478a;border:#19478a;max-width: 220px;" id="check_btn" onclick="show_update();" data-url="" ><i
                             class="fa fa-cloud-download" aria-hidden="true"></i> 检查数据库更新</button>
                 </div>
                 <div class="version_info" id="basedb_version">基础数据库版本：V16.66，更新于2020/01/01日</div>
