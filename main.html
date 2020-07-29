@@ -22,11 +22,12 @@
         var zipflag = 0;
         var verflag = 0;
         var manflag = 0;
+        var only_picflag=0;
         const ipcRenderer = require('electron').ipcRenderer;
         const remote = require('electron').remote;
         const { Menu, MenuItem } = remote;
         const menu = new Menu()
-        menu.append(new MenuItem({ label: convert_dymstrlist_to_string('仅显示有截图的Build' ,get_lang_now()), type: 'checkbox', click() { console.log('item 1 clicked') } }));
+        menu.append(new MenuItem({ label: convert_dymstrlist_to_string('仅显示有截图的Build' ,get_lang_now()), type: 'checkbox', click() { only_picflag=1;ipcRenderer.send('getbuildstage', now_proid);} }));
         menu.append(new MenuItem({ type: 'separator' }));
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string('Language' ,get_lang_now()), click() { ipcRenderer.send('openlangsetting', ''); }}));
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string('关于' ,get_lang_now()), click() { ipcRenderer.send('openabout', ''); } }));
@@ -422,9 +423,21 @@
             var s = JSON.parse(arg[2]);
             $("[data-type='build_stage'][data-id='" + arg[1] + "']").html('');
             for (var i = 0; i < s.length; i++) {
-                console.log(s[i]);
-                $("[data-type='build_stage'][data-id='" + arg[1] + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + s[i][0] + '" data-type="build_item">' + s[i][1] + '</div>');
+                if(only_picflag==1){
+                    if(fs.existsSync("./gallery/" + s[i][0] + ".zip")){
+                        //如果图片存在
+                        console.log(s[i]);
+                        $("[data-type='build_stage'][data-id='" + arg[1] + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + s[i][0] + '" data-type="build_item">' + s[i][1] + '</div>');
+                    }
+                }else{
+                    console.log(s[i]);
+                    $("[data-type='build_stage'][data-id='" + arg[1] + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + s[i][0] + '" data-type="build_item">' + s[i][1] + '</div>');
+                }
+                
             };
+            if($("[data-type='build_stage'][data-id='" + arg[1] + "']").children().length==0){
+                $("[data-type='build_stage'][data-id='" + arg[1] + "']").prev().hide();
+            }
             //添加相关的代码
             //alert(s[s.length-1][0]);
             if (firstid != $(".bwdb_sidebarA").children(".build_list:first").children(".bwdb_sidebar_item:first").attr('data-id') && now_proid == -1) {
