@@ -310,10 +310,11 @@
       now_height = document.documentElement.clientHeight;
       now_width = document.documentElement.clientWidth;
       times = new Date().getTime();
-      if (i1 == 1) {
+      
+      //if (i1 == 1) {
         $('.pic_cat').css("width", now_width - 70);
-        $('.pic_cat').css("height", now_height - 50);
-      }
+        $('.pic_cat').css("height", now_height-50);
+      //}
       $('.close_btn').css("left", now_width - $('.close_btn').width());
       $('.left_btn').css("left", 0);
       $('.left_btn').css("top", (now_height - $('.left_btn').height()) / 2);
@@ -338,10 +339,10 @@
       now_height = document.documentElement.clientHeight;
       now_width = document.documentElement.clientWidth;
       console.log("A" + i1)
-      if (i1 == 1) {
+      //if (i1 == 1) {
         $('.pic_cat').css("width", now_width - 70);
-        $('.pic_cat').css("height", now_height - 50);
-      }
+        $('.pic_cat').css("height", now_height-50);
+      //}
       $('.close_btn').css("left", now_width - $('.close_btn').width());
       $('.left_btn').css("left", 0);
       $('.left_btn').css("top", (now_height - $('.left_btn').height()) / 2);
@@ -422,9 +423,9 @@
                   alert(convert_dymstrlist_to_string("你输入的比例无效", get_lang_now()));
                   return -1;
                 }
-                i1=Number(r)/100;
+                i1=(Number(r))/100;
                 $("#pic_cat_1").css("transform", 'scale(' + i1 + ')');
-                $("#scale_label").html(parseInt(i1 * 100) + "%")
+                $("#scale_label").html(Math.ceil(i1 * 100) + "%")
               }
             });
           break;
@@ -515,7 +516,7 @@
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 </head>
 
-<body style="margin: 0;overflow: hidden;" style="width: 100%;height: 100%;">
+<body style="margin: 0;overflow: hidden;" style="width: 100%;height: 100%;background: #5f5f5f;">
   <div class="img_preview_box"
     style="width: 100%;height: 100%;background: #5f5f5f; display:flex;justify-content: center;">
     <div class="pic_cat" id="pic_cat_1" style="background-image: url('static/img/preview_img_2.png');">

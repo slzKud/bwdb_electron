@@ -578,7 +578,12 @@ ipcMain.on('closeabout', (event, args) => {
   aboutWindow.close();
 });
 ipcMain.on('closegallery', (event, args) => {
-  gallerywindow.close();
+  try{
+    gallerywindow.close();
+  }catch{
+    return -1;
+  }
+  
 });
 //管理界面的IPC部分
 ipcMain.on('editbuild', (event, args) => {
