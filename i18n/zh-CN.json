@@ -34,15 +34,15 @@
             },
             {
                 "ori_text": "ChangeLOG的处理",
-                "translate_text": "ChangeLOG的处理"
+                "translate_text": "Changelog的处理"
             },
             {
                 "ori_text": "版本号已经被更改，请选择ChangeLOG的处理方式：",
-                "translate_text": "版本号已经被更改，请选择ChangeLOG的处理方式："
+                "translate_text": "版本号已经被更改，请选择Changelog的处理方式："
             },
             {
                 "ori_text": "清空ChangeLOG",
-                "translate_text": "清空ChangeLOG"
+                "translate_text": "清空Changelog"
             },
             {
                 "ori_text": "更改ChageLOG中所有条目的版本（推荐）",
@@ -91,6 +91,12 @@
             },
             {
                 "strtype": "html",
+                "ori_text": "版本字符串",
+                "translate_text": "版本字符串",
+                "classStr": "info_box_items_title"
+            },
+            {
+                "strtype": "html",
                 "ori_text": "版本",
                 "translate_text": "版本",
                 "classStr": "info_box_items_title"
@@ -99,12 +105,6 @@
                 "strtype": "html",
                 "ori_text": "语言",
                 "translate_text": "语言",
-                "classStr": "info_box_items_title"
-            },
-            {
-                "strtype": "html",
-                "ori_text": "版本字符串",
-                "translate_text": "版本字符串",
                 "classStr": "info_box_items_title"
             },
             {

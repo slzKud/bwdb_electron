@@ -2,8 +2,8 @@ const fs1 = require("fs");
 var path = require('path');
 const { dialog } = require("electron");
 const remote1 = require("electron").remote;
+var os = require('os');
 function isChn(str) {
-
     var reg = /^[\u4E00-\u9FA5]+$/;
     if (!reg.test(str)) {
         return false;
@@ -370,4 +370,7 @@ function setlang(langcode) {
         var s = { now_lang: langcode };
         fs1.writeFileSync(process.cwd() + "/settings.json", JSON.stringify(s));
     }
+}
+function iswindows(){
+    
 }

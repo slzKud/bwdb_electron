@@ -34,19 +34,19 @@
             },
             {
                 "ori_text": "ChangeLOG的处理",
-                "translate_text": "The management to ChangeLOG"
+                "translate_text": "The management to Changelog"
             },
             {
                 "ori_text": "版本号已经被更改，请选择ChangeLOG的处理方式：",
-                "translate_text": "Version number changed successfully, please choose the management about the ChangeLOG:"
+                "translate_text": "Version number changed successfully, please choose the management about the Changelog:"
             },
             {
                 "ori_text": "清空ChangeLOG",
-                "translate_text": "Clean up the ChangeLOG"
+                "translate_text": "Clean up the Changelog"
             },
             {
                 "ori_text": "更改ChageLOG中所有条目的版本（推荐）",
-                "translate_text": "Change the version number of all items in the ChageLOG (Recommended)"
+                "translate_text": "Change the version number of all items in the Chagelog (Recommended)"
             },
             {
                 "ori_text": "不做任何处理",
@@ -91,6 +91,12 @@
             },
             {
                 "strtype": "html",
+                "ori_text": "版本字符串",
+                "translate_text": "BuildTag",
+                "classStr": "info_box_items_title"
+            },
+            {
+                "strtype": "html",
                 "ori_text": "版本",
                 "translate_text": "SKU",
                 "classStr": "info_box_items_title"
@@ -99,12 +105,6 @@
                 "strtype": "html",
                 "ori_text": "语言",
                 "translate_text": "Language",
-                "classStr": "info_box_items_title"
-            },
-            {
-                "strtype": "html",
-                "ori_text": "版本字符串",
-                "translate_text": "BuildTag",
                 "classStr": "info_box_items_title"
             },
             {
