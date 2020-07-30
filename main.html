@@ -102,8 +102,10 @@
                 ipcRenderer.send('getbuildstage', $(this).attr('data-id'));
                 if (slideflag == 1) {
                     console.log($(this).offset().Top);
-                    $('#bwdb_nav_select_bar').scrollTop($(this).offset().Top);
                     $("#bwdb_nav_select_bar").hide();
+                    //$('#bwdb_nav_select_bar').scrollTop(0);
+                    $('#bwdb_nav_select_bar').scrollTop($(this).position().top);
+                    
                     slideflag = 0;
                 }
                 if ($("#homeinfobox").css('display') != 'none') {
@@ -327,11 +329,13 @@
         });
         function slide_select() {
             if (slideflag == 0) {
+                
                 $("#bwdb_nav_select_bar").slideDown('100ms');
+                $('#bwdb_nav_select_bar').scrollTop($(".bwdb_select_item[data-id='" + now_proid + "']").position().top);
                 slideflag = 1;
             } else {
                 $("#bwdb_nav_select_bar").slideUp('100ms');
-                //$(".bwdb_select_item[data-id='" + now_proid + "']").hover();
+                
                 slideflag = 0;
             }
         }
