@@ -71,6 +71,14 @@
             {
                 "ori_text": "图片文件(*.png)",
                 "translate_text": "Image File(*.png)"
+            },
+            {
+                "ori_text": "提示",
+                "translate_text": "Error"
+            },
+            {
+                "ori_text": "你已经打开了一个截图阅览器，请关闭后重试。",
+                "translate_text": "You have opened a screenshot viewer, please close it and try again."
             }
         ]
     },

@@ -313,7 +313,7 @@
       
       //if (i1 == 1) {
         $('.pic_cat').css("width", now_width - 70);
-        $('.pic_cat').css("height", now_height-50);
+        $('.pic_cat').css("height", now_height-$('.toolbar').height());
       //}
       $('.close_btn').css("left", now_width - $('.close_btn').width());
       $('.left_btn').css("left", 0);
@@ -341,7 +341,7 @@
       console.log("A" + i1)
       //if (i1 == 1) {
         $('.pic_cat').css("width", now_width - 70);
-        $('.pic_cat').css("height", now_height-50);
+        $('.pic_cat').css("height", now_height-$('.toolbar').height());
       //}
       $('.close_btn').css("left", now_width - $('.close_btn').width());
       $('.left_btn').css("left", 0);

@@ -25,19 +25,23 @@ function createWindow() {
   // 创建浏览器窗口
   Menu.setApplicationMenu(null);
   win = new BrowserWindow({
-    minHeight: 400,
-    minWidth: 700,
-    width: 1009,
-    height: 679,
+    minHeight: 300,
+    minWidth: 600,
+    width: 900,
+    height: 600,
     show: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      directWrite:false
     }
   });
 
   // 并且为你的应用加载index.html
   win.loadFile('main.html');
-
+  win.on("close", function () {
+    win = null;
+    app.quit();
+  });
   // 打开开发者工具
   if (!app.isPackaged) {
     win.webContents.openDevTools();
@@ -93,15 +97,22 @@ function createAuthorWindow() {
 function creategalleryWindow() {
   // 创建浏览器窗口
   //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
+  if(gallerywindow!=null){
+    dialog.showErrorBox(i18n.convert_dymstrlist_to_string('提示',i18n.get_lang_now(),'main.js'), i18n.convert_dymstrlist_to_string('你已经打开了一个截图阅览器，请关闭后重试。',i18n.get_lang_now(),'main.js'));
+    //gallerywindow.fo
+    gallerywindow.show();
+    return -1;
+  }
   gallerywindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    width: 960,
+    height: 668,
     resizable: true,
     transparent: true,
     frame: false,
     show: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      directWrite:false
     }
   });
   gallerywindow.loadFile('gallery.html');

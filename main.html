@@ -209,11 +209,34 @@
                     $('.bwdb_sidebarA').css('overflow-y', 'auto');
                 }
                 console.log(document.documentElement.clientWidth);
-                if (document.documentElement.clientWidth > 975 && picflag == 0) {
+                if (document.documentElement.clientWidth > 750 && picflag == 0) {
                     show_pic();
                 } else {
                     hide_pic();
                 }
+                if (now_width < (900 - 355)) {
+                    font_s = 1.85 * (document.documentElement.clientWidth / 900);
+                    $('#ver_name').css("font-size", font_s + 'rem');
+                    $('#ver_smalltag').css("font-size", (font_s / 1.85) + 'rem');
+                } else {
+                    font_s = 1.85;
+                    $('#ver_name').css("font-size", font_s + 'rem');
+                    $('#ver_smalltag').css("font-size", (font_s / 1.85) + 'rem');
+                }
+
+                if (now_width > (900 - 355)) {
+                    font_s = 0.85 * (document.documentElement.clientWidth / 900);
+                    if (font_s > 1.05) {
+                        font_s = 1.05;
+                    }
+                    $('.info_box_items_title').css("font-size", font_s + 'rem');
+                    $('.info_box_items_text').css("font-size", font_s + 'rem');
+                } else {
+                    font_s = 0.85;
+                    $('.info_box_items_title').css("font-size", font_s + 'rem');
+                    $('.info_box_items_text').css("font-size", font_s + 'rem');
+                }
+
                 $('.bwdb_infobox_textarea').hide();
                 $('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
             });
@@ -579,14 +602,14 @@
                         var s1 = proname;
                     }
                     */
-                    var s1 =  proname;
+                    var s1 = proname;
                     var fsize = 1;
                     var fw = 450;
                     if (s1.length > 30) {
                         var fsize = 1 * (30 / s1.length);
                         //var fw=450**(30/s[i].length);
                     }
-                    $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text" title="' + proname.toString().replace(/\"/g, "&quot;") + '" style="font-size:'+String(fsize)+'rem;" >' + s1 + '</span></div></div><div class="build_list" data-id="' + proname.toString().replace(/\"/g, "!") + '" data-type="build_stage" >');
+                    $(".bwdb_sidebarA").append('<div class="big_stage_divider"><div class="big_stage_item"><span class="big_stage_text" title="' + proname.toString().replace(/\"/g, "&quot;") + '" style="font-size:' + String(fsize) + 'rem;" >' + s1 + '</span></div></div><div class="build_list" data-id="' + proname.toString().replace(/\"/g, "!") + '" data-type="build_stage" >');
                 }
                 $("[data-type='build_stage'][data-id='" + proname.toString().replace(/\"/g, "!") + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="build_item">' + buildver + '</div>');
             }
@@ -696,13 +719,21 @@
         <div class="bwdb_infobox" id="homeinfobox">
             <div class="home_title">
                 <div>
-                    <h5 class="bw_welcome">感谢您使用BetaWorld Library!</h5><button class="btn btn-primary"
-                        style="float:right;margin-right:25px;position: relative;display: block;width: 30%;min-width: 60px;background-color: #19478a;border:#19478a;max-width: 220px;"
+                    <h5 class="bw_welcome">感谢您使用BetaWorld Library!</h5>
+                </div>
+                <div style="display: flex;justify-content: space-between;">
+                    <div style="display: flex;flex-direction: column;flex-wrap: wrap;justify-content: space-between;">
+                        <div class="version_info" id="basedb_version"  style="align-self: flex-start;">基础数据库版本：V16.66，更新于2020/01/01日</div>
+                        <div class="version_info" id="gallerypak_version" style="align-self: flex-end;">图片数据库版本：V16.66，更新于2020/01/01日</div>
+                    </div>
+                    <div style="align-items: center;display: flex;">
+                        <button class="btn btn-primary"
+                        style="float:right;margin-right:25px;background-color: #19478a;border:#19478a;max-width: 220px;min-height: 30px;"
                         id="check_btn" onclick="show_update();" data-url=""><i class="fa fa-cloud-download"
                             aria-hidden="true"></i> 检查数据库更新</button>
+                    </div>
                 </div>
-                <div class="version_info" id="basedb_version">基础数据库版本：V16.66，更新于2020/01/01日</div>
-                <div class="version_info" id="gallerypak_version">图片数据库版本：V16.66，更新于2020/01/01日</div>
+
             </div>
             <div class="update_info">
 
@@ -723,8 +754,8 @@
         </div>
         <div class="bwdb_infobox" id="verinfobox" style="display: none;">
             <div class="Version_Title">
-                <div style="display: inline-flex;width:100%">
-                    <h2 id="ver_name">1.0 Alpha</h2> <a title="查看BetaWorld Wiki页面" id="wiki_link"
+                <div style="display: inline-flex;width:100%;align-items: center;flex-direction: row;">
+                    <h4 id="ver_name">1.0 Alpha</h4> <a title="查看BetaWorld Wiki页面" id="wiki_link"
                         style="margin-top: -5px;margin-left: 10px;margin-right: 25px;font-size:1.8rem;cursor: pointer;"
                         onclick="open_wiki_link();"> <img src="./static/img/bwWikiLogo.png" /></a>
                 </div>
