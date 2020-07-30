@@ -33,20 +33,20 @@
                 "translate_text": "清除Changelog完成!"
             },
             {
-                "ori_text": "ChangeLOG的处理",
+                "ori_text": "Changelog的处理",
                 "translate_text": "Changelog的处理"
             },
             {
-                "ori_text": "版本号已经被更改，请选择ChangeLOG的处理方式：",
+                "ori_text": "版本号已经被更改，请选择Changelog的处理方式：",
                 "translate_text": "版本号已经被更改，请选择Changelog的处理方式："
             },
             {
-                "ori_text": "清空ChangeLOG",
+                "ori_text": "清空Changelog",
                 "translate_text": "清空Changelog"
             },
             {
-                "ori_text": "更改ChageLOG中所有条目的版本（推荐）",
-                "translate_text": "更改ChageLOG中所有条目的版本（推荐）"
+                "ori_text": "更改Changelog中所有条目的版本（推荐）",
+                "translate_text": "更改Changelog中所有条目的版本（推荐）"
             },
             {
                 "ori_text": "不做任何处理",

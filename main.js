@@ -794,7 +794,7 @@ ipcMain.on('changeversion', (event, args) => {
       db.run("update Version set Version='"+args[0]+"'");
       db.run("update Version set Date='"+args[1]+"'");
       db.run("update Version set UpdateURL='"+args[2]+"'");
-      switch(dialog.showMessageBoxSync({type:'question',title:i18n.convert_dymstrlist_to_string('ChangeLOG的处理',i18n.get_lang_now(),'main.js'),message:i18n.convert_dymstrlist_to_string("版本号已经被更改，请选择ChangeLOG的处理方式：",i18n.get_lang_now(),'main.js'),buttons:[i18n.convert_dymstrlist_to_string('清空ChangeLOG',i18n.get_lang_now(),'main.js'),i18n.convert_dymstrlist_to_string('更改ChageLOG中所有条目的版本（推荐）',i18n.get_lang_now(),'main.js'),i18n.convert_dymstrlist_to_string('不做任何处理',i18n.get_lang_now(),'main.js')]})){
+      switch(dialog.showMessageBoxSync({type:'question',title:i18n.convert_dymstrlist_to_string('Changelog的处理',i18n.get_lang_now(),'main.js'),message:i18n.convert_dymstrlist_to_string("版本号已经被更改，请选择Changelog的处理方式：",i18n.get_lang_now(),'main.js'),buttons:[i18n.convert_dymstrlist_to_string('清空Changelog',i18n.get_lang_now(),'main.js'),i18n.convert_dymstrlist_to_string('更改Changelog中所有条目的版本（推荐）',i18n.get_lang_now(),'main.js'),i18n.convert_dymstrlist_to_string('不做任何处理',i18n.get_lang_now(),'main.js')]})){
         case 0:
           db.run("delete from ChangeLog");
           break;
