@@ -101,6 +101,8 @@
                 now_proid = -1;
                 ipcRenderer.send('getbuildstage', $(this).attr('data-id'));
                 if (slideflag == 1) {
+                    console.log($(this).offset().Top);
+                    $('#bwdb_nav_select_bar').scrollTop($(this).offset().Top);
                     $("#bwdb_nav_select_bar").hide();
                     slideflag = 0;
                 }
@@ -271,6 +273,15 @@
                         }
                         console.log(previd);
                         $('.bwdb_sidebar_item[data-id="' + previd + '"]').click();
+                        var i = $('.bwdb_sidebar_item[data-id="' + previd + '"]').index();
+                        console.log('元素索引：' + i);
+                        if ($('.bwdb_sidebar_item[data-id="' + previd + '"]').prev().length == 0) { return 0; }
+                        if (i == 0) {
+                            $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + previd + '"]').parents('.build_list').prev().offset().top - $(".bwdb_sidebarA").offset().top-50);
+                        } else {
+                            $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + previd + '"]').prev().offset().top - $(".bwdb_sidebarA").offset().top-50);
+                        }
+                        //$('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop()-$('.bwdb_sidebar_item[data-id="' + previd + '"]').offset.Top() -15);
                         break;
                     case 40:
                         //alert('b');
@@ -293,6 +304,15 @@
                         }
                         console.log(nextid);
                         $('.bwdb_sidebar_item[data-id="' + nextid + '"]').click();
+                        //$('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() - $('.bwdb_sidebar_item[data-id="' + previd + '"]').offset.Top() - 15);
+                        var i = $('.bwdb_sidebar_item[data-id="' + nextid + '"]').index();
+                        console.log('元素索引：' + i);
+                        if ($('.bwdb_sidebar_item[data-id="' + nextid + '"]').prev().length == 0) { return 0; }
+                        if (i == 0) {
+                            $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + nextid + '"]').parents('.build_list').prev().offset().top - $(".bwdb_sidebarA").offset().top-50);
+                        } else {
+                            $('.bwdb_sidebarA').scrollTop($('.bwdb_sidebarA').scrollTop() + $('.bwdb_sidebar_item[data-id="' + nextid + '"]').prev().offset().top - $(".bwdb_sidebarA").offset().top-50);
+                        }
                         break;
                     default:
                         break;
@@ -311,6 +331,7 @@
                 slideflag = 1;
             } else {
                 $("#bwdb_nav_select_bar").slideUp('100ms');
+                //$(".bwdb_select_item[data-id='" + now_proid + "']").hover();
                 slideflag = 0;
             }
         }
@@ -723,14 +744,16 @@
                 </div>
                 <div style="display: flex;justify-content: space-between;">
                     <div style="display: flex;flex-direction: column;flex-wrap: wrap;justify-content: space-between;">
-                        <div class="version_info" id="basedb_version"  style="align-self: flex-start;">基础数据库版本：V16.66，更新于2020/01/01日</div>
-                        <div class="version_info" id="gallerypak_version" style="align-self: flex-end;">图片数据库版本：V16.66，更新于2020/01/01日</div>
+                        <div class="version_info" id="basedb_version" style="align-self: flex-start;">
+                            基础数据库版本：V16.66，更新于2020/01/01日</div>
+                        <div class="version_info" id="gallerypak_version" style="align-self: flex-end;">
+                            图片数据库版本：V16.66，更新于2020/01/01日</div>
                     </div>
                     <div style="align-items: center;display: flex;">
                         <button class="btn btn-primary"
-                        style="float:right;margin-right:25px;background-color: #19478a;border:#19478a;max-width: 220px;min-height: 30px;"
-                        id="check_btn" onclick="show_update();" data-url=""><i class="fa fa-cloud-download"
-                            aria-hidden="true"></i> 检查数据库更新</button>
+                            style="float:right;margin-right:25px;background-color: #19478a;border:#19478a;max-width: 220px;min-height: 30px;"
+                            id="check_btn" onclick="show_update();" data-url=""><i class="fa fa-cloud-download"
+                                aria-hidden="true"></i> 检查数据库更新</button>
                     </div>
                 </div>
 
