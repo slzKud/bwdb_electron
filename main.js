@@ -104,8 +104,8 @@ function creategalleryWindow() {
     return -1;
   }
   gallerywindow = new BrowserWindow({
-    width: 960,
-    height: 668,
+    width: 750,
+    height: 650,
     resizable: true,
     transparent: true,
     frame: false,
