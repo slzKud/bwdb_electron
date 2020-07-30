@@ -39,7 +39,10 @@ function createWindow() {
   win.loadFile('main.html');
 
   // 打开开发者工具
-  //win.webContents.openDevTools();
+  if (!app.isPackaged) {
+    win.webContents.openDevTools();
+  }
+  //
   //createAboutWindow();
   //import sqlite3Db from './nw/sqlite3_test'
 }
@@ -123,6 +126,9 @@ function createManageMainWindow() {
 
   // 并且为你的应用加载index.html
   win.loadFile('manage/main.html');
+  if (!app.isPackaged) {
+    win.webContents.openDevTools();
+  }
   //win.webContents.openDevTools();
 }
 function createManageSettingWindow() {
