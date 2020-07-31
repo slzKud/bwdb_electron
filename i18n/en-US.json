@@ -179,7 +179,7 @@
         "dymstr": [
             {
                 "ori_text": "仅显示有截图的Build",
-                "translate_text": "Display Builds with Screenshots only."
+                "translate_text": "Display Builds with ScreenShots only."
             },
             {
                 "ori_text": "Language",
@@ -211,7 +211,7 @@
             },
             {
                 "ori_text": "当前截图库 产品/Build ID不一致！请检查。",
-                "translate_text": "Screenshots Library and Production/Build ID currently opened is not match! Please check it at once."
+                "translate_text": "ScreenShots Library and Product/Build ID currently opened is not match! Please check it at once."
             },
             {
                 "ori_text": "点击查看截图",
@@ -227,11 +227,11 @@
             },
             {
                 "ori_text": "基础数据库版本：V%1,更新于%2。",
-                "translate_text": "Basic database version:V%1, update at %2."
+                "translate_text": "Basic database version: V%1, update at %2."
             },
             {
                 "ori_text": "图片数据库版本：V%1,更新于%2。",
-                "translate_text": "Screenshots database version:V%1, update at %2."
+                "translate_text": "ScreenShots database version: V%1, update at %2."
             },
             {
                 "ori_text": "点击跳转到对应版本",
@@ -580,7 +580,7 @@
             {
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-arrow-up\" aria-hidden=\"true\"></i> 上移图片",
-                "translate_text": "<i class=\"fa fa-arrow-up\" aria-hidden=\"true\"></i> Upload image",
+                "translate_text": "<i class=\"fa fa-arrow-up\" aria-hidden=\"true\"></i> Move up image",
                 "classStr": "btn.btn-primary.pic_btn"
             },
             {
@@ -695,7 +695,7 @@
             {
                 "strtype": "html",
                 "ori_text": "清空ChangeLog",
-                "translate_text": "Clear ChangeLog",
+                "translate_text": "Clear Changelog",
                 "classStr": "edit_title"
             },
             {
@@ -726,7 +726,7 @@
             },
             {
                 "ori_text": "数据库设置",
-                "translate_text": "DataBase Settings"
+                "translate_text": "Database Settings"
             }
         ]
     },
@@ -753,7 +753,7 @@
             },
             {
                 "ori_text": "语言设置成功。点击确定后会立即刷新。",
-                "translate_text": "Language set successfully. The software will refresh as soon as you click \"OK\"."
+                "translate_text": "Language set successfully. The software will reload as soon as you click \"OK\"."
             },
             {
                 "ori_text": "语言设置",

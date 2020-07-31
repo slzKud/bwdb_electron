@@ -33,3 +33,5 @@ BetaWorld Library的Electron版本，以SQLite3为基本数据架构。
 * Macadmin
 * Driver1998
 * th1r5bvn23
+* qazmko1029
+* BlueRain
