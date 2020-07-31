@@ -12,6 +12,7 @@ const remote = require('electron').remote;
 const { Menu, MenuItem } = remote;
 var AdmZip = require('adm-zip');
 var fs = require("fs");
+//const os = require("os");
 var picdo = require("./moudles/picdo");
 const { now } = require('jquery');
 const prompt = require('electron-prompt');
@@ -86,20 +87,38 @@ function ifzipfileexist(zip, entryname) {
 }
 function movelist(selector, flag) {
     if ($(selector).children("option:selected").prev().length == 0 && flag == true) {
-        remote.dialog.showMessageBoxSync({
-            type: 'info',
-            title: convert_dymstrlist_to_string('提示',get_lang_now()),
-            message: convert_dymstrlist_to_string('你不能再往上移动',get_lang_now())
-        });
+        if (os.platform == "win32") {
+            remote.dialog.showMessageBoxSync({
+                type: 'info',
+                title: convert_dymstrlist_to_string('提示', get_lang_now()),
+                message: convert_dymstrlist_to_string('你不能再往上移动', get_lang_now())
+            });
+        } else {
+            remote.dialog.showMessageBoxSync({
+                type: 'info',
+                title: convert_dymstrlist_to_string('提示', get_lang_now()),
+                message: convert_dymstrlist_to_string('你不能再往上移动', get_lang_now()),
+                buttons: ['OK']
+            });
+        }
         //alert('你不能再往上移动');
         return -1;
     }
     if ($(selector).children("option:selected").next().length == 0 && flag == false) {
-        remote.dialog.showMessageBoxSync({
-            type: 'info',
-            title: convert_dymstrlist_to_string('提示',get_lang_now()),
-            message: convert_dymstrlist_to_string('你不能再往下移动',get_lang_now())
-        });
+        if (os.platform == "win32") {
+            remote.dialog.showMessageBoxSync({
+                type: 'info',
+                title: convert_dymstrlist_to_string('提示', get_lang_now()),
+                message: convert_dymstrlist_to_string('你不能再往下移动', get_lang_now())
+            });
+        } else {
+            remote.dialog.showMessageBoxSync({
+                type: 'info',
+                title: convert_dymstrlist_to_string('提示', get_lang_now()),
+                message: convert_dymstrlist_to_string('你不能再往下移动', get_lang_now()),
+                buttons: ['OK']
+            });
+        }
         //alert('你不能再往下移动');
         return -1;
     }
@@ -217,54 +236,72 @@ $(document).on('click', '.bwdb_sidebar_item', function () {
 $(document).keydown(function (event) {
     var keyNum = event.which;  //获取键值
     console.log(keyNum);
-    console.log("now:"+document.activeElement.type);
-    if(document.activeElement.type=="text" ||document.activeElement.type=="input" || document.activeElement.type=="date" || document.activeElement.type=="textarea" || document.activeElement.type=="select-multiple" ){
+    console.log("now:" + document.activeElement.type);
+    if (document.activeElement.type == "text" || document.activeElement.type == "input" || document.activeElement.type == "date" || document.activeElement.type == "textarea" || document.activeElement.type == "select-multiple") {
         return -1;
     }
     switch (keyNum) { //判断按键
         case 38:
             //alert('a');
             //先判断相同层级的
-            previd=-1;
+            previd = -1;
             if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().length == 0) {
                 //接着判断上一个层级 
                 if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').prev().prev().length == 0) {
                     //到顶了
-                    remote.dialog.showMessageBoxSync({
-                        type: 'info',
-                        title: convert_dymstrlist_to_string('提示',get_lang_now()),
-                        message: convert_dymstrlist_to_string('你不能再往上移动',get_lang_now())
-                    });
+                    if (os.platform == "win32") {
+                        remote.dialog.showMessageBoxSync({
+                            type: 'info',
+                            title: convert_dymstrlist_to_string('提示', get_lang_now()),
+                            message: convert_dymstrlist_to_string('你不能再往上移动', get_lang_now())
+                        });
+                    } else {
+                        remote.dialog.showMessageBoxSync({
+                            type: 'info',
+                            title: convert_dymstrlist_to_string('提示', get_lang_now()),
+                            message: convert_dymstrlist_to_string('你不能再往上移动', get_lang_now()),
+                            buttons: ['OK']
+                        });
+                    }
                     return -1;
                 } else {
-                   if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').prev().prev().children('div:last').length!=0){
-                       previd=$('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').prev().prev().children('div:last').attr('data-id');
-                   } 
+                    if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').prev().prev().children('div:last').length != 0) {
+                        previd = $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').prev().prev().children('div:last').attr('data-id');
+                    }
                 }
             } else {
-                previd=$('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().attr('data-id');
+                previd = $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').prev().attr('data-id');
             }
             console.log(previd);
             $('.bwdb_sidebar_item[data-id="' + previd + '"]').click();
             break;
         case 40:
             //alert('b');
-            nextid=-1;
+            nextid = -1;
             if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').next().length == 0) {
-                if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().length==0){
-                    remote.dialog.showMessageBoxSync({
-                        type: 'info',
-                        title: convert_dymstrlist_to_string('提示',get_lang_now()),
-                        message: convert_dymstrlist_to_string('你不能再往下移动',get_lang_now())
-                    });
+                if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().length == 0) {
+                    if (os.platform == "win32") {
+                        remote.dialog.showMessageBoxSync({
+                            type: 'info',
+                            title: convert_dymstrlist_to_string('提示', get_lang_now()),
+                            message: convert_dymstrlist_to_string('你不能再往下移动', get_lang_now())
+                        });
+                    } else {
+                        remote.dialog.showMessageBoxSync({
+                            type: 'info',
+                            title: convert_dymstrlist_to_string('提示', get_lang_now()),
+                            message: convert_dymstrlist_to_string('你不能再往下移动', get_lang_now()),
+                            buttons: ['OK']
+                        });
+                    }
                     return -1;
-                }else{
-                    if($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().children('div:first').length!=0){
-                       nextid=$('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().children('div:first').attr('data-id');
-                   } 
+                } else {
+                    if ($('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().children('div:first').length != 0) {
+                        nextid = $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').parent('.build_list').next().next().children('div:first').attr('data-id');
+                    }
                 }
-            }else{
-                nextid=$('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').next().attr('data-id');
+            } else {
+                nextid = $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').next().attr('data-id');
             }
             console.log(nextid);
             $('.bwdb_sidebar_item[data-id="' + nextid + '"]').click();
@@ -297,7 +334,7 @@ function show_search_textbox() {
         $('.search_btn').css('border', '#fff 2px solid');
         $('.bwdb_nav_search_text').val('');
         $(".bwdb_nav_search").show();
-        $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string('按回车键开始搜索',get_lang_now())+'<br>'+convert_dymstrlist_to_string('单击放大镜按钮以关闭搜索工具。',get_lang_now()))
+        $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string('按回车键开始搜索', get_lang_now()) + '<br>' + convert_dymstrlist_to_string('单击放大镜按钮以关闭搜索工具。', get_lang_now()))
         $(".bw_sidebar_info_box").show();
         $(".bwdb_sidebarA").hide();
         verflag = 1;
@@ -307,7 +344,7 @@ function show_search_textbox() {
         $(".bwdb_nav_search").hide();
         $(".bw_sidebar_info_box").hide();
         $(".bwdb_sidebarA").show();
-        if ($(".bw_sidebar_info_box").html().indexOf(convert_dymstrlist_to_string('按回车键开始搜索',get_lang_now())) == -1) {
+        if ($(".bw_sidebar_info_box").html().indexOf(convert_dymstrlist_to_string('按回车键开始搜索', get_lang_now())) == -1) {
             $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
             $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
             $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
@@ -534,7 +571,7 @@ ipcRenderer.on('searchlist', function (event, arg) {
         }
         $("[data-type='build_stage'][data-id='" + proname + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + buildid + '" data-id-proid="' + proid + '" data-type="build_item">' + buildver + '</div>');
     }
-    $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string_include_array('共找到%1项。',get_lang_now(),[s.length]));
+    $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string_include_array('共找到%1项。', get_lang_now(), [s.length]));
     $(".bw_sidebar_info_box").show();
     $(".bwdb_sidebarA").show();
     if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
@@ -550,11 +587,20 @@ ipcRenderer.on('newbuildid', function (event, arg) {
     now_buildid = arg[1];
     make_screen_zip(now_buildid);
     //remote.dialog.showMessageBoxSync();
-    remote.dialog.showMessageBoxSync({
-        type: 'info',
-        title: convert_dymstrlist_to_string('修改数据成功',get_lang_now()),
-        message: convert_dymstrlist_to_string('修改数据成功',get_lang_now())
-    });
+    if (os.platform == "win32") {
+        remote.dialog.showMessageBoxSync({
+            type: 'info',
+            title: convert_dymstrlist_to_string('修改数据成功', get_lang_now()),
+            message: convert_dymstrlist_to_string('修改数据成功', get_lang_now())
+        });
+    } else {
+        remote.dialog.showMessageBoxSync({
+            type: 'info',
+            title: convert_dymstrlist_to_string('修改数据成功', get_lang_now()),
+            message: convert_dymstrlist_to_string('修改数据成功', get_lang_now()),
+            buttons: ['OK']
+        });
+    }
     //alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
     $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
@@ -569,11 +615,20 @@ ipcRenderer.on('delbuildid', function (event, arg) {
     now_proid = arg[0];
     now_buildid = arg[1];
     //remote.dialog.showMessageBoxSync();
-    remote.dialog.showMessageBoxSync({
-        type: 'info',
-        title: convert_dymstrlist_to_string('删除Build成功',get_lang_now()),
-        message: convert_dymstrlist_to_string('删除Build成功',get_lang_now())
-    });
+    if (os.platform == "win32") {
+        remote.dialog.showMessageBoxSync({
+            type: 'info',
+            title: convert_dymstrlist_to_string('删除Build成功', get_lang_now()),
+            message: convert_dymstrlist_to_string('删除Build成功', get_lang_now())
+        });
+    } else {
+        remote.dialog.showMessageBoxSync({
+            type: 'info',
+            title: convert_dymstrlist_to_string('删除Build成功', get_lang_now()),
+            message: convert_dymstrlist_to_string('删除Build成功', get_lang_now()),
+            buttons: ['OK']
+        });
+    }
     //alert('修改成功');
     $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
     $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
@@ -589,7 +644,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
     var s = JSON.parse(arg[2]);
     console.log(s);
     console.log(s[0][2]);
-    $('.title_bar').html('Now BuildID:'+now_buildid);
+    $('.title_bar').html('Now BuildID:' + now_buildid);
     //$("#ver_name").text(s[0][2]);
     var arrlist = ['ver_archlist', 'ver_verlist', 'ver_langlist', 'ver_tag', 'install_bios_date', 'install_sn', 'install_notice', 'install_notice_en', 'Codename'];
     if ($('.bw_sidebar_info_box').css('display') == 'none') {
@@ -726,9 +781,9 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
         case "delete":
             remote.dialog.showMessageBox({
                 type: 'question',
-                title: convert_dymstrlist_to_string('确认删除？',get_lang_now()),
-                message: convert_dymstrlist_to_string('确认删除这个build吗？',get_lang_now()),
-                buttons: [convert_dymstrlist_to_string('确认',get_lang_now()), convert_dymstrlist_to_string('取消',get_lang_now())]
+                title: convert_dymstrlist_to_string('确认删除？', get_lang_now()),
+                message: convert_dymstrlist_to_string('确认删除这个build吗？', get_lang_now()),
+                buttons: [convert_dymstrlist_to_string('确认', get_lang_now()), convert_dymstrlist_to_string('取消', get_lang_now())]
             }).then((index) => {
                 if (index.response === 0) {
                     ipcRenderer.send('deletebuild', [now_proid, now_buildid]);
@@ -738,9 +793,9 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
         case "ignore":
             let t = remote.dialog.showMessageBoxSync({
                 type: 'question',
-                title: convert_dymstrlist_to_string('确认放弃修改？',get_lang_now()),
-                message: convert_dymstrlist_to_string('确认放弃修改吗？这会退出当前编辑状态。',get_lang_now()),
-                buttons: [convert_dymstrlist_to_string('确认',get_lang_now()), convert_dymstrlist_to_string('取消',get_lang_now())]
+                title: convert_dymstrlist_to_string('确认放弃修改？', get_lang_now()),
+                message: convert_dymstrlist_to_string('确认放弃修改吗？这会退出当前编辑状态。', get_lang_now()),
+                buttons: [convert_dymstrlist_to_string('确认', get_lang_now()), convert_dymstrlist_to_string('取消', get_lang_now())]
             })
             if (t == 0) {
                 if (now_proid == -1) {
@@ -755,16 +810,27 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
 
             break;
         case "setting":
-            ipcRenderer.send('openmanagesetting','');
+            ipcRenderer.send('openmanagesetting', '');
             break;
         case "info":
-            remote.dialog.showMessageBoxSync(
-                {
-                    type:"info",
-                    title:convert_dymstrlist_to_string("编辑说明",get_lang_now()),
-                    message:convert_dymstrlist_to_string("暂时还没有说明哦~",get_lang_now())
-                }
-            )
+            if (os.platform == "win32") {
+                remote.dialog.showMessageBoxSync(
+                    {
+                        type: "info",
+                        title: convert_dymstrlist_to_string("编辑说明", get_lang_now()),
+                        message: convert_dymstrlist_to_string("暂时还没有说明哦~", get_lang_now())
+                    }
+                );
+            } else {
+                remote.dialog.showMessageBoxSync(
+                    {
+                        type: "info",
+                        title: convert_dymstrlist_to_string("编辑说明", get_lang_now()),
+                        message: convert_dymstrlist_to_string("暂时还没有说明哦~", get_lang_now()),
+                        buttons: ['OK']
+                    }
+                );
+            }
     }
 });
 $(document).on('click', '.pic_btn', function () {
@@ -778,8 +844,8 @@ $(document).on('click', '.pic_btn', function () {
             break;
         case "add":
             prompt({
-                title: convert_dymstrlist_to_string('请输入截图名',get_lang_now()),
-                label: convert_dymstrlist_to_string('截图名:',get_lang_now()),
+                title: convert_dymstrlist_to_string('请输入截图名', get_lang_now()),
+                label: convert_dymstrlist_to_string('截图名:', get_lang_now()),
                 value: '',
                 inputAttrs: {
                     type: 'text'
@@ -795,11 +861,20 @@ $(document).on('click', '.pic_btn', function () {
                             var s = picdo.waterimg2base64(fp);
                             $("#screenshotlist").append("<option data-pic=" + "-1" + " data-pic-hash='" + picdo.base642hash(s) + "' data-pic-base64='" + s + "' >" + r + "</option>");
                             //alert('添加成功！');
-                            remote.dialog.showMessageBoxSync({
-                                type: 'info',
-                                title: convert_dymstrlist_to_string('添加截图成功',get_lang_now()),
-                                message: convert_dymstrlist_to_string('添加截图成功',get_lang_now())
-                            });
+                            if (os.platform == "win32") {
+                                remote.dialog.showMessageBoxSync({
+                                    type: 'info',
+                                    title: convert_dymstrlist_to_string('添加截图成功', get_lang_now()),
+                                    message: convert_dymstrlist_to_string('添加截图成功', get_lang_now())
+                                });
+                            } else {
+                                remote.dialog.showMessageBoxSync({
+                                    type: 'info',
+                                    title: convert_dymstrlist_to_string('添加截图成功', get_lang_now()),
+                                    message: convert_dymstrlist_to_string('添加截图成功', get_lang_now()),
+                                    buttons: ['OK']
+                                });
+                            }
                         }
                     }
                 })
@@ -811,8 +886,8 @@ $(document).on('click', '.pic_btn', function () {
                 return -1;
             }
             prompt({
-                title: convert_dymstrlist_to_string('请输入新的截图名',get_lang_now()),
-                label: convert_dymstrlist_to_string('截图名:',get_lang_now()),
+                title: convert_dymstrlist_to_string('请输入新的截图名', get_lang_now()),
+                label: convert_dymstrlist_to_string('截图名:', get_lang_now()),
                 value: $("#screenshotlist").find("option:selected").html(),
                 inputAttrs: {
                     type: 'text'
@@ -847,11 +922,20 @@ $(document).on('click', '.pic_btn', function () {
                 //$("#screenshotlist").children("[data-pic="+checkValue+"]").attr('data-pic','-1');
                 s1 = "url(data:image/png;base64," + s + ')';
                 $('#main_pic').css('background-image', s1);
-                remote.dialog.showMessageBoxSync({
-                    type: 'info',
-                    title: convert_dymstrlist_to_string('替换截图成功',get_lang_now()),
-                    message: convert_dymstrlist_to_string('替换截图成功',get_lang_now())
-                });
+                if (os.platform == "win32") {
+                    remote.dialog.showMessageBoxSync({
+                        type: 'info',
+                        title: convert_dymstrlist_to_string('替换截图成功', get_lang_now()),
+                        message: convert_dymstrlist_to_string('替换截图成功', get_lang_now())
+                    });
+                } else {
+                    remote.dialog.showMessageBoxSync({
+                        type: 'info',
+                        title: convert_dymstrlist_to_string('替换截图成功', get_lang_now()),
+                        message: convert_dymstrlist_to_string('替换截图成功', get_lang_now()),
+                        buttons: ['OK']
+                    });
+                }
             }
             break;
         case "del":

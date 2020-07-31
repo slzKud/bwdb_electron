@@ -4,6 +4,7 @@ const initSqlJs = require('sql.js/dist/sql-asm');
 const dialog = require('electron').dialog;
 //const SQL = require('sql.js/dist/sql-asm');
 const fs = require("fs");
+const os = require("os");
 const { promises } = require('dns');
 const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 const { resourceUsage } = require('process');
@@ -11,7 +12,7 @@ const i18n = require('./static/js/i18n.node');
 try {
   var data = fs.readFileSync('./DataBase.db');
 } catch{
-  dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库不存在',i18n.get_lang_now(),'main.js'), i18n.convert_dymstrlist_to_string('基本数据库不存在，程序将退出。',i18n.get_lang_now(),'main.js'));
+  dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库不存在', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('基本数据库不存在，程序将退出。', i18n.get_lang_now(), 'main.js'));
   app.quit();
 }
 String.prototype.myReplace = function (f, e) {//吧f替换成e
@@ -19,7 +20,7 @@ String.prototype.myReplace = function (f, e) {//吧f替换成e
   return this.replace(reg, e);
 }
 ////console.log(db);
-var win, aboutWindow, authorwindow, gallerywindow,settingwindow,langwindow;
+var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow;
 var picjson;
 function createWindow() {
   // 创建浏览器窗口
@@ -32,7 +33,7 @@ function createWindow() {
     show: false,
     webPreferences: {
       nodeIntegration: true,
-      directWrite:false
+      directWrite: false
     }
   });
 
@@ -97,8 +98,8 @@ function createAuthorWindow() {
 function creategalleryWindow() {
   // 创建浏览器窗口
   //aboutWindow = new BrowserWindow ({width: 420, height:290,transparent: true, frame: false})
-  if(gallerywindow!=null){
-    dialog.showErrorBox(i18n.convert_dymstrlist_to_string('提示',i18n.get_lang_now(),'main.js'), i18n.convert_dymstrlist_to_string('你已经打开了一个截图阅览器，请关闭后重试。',i18n.get_lang_now(),'main.js'));
+  if (gallerywindow != null) {
+    dialog.showErrorBox(i18n.convert_dymstrlist_to_string('提示', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('你已经打开了一个截图阅览器，请关闭后重试。', i18n.get_lang_now(), 'main.js'));
     //gallerywindow.fo
     gallerywindow.show();
     return -1;
@@ -112,7 +113,7 @@ function creategalleryWindow() {
     show: false,
     webPreferences: {
       nodeIntegration: true,
-      directWrite:false
+      directWrite: false
     }
   });
   gallerywindow.loadFile('gallery.html');
@@ -133,7 +134,7 @@ function createManageMainWindow() {
       nodeIntegration: true
     }
   });
-  
+
 
   // 并且为你的应用加载index.html
   win.loadFile('manage/main.html');
@@ -163,9 +164,9 @@ function createLangSettingWindow() {
   langwindow = new BrowserWindow({
     width: 325,
     height: 400,
-    resizable:false,
-    maximizable:false,
-    show:false,
+    resizable: false,
+    maximizable: false,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
@@ -182,7 +183,7 @@ function app_ready_do() {
   } else {
     createWindow();
   }
-  global.syslang=app.getLocale();
+  global.syslang = app.getLocale();
 }
 app.whenReady().then(app_ready_do)
 
@@ -363,7 +364,7 @@ ipcMain.on(newLocal, (event, args) => {
     //console.log("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%"+args+"%' ORDER BY ID,Date");
     contents = db.exec("SELECT ID,ProductID,Stage,Version FROM Build where Version like '%" + args + "%' ORDER BY ID,Date");
     if (contents.length == 0) {
-      dialog.showErrorBox(i18n.convert_dymstrlist_to_string('找不到数据',i18n.get_lang_now(),'main.js'), i18n.convert_dymstrlist_to_string_include_array("你查找的“%1”找不到条目。",i18n.get_lang_now(),'main.js',[args]));
+      dialog.showErrorBox(i18n.convert_dymstrlist_to_string('找不到数据', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string_include_array("你查找的“%1”找不到条目。", i18n.get_lang_now(), 'main.js', [args]));
       var json1 = JSON.stringify([]);
       //console.log(json1);
       win.webContents.send('searchlist', [args, json1]);
@@ -480,7 +481,7 @@ ipcMain.on('getbwdbversion', (event, args) => {
     //console.log(arr_sys);
     var json1 = JSON.stringify(arr_sys);
     //console.log([json1]);
-    switch(args){
+    switch (args) {
       case "about":
         aboutWindow.webContents.send('bwdbversion', [json1]);
         break;
@@ -595,12 +596,12 @@ ipcMain.on('closeabout', (event, args) => {
   aboutWindow.close();
 });
 ipcMain.on('closegallery', (event, args) => {
-  try{
+  try {
     gallerywindow.close();
-  }catch{
+  } catch{
     return -1;
   }
-  
+
 });
 //管理界面的IPC部分
 ipcMain.on('editbuild', (event, args) => {
@@ -633,7 +634,7 @@ ipcMain.on('editbuild', (event, args) => {
           }
         })
       }).then(val => {
-        resolve (val);
+        resolve(val);
       });
 
     } else {
@@ -671,7 +672,7 @@ ipcMain.on('editbuild', (event, args) => {
     //检验产品是否存在
     proid = val;
     //防止ID传错
-    if (proid != args[0] && args[0]!=-1) {
+    if (proid != args[0] && args[0] != -1) {
       throw new Error('invild pro id');
     }
     if (buildid == -1) {
@@ -681,11 +682,11 @@ ipcMain.on('editbuild', (event, args) => {
           db = new SQL.Database(data);
           contents_version = db.exec("SELECT * FROM Version");
           arr_version = contents_version[0].values;
-          dbversion=arr_version[0][0];
+          dbversion = arr_version[0][0];
           db.exec("insert into 'Build' values (null, " + proid + ", '" + args[2] + "', '" + args[3] + "', '" + args[4] + "', '" + args[5] + "', '" + args[8] + "', '" + args[9] + "', '" + args[6] + "', '" + args[7] + "', '" + args[10].myReplace("'", "''") + "', '" + args[11].myReplace("'", "''") + "','" + args[12].myReplace("'", "''") + "');");
           contents = db.exec("select ID from Build where Version='" + args[2] + "' and Stage='" + args[3] + "' and BuildTag='" + args[4] + "' and ProductID=" + proid);
           arr = contents[0].values;
-          db.run("insert into ChangeLog values ('"+dbversion+"',"+arr[0][0]+")");
+          db.run("insert into ChangeLog values ('" + dbversion + "'," + arr[0][0] + ")");
           data = db.export();
           try {
             resolve(arr[0][0]);
@@ -707,7 +708,7 @@ ipcMain.on('editbuild', (event, args) => {
           update_list = ['Version', 'Stage', 'BuildTag', 'Architecture', 'Date', 'Serial', 'Edition', 'Language', 'Notes', 'NotesEN', 'CodeName'];
           contents_version = db.exec("SELECT * FROM Version");
           arr_version = contents_version[0].values;
-          dbversion=arr_version[0][0];
+          dbversion = arr_version[0][0];
           sql = `UPDATE 'Build' SET ProductID = '${proid}' WHERE ID=${buildid}`;
           db.exec(sql);
           for (let i = 0; i < update_list.length; i++) {
@@ -724,7 +725,7 @@ ipcMain.on('editbuild', (event, args) => {
             db.run(sql);
             db.run('COMMIT;');
           }
-          db.run("insert into ChangeLog values ('"+dbversion+"',"+buildid+")");
+          db.run("insert into ChangeLog values ('" + dbversion + "'," + buildid + ")");
           //dialog.showErrorBox('发生致命错误', '1');
           data = db.export();
           //dialog.showErrorBox('发生致命错误', '2');
@@ -756,13 +757,13 @@ ipcMain.on('deletebuild', (event, args) => {
       db = new SQL.Database(data);
       db.run("delete from Build Where ID=" + buildid);
       db.run("delete from ChangeLog Where BuildID=" + buildid);
-      contents=db.exec("select count(*) as c from Build Where ProductID=" + proid);
+      contents = db.exec("select count(*) as c from Build Where ProductID=" + proid);
       arr = contents[0].values;
       count = arr[0][0];
       if (count == 0) {
         db.run("delete from Product Where ID=" + proid);
       }
-      data=db.export();
+      data = db.export();
       resolve(0);
     });
   }).then(val => {
@@ -794,9 +795,9 @@ ipcMain.on('cleanchangelog', (event, args) => {
     var filename = './DataBase.db';
     fs.writeFileSync(filename, buffer);
     dialog.showMessageBoxSync({
-      type:'info',
-      title:i18n.convert_dymstrlist_to_string("清除Changelog完成",i18n.get_lang_now(),'main.js'),
-      message:i18n.convert_dymstrlist_to_string("清除Changelog完成!",i18n.get_lang_now(),'main.js')
+      type: 'info',
+      title: i18n.convert_dymstrlist_to_string("清除Changelog完成", i18n.get_lang_now(), 'main.js'),
+      message: i18n.convert_dymstrlist_to_string("清除Changelog完成!", i18n.get_lang_now(), 'main.js')
     })
   }).catch(err => {
     console.log(err);
@@ -808,18 +809,18 @@ ipcMain.on('changeversion', (event, args) => {
     initSqlJs().then(SQL => {
       db = new SQL.Database(data);
       //db.run("delete from ChangeLog");
-      db.run("update Version set Version='"+args[0]+"'");
-      db.run("update Version set Date='"+args[1]+"'");
-      db.run("update Version set UpdateURL='"+args[2]+"'");
-      switch(dialog.showMessageBoxSync({type:'question',title:i18n.convert_dymstrlist_to_string('Changelog的处理',i18n.get_lang_now(),'main.js'),message:i18n.convert_dymstrlist_to_string("版本号已经被更改，请选择Changelog的处理方式：",i18n.get_lang_now(),'main.js'),buttons:[i18n.convert_dymstrlist_to_string('清空Changelog',i18n.get_lang_now(),'main.js'),i18n.convert_dymstrlist_to_string('更改Changelog中所有条目的版本（推荐）',i18n.get_lang_now(),'main.js'),i18n.convert_dymstrlist_to_string('不做任何处理',i18n.get_lang_now(),'main.js')]})){
+      db.run("update Version set Version='" + args[0] + "'");
+      db.run("update Version set Date='" + args[1] + "'");
+      db.run("update Version set UpdateURL='" + args[2] + "'");
+      switch (dialog.showMessageBoxSync({ type: 'question', title: i18n.convert_dymstrlist_to_string('Changelog的处理', i18n.get_lang_now(), 'main.js'), message: i18n.convert_dymstrlist_to_string("版本号已经被更改，请选择Changelog的处理方式：", i18n.get_lang_now(), 'main.js'), buttons: [i18n.convert_dymstrlist_to_string('清空Changelog', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('更改Changelog中所有条目的版本（推荐）', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('不做任何处理', i18n.get_lang_now(), 'main.js')] })) {
         case 0:
           db.run("delete from ChangeLog");
           break;
         case 1:
-          db.run("update ChangeLog Set Version='"+args[0]+"'");
+          db.run("update ChangeLog Set Version='" + args[0] + "'");
           break;
       }
-      data=db.export();
+      data = db.export();
       resolve(0);
     });
   }).then(val => {
@@ -827,11 +828,21 @@ ipcMain.on('changeversion', (event, args) => {
     // 被创建数据库名称
     var filename = './DataBase.db';
     fs.writeFileSync(filename, buffer);
-    dialog.showMessageBoxSync({
-      type:'info',
-      title:i18n.convert_dymstrlist_to_string("数据库版本修改完成",i18n.get_lang_now(),'main.js'),
-      message:i18n.convert_dymstrlist_to_string("数据库版本修改完成!",i18n.get_lang_now(),'main.js')
-    });
+    if (os.platform == "win32") {
+      dialog.showMessageBoxSync({
+        type: 'info',
+        title: i18n.convert_dymstrlist_to_string("数据库版本修改完成", i18n.get_lang_now(), 'main.js'),
+        message: i18n.convert_dymstrlist_to_string("数据库版本修改完成!", i18n.get_lang_now(), 'main.js')
+      });
+    } else {
+      dialog.showMessageBoxSync({
+        type: 'info',
+        title: i18n.convert_dymstrlist_to_string("数据库版本修改完成", i18n.get_lang_now(), 'main.js'),
+        message: i18n.convert_dymstrlist_to_string("数据库版本修改完成!", i18n.get_lang_now(), 'main.js'),
+        buttons: ['OK']
+      });
+    }
+
     settingwindow.close();
   }).catch(err => {
     console.log(err);
@@ -839,10 +850,10 @@ ipcMain.on('changeversion', (event, args) => {
 });
 ipcMain.on('refreshwindow', (event, args) => {
   win.reload();
-  if(gallerywindow!=null){
+  if (gallerywindow != null) {
     gallerywindow.reload();
   }
-  if(settingwindow!=null){
+  if (settingwindow != null) {
     settingwindow.reload();
   }
   langwindow.close();

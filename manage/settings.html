@@ -33,19 +33,37 @@
         });
         function save_settings() {
             if ($("#dbver").val() == "") {
+                if (os.platform=="win32"){
                 remote.dialog.showMessageBoxSync({
                     type: 'info',
                     title: convert_dymstrlist_to_string('提示',get_lang_now()),
                     message: convert_dymstrlist_to_string('版本号不能为空',get_lang_now())
                 });
+            }else{
+                remote.dialog.showMessageBoxSync({
+                    type: 'info',
+                    title: convert_dymstrlist_to_string('提示',get_lang_now()),
+                    message: convert_dymstrlist_to_string('版本号不能为空',get_lang_now()),
+                    buttons:['OK']
+                });
+            }
                 return 0;
             }
             if ($("#dbtime").val() == "") {
+                if (os.platform=="win32"){
                 remote.dialog.showMessageBoxSync({
                     type: 'info',
                     title: convert_dymstrlist_to_string('提示',get_lang_now()),
                     message: convert_dymstrlist_to_string('更新时间不能为空',get_lang_now())
                 });
+            }else{
+                remote.dialog.showMessageBoxSync({
+                    type: 'info',
+                    title: convert_dymstrlist_to_string('提示',get_lang_now()),
+                    message: convert_dymstrlist_to_string('更新时间不能为空',get_lang_now()),
+                    buttons:['OK']
+                });
+            }
                 return 0;
             }
             var s = [$("#dbver").val(), $("#dbtime").val(), $("#dbaddress").val()];

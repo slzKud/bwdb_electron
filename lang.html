@@ -13,6 +13,7 @@
     <script>
         const ipcRenderer = require('electron').ipcRenderer;
         const remote = require('electron').remote;
+        //const os = require("os");
         $(document).ready(function () {
             change_static_element(get_lang_now());
             //get_all_html_element();
@@ -29,22 +30,31 @@
                     }
 
                 }
-                $('title').html(convert_dymstrlist_to_string("语言设置",get_lang_now()));
+                $('title').html(convert_dymstrlist_to_string("语言设置", get_lang_now()));
                 ipcRenderer.send('show-win', 'langsetting');
             });
         });
         function savesetting() {
-            var l=$("#lang_list").find("option:selected").attr('data-lang');
-            if(l==undefined){
+            var l = $("#lang_list").find("option:selected").attr('data-lang');
+            if (l == undefined) {
                 return -1;
             }
             setlang(l);
-            remote.dialog.showMessageBoxSync({
-                type: 'info',
-                title: convert_dymstrlist_to_string("设置成功！",get_lang_now()),
-                message: convert_dymstrlist_to_string("语言设置成功。点击确定后会立即刷新。",get_lang_now())
-            });
-            ipcRenderer.send('refreshwindow','');
+            if (os.platform == "win32") {
+                remote.dialog.showMessageBoxSync({
+                    type: 'info',
+                    title: convert_dymstrlist_to_string("设置成功！", get_lang_now()),
+                    message: convert_dymstrlist_to_string("语言设置成功。点击确定后会立即刷新。", get_lang_now())
+                });
+            } else {
+                remote.dialog.showMessageBoxSync({
+                    type: 'info',
+                    title: convert_dymstrlist_to_string("设置成功！", get_lang_now()),
+                    message: convert_dymstrlist_to_string("语言设置成功。点击确定后会立即刷新。", get_lang_now()),
+                    buttons: ['OK']
+                });
+            }
+            ipcRenderer.send('refreshwindow', '');
         }
 
     </script>
