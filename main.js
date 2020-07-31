@@ -794,11 +794,20 @@ ipcMain.on('cleanchangelog', (event, args) => {
     // 被创建数据库名称
     var filename = './DataBase.db';
     fs.writeFileSync(filename, buffer);
+    if (os.platform=="win32"){
     dialog.showMessageBoxSync({
       type: 'info',
       title: i18n.convert_dymstrlist_to_string("清除Changelog完成", i18n.get_lang_now(), 'main.js'),
       message: i18n.convert_dymstrlist_to_string("清除Changelog完成!", i18n.get_lang_now(), 'main.js')
-    })
+    });
+  }else{
+    dialog.showMessageBoxSync({
+      type: 'info',
+      title: i18n.convert_dymstrlist_to_string("清除Changelog完成", i18n.get_lang_now(), 'main.js'),
+      message: i18n.convert_dymstrlist_to_string("清除Changelog完成!", i18n.get_lang_now(), 'main.js'),
+      buttons:['OK']
+    });
+  }
   }).catch(err => {
     console.log(err);
   });
