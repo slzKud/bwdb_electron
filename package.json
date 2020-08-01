@@ -5,7 +5,10 @@
   "scripts": {
     "start": "electron .",
     "startmanage": "electron . --manage",
-    "package": "electron-packager . BetaWorld_Library --platform=win32 --arch=x64 --icon=bwdb.ico --out=./out --app-version=0.0.3 --overwrite"
+    "package": "electron-packager . BetaWorld_Library --platform=win32 --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --overwrite --win32metadata.CompanyName=\"BetaWorld\" --win32metadata.ProductName=\"BetaWorld Library\" --win32metadata.FileDescription=\"BetaWorld Library\" ",
+    "packagelinux": "electron-packager . BetaWorld_Library --platform=linux --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --overwrite",
+    "packagemac": "electron-packager . BetaWorld_Library --platform=darwin --arch=x64 --icon=bwdb.icns --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --overwrite",
+    "zipmac":"electron-installer-zip ./out/BetaWorld_Library-darwin-x64 ./out/BetaWorld_Library-darwin-x64.zip"
   },
   "devDependencies": {
     "electron": "^8.3.0"
@@ -15,6 +18,7 @@
     "electron-prompt": "^1.5.1",
     "jquery": "^3.5.1",
     "jquery-editable-select": "^2.2.5",
-    "sql.js": "^1.2.2"
+    "sql.js": "^1.2.2",
+    "images": "^3.2.2"
   }
 }

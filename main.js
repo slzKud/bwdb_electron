@@ -31,6 +31,7 @@ function createWindow() {
     width: 900,
     height: 600,
     show: false,
+    icon:'./static/img/bwdb_icon.png',
     webPreferences: {
       nodeIntegration: true,
       directWrite: false
@@ -111,6 +112,7 @@ function creategalleryWindow() {
     transparent: true,
     frame: false,
     show: false,
+    icon:'./static/img/bwdb_icon.png',
     webPreferences: {
       nodeIntegration: true,
       directWrite: false
