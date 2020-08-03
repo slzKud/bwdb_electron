@@ -405,6 +405,12 @@
             },
             {
                 "strtype": "title",
+                "ori_text": "以此为模板创建项目",
+                "translate_text": "Create a project using this as a template",
+                "classStr": "nav_btn"
+            },
+            {
+                "strtype": "title",
                 "ori_text": "保存更改",
                 "translate_text": "Save",
                 "classStr": "nav_btn"

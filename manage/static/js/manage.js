@@ -771,6 +771,16 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
             s1 = "url('static/images/no_image_preview.png')";
             $('#main_pic').css('background-image', s1);
             $('.title_bar').html('New Build');
+            break;
+        case "copycat":
+            now_buildid = -1;
+            now_proid = -1;
+            //alert(s[0][9]);
+            $("#screenshotlist").empty();
+            s1 = "url('static/images/no_image_preview.png')";
+            $('#main_pic').css('background-image', s1);
+            $('.title_bar').html('New Build');
+            break;
         case "refresh":
             if (now_buildid != -1) {
                 ipcRenderer.send('getsyslistA', 'ping');
