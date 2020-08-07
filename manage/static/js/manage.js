@@ -336,6 +336,7 @@ function show_search_textbox() {
         $(".bwdb_nav_search").show();
         $(".bw_sidebar_info_box").html(convert_dymstrlist_to_string('按回车键开始搜索', get_lang_now()) + '<br>' + convert_dymstrlist_to_string('单击放大镜按钮以关闭搜索工具。', get_lang_now()))
         $(".bw_sidebar_info_box").show();
+        $('.bwdb_nav_search_text').focus();
         $(".bwdb_sidebarA").hide();
         verflag = 1;
         textflag = 1;
@@ -670,6 +671,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
     $("#stage").val(s[0][1]);
     $("#vername").val(s[0][2]);
     $("#buildtag").val(s[0][6]);
+    $("#biosdate").val(dateFtt('yyyy-MM-dd', s[0][7]));
     $("#biosdate").attr('value', dateFtt('yyyy-MM-dd', s[0][7]));
     $("#arch").val(s[0][3]);
 
