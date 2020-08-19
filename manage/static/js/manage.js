@@ -603,13 +603,15 @@ ipcRenderer.on('newbuildid', function (event, arg) {
         });
     }
     //alert('修改成功');
-    $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
-    $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
-    $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
-    verflag = 0;
-    ipcRenderer.send('getsyslistA', 'ping');
-    ipcRenderer.send('getbuildstage', now_proid);
-    get_build_info(now_proid, now_buildid);
+    if ($('.bw_sidebar_info_box').css('display') == 'none') {
+        $(".search_box_title").html($(".bwdb_select_item[data-id='" + now_proid + "']").html());
+        $(".search_box_title").attr('data-id', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id'));
+        $(".search_box_title").attr('data-id-codename', $(".bwdb_select_item[data-id='" + now_proid + "']").attr('data-id-codename'));
+        verflag = 0;
+        ipcRenderer.send('getsyslistA', 'ping');
+        ipcRenderer.send('getbuildstage', now_proid);
+        get_build_info(now_proid, now_buildid);
+    }
 });
 ipcRenderer.on('delbuildid', function (event, arg) {
     console.log(arg);
