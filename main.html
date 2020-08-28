@@ -49,6 +49,7 @@
         }
         */
         //alert(tmpobj.Name);
+        
         String.prototype.replaceAll = function (s1, s2) {
             return this.replace(new RegExp(s1, "gm"), s2);
         }
@@ -90,6 +91,7 @@
         }
         $(document).ready(function () {
             change_static_element(get_lang_now());
+            $("#vmguide").attr('title',convert_dymstrlist_to_string('打开VMGuide', get_lang_now()));
             now_height = document.documentElement.clientHeight - 55;
             now_width = document.documentElement.clientWidth - 355;
             notice_text = document.documentElement.clientHeight - $('.install_notice_text').offset()['top'] - 25;
@@ -149,6 +151,13 @@
             });
             $(".info_box_items_btn").click(function () {
                 console.log($(this).parent('.info_box_items').children('.info_box_items_text').html());
+                if ($(this).children('.info_box_items_btn_text').attr('id')=="vmguide"){
+                    var s=$(this).parent('.info_box_items').children('.info_box_items_text').html().replace(/;/g, '\n').replace(/,/g, '\n').replace(/\n /g, '\n');
+                    var link = encodeURI("vm-settings://biosdate/"+dateFtt('yyyyMMdd',s));
+                    console.log(link);
+                    shell.openExternal(link);
+                    return 0;
+                }
                 if ($('.bwdb_infobox_textarea').css('display') != 'none') {
                     $('.bwdb_infobox_textarea').hide();
                     $(this).children('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
@@ -877,7 +886,7 @@
                     <div class="info_box_items_title">BIOS日期</div>
                     <div class="info_box_items_text notice_text">16-Bits</div>
                     <div class="info_box_items_btn">
-                        <div class="info_box_items_btn_text"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                        <div class="info_box_items_btn_text" id="vmguide" title="打开VMGuide"><i class="fa fa-arrows-alt" aria-hidden="true"></i></div>
                     </div>
                 </div>
                 <div class="info_box_items" id="install_sn">

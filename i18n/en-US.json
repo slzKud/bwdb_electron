@@ -244,6 +244,10 @@
             {
                 "ori_text": "版本",
                 "translate_text": "SKU"
+            },
+            {
+                "ori_text": "打开VMGuide",
+                "translate_text": "Open VMGuide with This Date"
             }
         ]
     },
