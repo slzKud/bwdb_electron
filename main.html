@@ -755,9 +755,13 @@
             ipcRenderer.send('getbuildinfo', [proid, buildid]);
         }
         function open_wiki_link() {
-            var link = encodeURI('https://wiki.betaworld.org/index.php?search=' + $('.search_box_title').html() + ':' + $("#ver_tag").children('.info_box_items_text').html().replace('#', ''));
+            var link = 'https://wiki.betaworld.org/index.php?search=' + $('.search_box_title').html() + ':' + $("#ver_tag").children('.info_box_items_text').html().replace('#', '');
+            link=link.replace('95:4.0','95:4.00')//适配windows 95
+            link=link.replace('1.0:1.0 ','1.0:')//适配windows 1.0
+            link=link.replace('Windows 3.1:3.1.0','Windows 3.1:3.1.')//适配windows 3.1
+            link=link.replace('3.11:3.11.0','3.11:3.11.')//适配windows 3.11
             console.log(link);
-            shell.openExternal(link);
+            shell.openExternal(encodeURI(link));
         }
         function show_update() {
             //alert($("#check_btn").attr('data-url'));
@@ -886,7 +890,7 @@
                     <div class="info_box_items_title">BIOS日期</div>
                     <div class="info_box_items_text notice_text">16-Bits</div>
                     <div class="info_box_items_btn">
-                        <div class="info_box_items_btn_text" id="vmguide" title="打开VMGuide"><i class="fa fa-arrows-alt" aria-hidden="true"></i></div>
+                        <div class="info_box_items_btn_text" id="vmguide" title="打开VMGuide"><img src="static/img/vmguide_btn.png" style="width: 15px;height: 15px;"></div>
                     </div>
                 </div>
                 <div class="info_box_items" id="install_sn">
