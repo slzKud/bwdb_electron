@@ -849,6 +849,13 @@
                 }    
             }
             link=link.replace(' Core','')//适配windows 8.1 For IOT 和windows 10 IOT
+            
+            if($("#ver_name").html().replace('#', '').indexOf(' v1')!=-1){
+                link=link+"v1";
+            }
+            if($("#ver_name").html().replace('#', '').indexOf(' v2')!=-1){
+                link=link+"v2";
+            }
             console.log(link);
             shell.openExternal(encodeURI(link));
         }
