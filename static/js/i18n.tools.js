@@ -3,6 +3,15 @@ var path = require('path');
 const { dialog } = require("electron");
 const remote1 = require("electron").remote;
 var os = require('os');
+function get_path(){
+    if(os.platform=="darwin"){
+        //是mac
+        return remote1.app.getAppPath();
+    }else{
+        return process.cwd();
+    }
+}
+var appp=get_path();
 function isChn(str) {
     var reg = /^[\u4E00-\u9FA5]+$/;
     if (!reg.test(str)) {
@@ -161,7 +170,7 @@ function get_all_html_element() {
     return (JSON.stringify({ modulename: get_the_filename(), staticlangstr: a }));
 }
 function change_static_element(langcode) {
-    var j = fs1.readFileSync(process.cwd() + "/i18n/" + langcode + ".json").toString();
+    var j = fs1.readFileSync(appp + "/i18n/" + langcode + ".json").toString();
     console.log(j);
     var s1 = JSON.parse(j);
     for (let i = 0; i < s1.length; i++) {
@@ -250,7 +259,7 @@ function change_static_element(langcode) {
     }
 }
 function convert_dymstrlist_to_string(str, langcode) {
-    var j = fs1.readFileSync(process.cwd() + "/i18n/" + langcode + ".json").toString();
+    var j = fs1.readFileSync(appp + "/i18n/" + langcode + ".json").toString();
     var s1 = JSON.parse(j);
     for (let i = 0; i < s1.length; i++) {
         if (s1[i].modulename == get_the_filename()) {
@@ -272,7 +281,7 @@ function convert_dymstrlist_to_string(str, langcode) {
     return str;
 }
 function convert_dymstrlist_to_string_include_array(str, langcode, arr) {
-    var j = fs1.readFileSync(process.cwd() + "/i18n/" + langcode + ".json").toString();
+    var j = fs1.readFileSync(appp + "/i18n/" + langcode + ".json").toString();
     var s2 = JSON.parse(j);
     for (let i = 0; i < s2.length; i++) {
         if (s2[i].modulename == get_the_filename()) {
@@ -316,12 +325,12 @@ function convert_dym_strlist(arr) {
 function get_lang_now() {
     langcode = "";
     try {
-        var j = fs1.readFileSync(process.cwd() + "/settings.json").toString();
+        var j = fs1.readFileSync(appp + "/settings.json").toString();
         var s = JSON.parse(j);
         langcode = s.now_lang;
     } catch{
         langcode = remote1.getGlobal('syslang');
-        if (!fs1.existsSync(process.cwd() + "/i18n/" + langcode + ".json")) {
+        if (!fs1.existsSync(appp + "/i18n/" + langcode + ".json")) {
             langcode = "en-US";
         }
     }
@@ -330,10 +339,10 @@ function get_lang_now() {
 function scan_lang_list() {
     var a = [];
     return new Promise(resolve => {
-        fs1.readdir(process.cwd() + '/i18n', function (err, files) {
+        fs1.readdir(appp + '/i18n', function (err, files) {
             files.forEach(function (filename) {
                 //获取当前文件的绝对路径
-                var filepath = path.join(process.cwd() + '/i18n', filename);
+                var filepath = path.join(appp + '/i18n', filename);
                 if (filepath.indexOf('.json') != -1) {
                     var j = fs1.readFileSync(filepath).toString();
                     var s2 = JSON.parse(j);
@@ -362,13 +371,13 @@ function scan_lang_list() {
 }
 function setlang(langcode) {
     try {
-        var j = fs1.readFileSync(process.cwd() + "/settings.json").toString();
+        var j = fs1.readFileSync(appp + "/settings.json").toString();
         var s = JSON.parse(j);
         s.now_lang = langcode;
-        fs1.writeFileSync(process.cwd() + "/settings.json", JSON.stringify(s));
+        fs1.writeFileSync(appp + "/settings.json", JSON.stringify(s));
     } catch{
         var s = { now_lang: langcode };
-        fs1.writeFileSync(process.cwd() + "/settings.json", JSON.stringify(s));
+        fs1.writeFileSync(appp + "/settings.json", JSON.stringify(s));
     }
 }
 function iswindows(){

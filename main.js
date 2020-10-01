@@ -9,8 +9,9 @@ const { promises } = require('dns');
 const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 const { resourceUsage } = require('process');
 const i18n = require('./static/js/i18n.node');
+var appp=i18n.get_path();
 try {
-  var data = fs.readFileSync('./DataBase.db');
+  var data = fs.readFileSync(appp+'/DataBase.db');
 } catch{
   dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库不存在', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('基本数据库不存在，程序将退出。', i18n.get_lang_now(), 'main.js'));
   app.quit();

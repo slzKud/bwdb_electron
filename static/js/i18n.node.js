@@ -1,8 +1,20 @@
 const fs1 = require("fs");
 const { Module } = require("sql.js/dist/sql-asm");
 const remote1= require("electron").remote;
+const {app}=require("electron");
+const os=require('os');
+
+function get_path(){
+    if(os.platform=="darwin"){
+        //是mac
+        return app.getAppPath();
+    }else{
+        return process.cwd();
+    }
+}
+var appp=get_path();
 function convert_dymstrlist_to_string(str,langcode,modulename){
-    var j = fs1.readFileSync(process.cwd() + "/i18n/" + langcode + ".json").toString();
+    var j = fs1.readFileSync(appp + "/i18n/" + langcode + ".json").toString();
     var s1 = JSON.parse(j);
     for(let i=0;i<s1.length;i++){
         if(s1[i].modulename==modulename){
@@ -24,7 +36,7 @@ function convert_dymstrlist_to_string(str,langcode,modulename){
     return str;
 }
 function convert_dymstrlist_to_string_include_array(str,langcode,modulename,arr){
-    var j = fs1.readFileSync(process.cwd() + "/i18n/" + langcode + ".json").toString();
+    var j = fs1.readFileSync(appp + "/i18n/" + langcode + ".json").toString();
     var s2 = JSON.parse(j);
     for(let i=0;i<s2.length;i++){
         if(s2[i].modulename==modulename){
@@ -56,12 +68,12 @@ function convert_dymstrlist_to_string_include_array(str,langcode,modulename,arr)
 function get_lang_now(){
     langcode="";
     try{
-        var j = fs1.readFileSync(process.cwd() + "/settings.json").toString();
+        var j = fs1.readFileSync(appp + "/settings.json").toString();
         var s = JSON.parse(j);
         langcode=s.now_lang;
     }catch{
         langcode=global.syslang;
-        if(!fs1.existsSync(process.cwd() + "/i18n/" + langcode + ".json")){
+        if(!fs1.existsSync(appp + "/i18n/" + langcode + ".json")){
             langcode="en-US";
         }
     }
@@ -70,5 +82,6 @@ function get_lang_now(){
 module.exports={
     convert_dymstrlist_to_string,
     convert_dymstrlist_to_string_include_array,
-    get_lang_now
+    get_lang_now,
+    get_path
 };
