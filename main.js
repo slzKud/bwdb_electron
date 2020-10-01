@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, MenuItem } = require('electron')
 const ipcMain = require('electron').ipcMain;
 const initSqlJs = require('sql.js/dist/sql-asm');
 const dialog = require('electron').dialog;
@@ -9,10 +9,10 @@ const { promises } = require('dns');
 const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 const { resourceUsage } = require('process');
 const i18n = require('./static/js/i18n.node');
-var appp=i18n.get_path();
+var appp = i18n.get_path();
 try {
-  var data = fs.readFileSync(appp+'/DataBase.db');
-} catch{
+  var data = fs.readFileSync(appp + '/DataBase.db');
+} catch {
   dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库不存在', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('基本数据库不存在，程序将退出。', i18n.get_lang_now(), 'main.js'));
   app.quit();
 }
@@ -25,14 +25,21 @@ var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow;
 var picjson;
 function createWindow() {
   // 创建浏览器窗口
-  Menu.setApplicationMenu(null);
+  if (os.platform != "darwin") {
+    Menu.setApplicationMenu(null);
+  } else {
+    const menu = new Menu();
+    menu.append(new MenuItem({ label: i18n.convert_dymstrlist_to_string('关于', i18n.get_lang_now()), click() { createAboutWindow(); } }));
+    Menu.setApplicationMenu(menu);
+  }
+
   win = new BrowserWindow({
     minHeight: 300,
     minWidth: 600,
     width: 900,
     height: 600,
     show: false,
-    icon:'./static/img/bwdb_icon.png',
+    icon: './static/img/bwdb_icon.png',
     webPreferences: {
       nodeIntegration: true,
       directWrite: false
@@ -113,7 +120,7 @@ function creategalleryWindow() {
     transparent: true,
     frame: false,
     show: false,
-    icon:'./static/img/bwdb_icon.png',
+    icon: './static/img/bwdb_icon.png',
     webPreferences: {
       nodeIntegration: true,
       directWrite: false
@@ -601,7 +608,7 @@ ipcMain.on('closeabout', (event, args) => {
 ipcMain.on('closegallery', (event, args) => {
   try {
     gallerywindow.close();
-  } catch{
+  } catch {
     return -1;
   }
 
@@ -632,7 +639,7 @@ ipcMain.on('editbuild', (event, args) => {
           arr = contents[0].values;
           try {
             resolve(arr[0][0]);
-          } catch{
+          } catch {
             throw new Error('create product error');
           }
         })
@@ -663,7 +670,7 @@ ipcMain.on('editbuild', (event, args) => {
               db.run(sql);
             }
             resolve(arr[0][0]);
-          } catch{
+          } catch {
             throw new Error('product invild');
           }
         })
@@ -693,7 +700,7 @@ ipcMain.on('editbuild', (event, args) => {
           data = db.export();
           try {
             resolve(arr[0][0]);
-          } catch{
+          } catch {
             throw new Error('product invild');
           }
         });
@@ -776,7 +783,7 @@ ipcMain.on('deletebuild', (event, args) => {
     fs.writeFileSync(filename, buffer);
     try {
       fs.unlinkSync(process.cwd() + "/gallery/" + args[1] + ".zip");
-    } catch{
+    } catch {
       console.log('screenshot file invild!');
     }
     win.webContents.send('delbuildid', [1, 1]);
@@ -797,20 +804,20 @@ ipcMain.on('cleanchangelog', (event, args) => {
     // 被创建数据库名称
     var filename = './DataBase.db';
     fs.writeFileSync(filename, buffer);
-    if (os.platform=="win32"){
-    dialog.showMessageBoxSync({
-      type: 'info',
-      title: i18n.convert_dymstrlist_to_string("清除Changelog完成", i18n.get_lang_now(), 'main.js'),
-      message: i18n.convert_dymstrlist_to_string("清除Changelog完成!", i18n.get_lang_now(), 'main.js')
-    });
-  }else{
-    dialog.showMessageBoxSync({
-      type: 'info',
-      title: i18n.convert_dymstrlist_to_string("清除Changelog完成", i18n.get_lang_now(), 'main.js'),
-      message: i18n.convert_dymstrlist_to_string("清除Changelog完成!", i18n.get_lang_now(), 'main.js'),
-      buttons:['OK']
-    });
-  }
+    if (os.platform == "win32") {
+      dialog.showMessageBoxSync({
+        type: 'info',
+        title: i18n.convert_dymstrlist_to_string("清除Changelog完成", i18n.get_lang_now(), 'main.js'),
+        message: i18n.convert_dymstrlist_to_string("清除Changelog完成!", i18n.get_lang_now(), 'main.js')
+      });
+    } else {
+      dialog.showMessageBoxSync({
+        type: 'info',
+        title: i18n.convert_dymstrlist_to_string("清除Changelog完成", i18n.get_lang_now(), 'main.js'),
+        message: i18n.convert_dymstrlist_to_string("清除Changelog完成!", i18n.get_lang_now(), 'main.js'),
+        buttons: ['OK']
+      });
+    }
   }).catch(err => {
     console.log(err);
   });

@@ -29,7 +29,7 @@
         //const os = require("os");
         const { Menu, MenuItem } = remote;
         const menu = new Menu()
-        if (fs.existsSync('./gallery/info.json') == true) {
+        if (fs.existsSync(get_path()+'/gallery/info.json') == true) {
             menu.append(new MenuItem({ label: convert_dymstrlist_to_string('仅显示有截图的Build', get_lang_now()), type: 'checkbox', click() { only_picflag = 1; ipcRenderer.send('getbuildstage', now_proid); } }));
             menu.append(new MenuItem({ type: 'separator' }));
         } else {
