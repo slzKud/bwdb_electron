@@ -3,11 +3,15 @@ const { Module } = require("sql.js/dist/sql-asm");
 const remote1= require("electron").remote;
 const {app}=require("electron");
 const os=require('os');
-
 function get_path(){
     if(os.platform=="darwin"){
         //是mac
-        return app.getAppPath();
+        if(app!=undefined){
+            return app.getAppPath();
+        }else{
+            return remote1.app.getAppPath();
+        }
+        
     }else{
         return process.cwd();
     }

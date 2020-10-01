@@ -410,7 +410,7 @@
             {
                 "strtype": "title",
                 "ori_text": "以此为模板创建项目",
-                "translate_text": "Create a project using this as a template",
+                "translate_text": "Create new Build using this as a template",
                 "classStr": "nav_btn"
             },
             {
@@ -672,6 +672,10 @@
             {
                 "ori_text": "截图名:",
                 "translate_text": "ScreenShot Name:"
+            },
+            {
+                "ori_text": "操作",
+                "translate_text": "Edit"
             }
         ]
     },

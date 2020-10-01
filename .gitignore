@@ -63,3 +63,4 @@ gallery/
 buildgallery.pak
 *.zip
 DataBase.db
+.DS_store

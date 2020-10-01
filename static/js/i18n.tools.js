@@ -277,6 +277,42 @@ function convert_dymstrlist_to_string(str, langcode) {
             return s.dymstr[i].translate_text
         }
     }
+    //加一个静态字符查询
+    for (let i = 0; i < s.staticlangstr.length; i++) {
+        //console.log(s.dymstr[i].ori_text);
+        if (s.staticlangstr[i].ori_text == str) {
+            return s.staticlangstr[i].translate_text
+        }
+    }
+    console.log('找不到：' + str);
+    return str;
+}
+function convert_dymstrlist_to_string_with_mod(str, langcode,modulename) {
+    var j = fs1.readFileSync(appp + "/i18n/" + langcode + ".json").toString();
+    var s1 = JSON.parse(j);
+    for (let i = 0; i < s1.length; i++) {
+        if (s1[i].modulename == modulename) {
+            var s = s1[i];
+            break;
+        }
+    }
+    if (s == undefined) {
+        return str;
+    }
+    //console.log(s);
+    for (let i = 0; i < s.dymstr.length; i++) {
+        //console.log(s.dymstr[i].ori_text);
+        if (s.dymstr[i].ori_text == str) {
+            return s.dymstr[i].translate_text
+        }
+    }
+    //加一个静态字符查询
+    for (let i = 0; i < s.staticlangstr.length; i++) {
+        //console.log(s.dymstr[i].ori_text);
+        if (s.staticlangstr[i].ori_text == str) {
+            return s.staticlangstr[i].translate_text
+        }
+    }
     console.log('找不到：' + str);
     return str;
 }

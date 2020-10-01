@@ -17,6 +17,84 @@ var picdo = require("./moudles/picdo");
 const { now } = require('jquery');
 const prompt = require('electron-prompt');
 const { resolve } = require('path');
+const { app } = require('electron');
+if (process.platform === 'darwin') {
+    const isMac = process.platform === 'darwin'
+
+    const template = [
+        // { role: 'appMenu' }
+        ...(isMac ? [{
+            label: remote.app.name,
+            submenu: [
+                {
+                    label: convert_dymstrlist_to_string('设置', get_lang_now()),
+                    click: async () => {
+                        $('.nav_right_btn .nav_btn[data-do=setting]').click();
+                    }
+                },
+                {
+                    label: convert_dymstrlist_to_string_with_mod('Language', get_lang_now(), 'main.html'),
+                    click: async () => {
+                        ipcRenderer.send('openlangsetting','')
+                    }
+                },
+                {
+                    label: convert_dymstrlist_to_string_with_mod('关于', get_lang_now(), 'main.html') + " BetaWorld Library",
+                    click: async () => {
+                        ipcRenderer.send('openabout','')
+                    }
+                },
+                { role: 'quit' }
+            ]
+        }] : []),
+        {
+            label: convert_dymstrlist_to_string('操作', get_lang_now()),
+            submenu: [
+                {
+                    label: convert_dymstrlist_to_string('新建项目', get_lang_now()),
+                    click: async () => {
+                        $('.nav_right_btn .nav_btn[data-do=new]').click();
+                    }
+                },
+                {
+                    label: convert_dymstrlist_to_string('以此为模板创建项目', get_lang_now()),
+                    click: async () => {
+                        $('.nav_right_btn .nav_btn[data-do=copycat]').click();
+                    }
+                },
+                {
+                    label: convert_dymstrlist_to_string('保存更改', get_lang_now()),
+                    click: async () => {
+                        $('.nav_right_btn .nav_btn[data-do=save]').click();
+                    }
+                },
+                {
+                    label: convert_dymstrlist_to_string('删除此Build', get_lang_now()),
+                    click: async () => {
+                        $('.nav_right_btn .nav_btn[data-do=delete]').click();
+                    }
+                },
+                {
+                    label: convert_dymstrlist_to_string('放弃更改', get_lang_now()),
+                    click: async () => {
+                        $('.nav_right_btn .nav_btn[data-do=ignore]').click();
+                    }
+                },
+                {
+                    label: convert_dymstrlist_to_string('刷新', get_lang_now()),
+                    click: async () => {
+                        $('.nav_right_btn .nav_btn[data-do=refresh]').click();
+                    }
+                }
+            ]
+          }
+    ]
+
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
+} else {
+    Menu.setApplicationMenu(null);
+}
 function get_build_info(proid, buildid) {
     console.log([proid, buildid])
     console.log("clearD" + selectflag);
@@ -81,7 +159,7 @@ function ifzipfileexist(zip, entryname) {
     try {
         var decompressedData = zip.readFile(entryname);
         return 1;
-    } catch{
+    } catch {
         return -1;
     }
 }
@@ -717,7 +795,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
                 showpic(now_buildid, mainpicid);
             }
         }
-    } catch{
+    } catch {
         console.log('nopic');
     }
     //$("#wiki_link").attr(href,'https://wiki.betaworld.org/index.php?search='+s[0][6])

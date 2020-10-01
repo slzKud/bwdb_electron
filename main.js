@@ -24,21 +24,43 @@ String.prototype.myReplace = function (f, e) {//吧f替换成e
 var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow;
 var picjson;
 function createWindow() {
-  // 创建浏览器窗口
-  if (os.platform != "darwin") {
-    Menu.setApplicationMenu(null);
-  } else {
-    const menu = new Menu();
-    menu.append(new MenuItem({ label: i18n.convert_dymstrlist_to_string('关于', i18n.get_lang_now()), click() { createAboutWindow(); } }));
-    Menu.setApplicationMenu(menu);
-  }
+  if (process.platform === 'darwin') {
+    const isMac = process.platform === 'darwin'
 
+    const template = [
+      // { role: 'appMenu' }
+      ...(isMac ? [{
+        label: app.name,
+        submenu: [
+          {
+            label: i18n.convert_dymstrlist_to_string('Language', i18n.get_lang_now(), 'main.html'),
+            click: async () => {
+              createLangSettingWindow();
+            }
+          },
+          {
+            label: i18n.convert_dymstrlist_to_string('关于', i18n.get_lang_now(), 'main.html')+" BetaWorld Library",
+            click: async () => {
+              createAboutWindow();
+            }
+          },
+          { role: 'quit' }
+        ]
+      }] : [])
+    ]
+
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
+  } else {
+    Menu.setApplicationMenu(null);
+  }
+  // 创建浏览器窗口
   win = new BrowserWindow({
     minHeight: 300,
     minWidth: 600,
     width: 900,
     height: 600,
-    show: false,
+    show: true,
     icon: './static/img/bwdb_icon.png',
     webPreferences: {
       nodeIntegration: true,
@@ -139,7 +161,7 @@ function createManageMainWindow() {
     minWidth: 700,
     width: 1009,
     height: 679,
-    show: false,
+    show: true,
     webPreferences: {
       nodeIntegration: true
     }
@@ -148,13 +170,19 @@ function createManageMainWindow() {
 
   // 并且为你的应用加载index.html
   win.loadFile('manage/main.html');
+  win.on("close", function () {
+    win = null;
+    app.quit();
+  });
   if (!app.isPackaged) {
     win.webContents.openDevTools();
   }
   //win.webContents.openDevTools();
 }
 function createManageSettingWindow() {
-  Menu.setApplicationMenu(null);
+  if (os.platform!="darwin"){
+    Menu.setApplicationMenu(null);
+  }
   settingwindow = new BrowserWindow({
     minHeight: 690,
     minWidth: 363,
@@ -170,7 +198,9 @@ function createManageSettingWindow() {
   //settingwindow.webContents.openDevTools();
 }
 function createLangSettingWindow() {
-  Menu.setApplicationMenu(null);
+  if (os.platform!="darwin"){
+    Menu.setApplicationMenu(null);
+  }
   langwindow = new BrowserWindow({
     width: 325,
     height: 400,
