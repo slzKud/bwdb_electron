@@ -224,6 +224,10 @@ function app_ready_do() {
     createWindow();
   }
   global.syslang = app.getLocale();
+  if(os.platform=="darwin"){
+    app.dock.setIcon(appp+"/static/img/bwdb_icon.png");
+  }
+  
 }
 app.whenReady().then(app_ready_do)
 
