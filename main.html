@@ -158,6 +158,10 @@
             $(".info_box_items_btn").click(function () {
                 console.log($(this).parent('.info_box_items').children('.info_box_items_text').html());
                 if ($(this).children('.info_box_items_btn_text').attr('id') == "vmguide") {
+                    if(os.platform=="darwin"){
+                        alert(convert_dymstrlist_to_string("VMGuide暂不可用。", get_lang_now()));
+                        return(-1);
+                    }
                     var s = $(this).parent('.info_box_items').children('.info_box_items_text').html().replace(/;/g, '\n').replace(/,/g, '\n').replace(/\n /g, '\n');
                     var link = encodeURI("vm-settings://biosdate/" + dateFtt('yyyyMMdd', s));
                     console.log(link);

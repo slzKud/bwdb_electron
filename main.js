@@ -32,8 +32,8 @@ var picjson;
 function createWindow() {
   if (process.platform === 'darwin') {
     const isMac = process.platform === 'darwin'
-    if(fs.existsSync(appp+"/manage")){
-      const template = [
+    if (fs.existsSync(appp + "/manage")) {
+      template = [
         // { role: 'appMenu' }
         ...(isMac ? [{
           label: app.name,
@@ -41,7 +41,8 @@ function createWindow() {
             {
               label: i18n.convert_dymstrlist_to_string('切换至数据库编辑模式', i18n.get_lang_now(), 'main.html'),
               click: async () => {
-                createLangSettingWindow();
+                app.relaunch({ args: [".", "--manage"] })
+                app.exit(0)
               }
             },
             {
@@ -60,8 +61,8 @@ function createWindow() {
           ]
         }] : [])
       ]
-    }else{
-      const template = [
+    } else {
+      template = [
         // { role: 'appMenu' }
         ...(isMac ? [{
           label: app.name,
@@ -83,7 +84,7 @@ function createWindow() {
         }] : [])
       ]
     }
-    
+
 
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
@@ -171,19 +172,37 @@ function creategalleryWindow() {
     gallerywindow.show();
     return -1;
   }
-  gallerywindow = new BrowserWindow({
-    width: 750,
-    height: 650,
-    resizable: true,
-    transparent: true,
-    frame: false,
-    show: false,
-    icon: './static/img/bwdb_icon.png',
-    webPreferences: {
-      nodeIntegration: true,
-      directWrite: false
-    }
-  });
+  if(os.platform!="darwin"){
+    gallerywindow = new BrowserWindow({
+      width: 750,
+      height: 650,
+      resizable: true,
+      transparent: true,
+      frame: false,
+      show: false,
+      icon: './static/img/bwdb_icon.png',
+      webPreferences: {
+        nodeIntegration: true,
+        directWrite: false
+      }
+    });
+  }else{
+    gallerywindow = new BrowserWindow({
+      width: 750,
+      height: 650,
+      resizable: true,
+      transparent: true,
+      titleBarStyle:"hidden",
+      maximizable:false,
+      show: false,
+      icon: './static/img/bwdb_icon.png',
+      webPreferences: {
+        nodeIntegration: true,
+        directWrite: false
+      }
+    });
+  }
+  
   gallerywindow.loadFile('gallery.html');
   //gallerywindow.webContents.openDevTools();
   gallerywindow.on("close", function () {
@@ -951,7 +970,7 @@ ipcMain.on('refreshwindow', (event, args) => {
 ipcMain.on('reload', (event, args) => {
   console.log(args);
   if (args == "manage") {
-    app.relaunch({ args: [".","--manage"] })
+    app.relaunch({ args: [".", "--manage"] })
     app.exit(0)
   }
   if (args == "view") {
