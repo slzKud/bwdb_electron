@@ -18,7 +18,6 @@ const { now } = require('jquery');
 const prompt = require('electron-prompt');
 const { resolve } = require('path');
 const { app } = require('electron');
-const { join_path } = require('../../../static/js/i18n.node');
 if (process.platform === 'darwin') {
     const isMac = process.platform === 'darwin'
 

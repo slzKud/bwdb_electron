@@ -10,9 +10,9 @@ const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 const { resourceUsage } = require('process');
 const i18n = require('./static/js/i18n.node');
 var appp = i18n.get_path();
-v=i18n.join_path('DataBase.db');
-if(os.platform=="darwin"){
-  if(v.indexOf('.app/')!=-1){
+v = i18n.join_path('DataBase.db');
+if (os.platform == "darwin") {
+  if (v.indexOf('.app/') != -1) {
     dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库路径提醒', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('所使用的基本数据库是内置在程序的Lite版本，一些功能可能只在本地App生效。请手动复制数据库文件到与应用程序同级到文件夹中。', i18n.get_lang_now(), 'main.js'));
   }
 }
@@ -32,28 +32,58 @@ var picjson;
 function createWindow() {
   if (process.platform === 'darwin') {
     const isMac = process.platform === 'darwin'
-
-    const template = [
-      // { role: 'appMenu' }
-      ...(isMac ? [{
-        label: app.name,
-        submenu: [
-          {
-            label: i18n.convert_dymstrlist_to_string('Language', i18n.get_lang_now(), 'main.html'),
-            click: async () => {
-              createLangSettingWindow();
-            }
-          },
-          {
-            label: i18n.convert_dymstrlist_to_string('关于', i18n.get_lang_now(), 'main.html')+" BetaWorld Library",
-            click: async () => {
-              createAboutWindow();
-            }
-          },
-          { role: 'quit' }
-        ]
-      }] : [])
-    ]
+    if(fs.existsSync(appp+"/manage")){
+      const template = [
+        // { role: 'appMenu' }
+        ...(isMac ? [{
+          label: app.name,
+          submenu: [
+            {
+              label: i18n.convert_dymstrlist_to_string('切换至数据库编辑模式', i18n.get_lang_now(), 'main.html'),
+              click: async () => {
+                createLangSettingWindow();
+              }
+            },
+            {
+              label: i18n.convert_dymstrlist_to_string('Language', i18n.get_lang_now(), 'main.html'),
+              click: async () => {
+                createLangSettingWindow();
+              }
+            },
+            {
+              label: i18n.convert_dymstrlist_to_string('关于', i18n.get_lang_now(), 'main.html') + " BetaWorld Library",
+              click: async () => {
+                createAboutWindow();
+              }
+            },
+            { role: 'quit' }
+          ]
+        }] : [])
+      ]
+    }else{
+      const template = [
+        // { role: 'appMenu' }
+        ...(isMac ? [{
+          label: app.name,
+          submenu: [
+            {
+              label: i18n.convert_dymstrlist_to_string('Language', i18n.get_lang_now(), 'main.html'),
+              click: async () => {
+                createLangSettingWindow();
+              }
+            },
+            {
+              label: i18n.convert_dymstrlist_to_string('关于', i18n.get_lang_now(), 'main.html') + " BetaWorld Library",
+              click: async () => {
+                createAboutWindow();
+              }
+            },
+            { role: 'quit' }
+          ]
+        }] : [])
+      ]
+    }
+    
 
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
@@ -186,7 +216,7 @@ function createManageMainWindow() {
   //win.webContents.openDevTools();
 }
 function createManageSettingWindow() {
-  if (os.platform!="darwin"){
+  if (os.platform != "darwin") {
     Menu.setApplicationMenu(null);
   }
   settingwindow = new BrowserWindow({
@@ -204,7 +234,7 @@ function createManageSettingWindow() {
   //settingwindow.webContents.openDevTools();
 }
 function createLangSettingWindow() {
-  if (os.platform!="darwin"){
+  if (os.platform != "darwin") {
     Menu.setApplicationMenu(null);
   }
   langwindow = new BrowserWindow({
@@ -230,10 +260,10 @@ function app_ready_do() {
     createWindow();
   }
   global.syslang = app.getLocale();
-  if(os.platform=="darwin"){
-    app.dock.setIcon(appp+"/static/img/bwdb_icon.png");
+  if (os.platform == "darwin") {
+    app.dock.setIcon(appp + "/static/img/bwdb_icon.png");
   }
-  
+
 }
 app.whenReady().then(app_ready_do)
 
@@ -917,4 +947,15 @@ ipcMain.on('refreshwindow', (event, args) => {
   }
   langwindow.close();
 
+});
+ipcMain.on('reload', (event, args) => {
+  console.log(args);
+  if (args == "manage") {
+    app.relaunch({ args: [".","--manage"] })
+    app.exit(0)
+  }
+  if (args == "view") {
+    app.relaunch({ args: ["."] })
+    app.exit(0)
+  }
 });

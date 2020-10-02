@@ -31,11 +31,14 @@
         const menu = new Menu()
         if (fs.existsSync(join_path('gallery/info.json')) == true) {
             menu.append(new MenuItem({ label: convert_dymstrlist_to_string('仅显示有截图的Build', get_lang_now()), type: 'checkbox', click() { only_picflag = 1; ipcRenderer.send('getbuildstage', now_proid); } }));
-            //menu.append(new MenuItem({ type: 'separator' }));
+            menu.append(new MenuItem({ type: 'separator' }));
         } else {
             $('title').html('BetaWorld Library Lite')
         }
-
+        if(fs.existsSync(get_path()+"/manage")){
+            menu.append(new MenuItem({ label: convert_dymstrlist_to_string('切换至数据库编辑模式', get_lang_now()), click() {ipcRenderer.send('reload', 'manage');} }));
+            menu.append(new MenuItem({ type: 'separator' }));
+        }
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string('Language', get_lang_now()), click() { ipcRenderer.send('openlangsetting', ''); } }));
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string('关于', get_lang_now()), click() { ipcRenderer.send('openabout', ''); } }));
         if (os.platform == "darwin") {
