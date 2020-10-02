@@ -10,8 +10,14 @@ const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 const { resourceUsage } = require('process');
 const i18n = require('./static/js/i18n.node');
 var appp = i18n.get_path();
+v=i18n.join_path('DataBase.db');
+if(os.platform=="darwin"){
+  if(v.indexOf('.app/')!=-1){
+    dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库路径提醒', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('所使用的基本数据库是内置在程序的Lite版本，一些功能可能只在本地App生效。请手动复制数据库文件到与应用程序同级到文件夹中。', i18n.get_lang_now(), 'main.js'));
+  }
+}
 try {
-  var data = fs.readFileSync(appp + '/DataBase.db');
+  var data = fs.readFileSync(i18n.join_path('DataBase.db'));
 } catch {
   dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库不存在', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('基本数据库不存在，程序将退出。', i18n.get_lang_now(), 'main.js'));
   app.quit();
@@ -783,7 +789,7 @@ ipcMain.on('editbuild', (event, args) => {
   }).then(val => {
     var buffer = Buffer.from(data, 'binary');
     // 被创建数据库名称
-    var filename = './DataBase.db';
+    var filename = i18n.join_path('DataBase.db');
     fs.writeFileSync(filename, buffer);
     win.webContents.send('newbuildid', [proid, buildid]);
   }).catch(err => {
@@ -813,7 +819,7 @@ ipcMain.on('deletebuild', (event, args) => {
   }).then(val => {
     var buffer = Buffer.from(data, 'binary');
     // 被创建数据库名称
-    var filename = './DataBase.db';
+    var filename = i18n.join_path('DataBase.db');
     fs.writeFileSync(filename, buffer);
     try {
       fs.unlinkSync(process.cwd() + "/gallery/" + args[1] + ".zip");
@@ -836,7 +842,7 @@ ipcMain.on('cleanchangelog', (event, args) => {
   }).then(val => {
     var buffer = Buffer.from(data, 'binary');
     // 被创建数据库名称
-    var filename = './DataBase.db';
+    var filename = i18n.join_path('DataBase.db');
     fs.writeFileSync(filename, buffer);
     if (os.platform == "win32") {
       dialog.showMessageBoxSync({
@@ -879,7 +885,7 @@ ipcMain.on('changeversion', (event, args) => {
   }).then(val => {
     var buffer = Buffer.from(data, 'binary');
     // 被创建数据库名称
-    var filename = './DataBase.db';
+    var filename = i18n.join_path('DataBase.db');
     fs.writeFileSync(filename, buffer);
     if (os.platform == "win32") {
       dialog.showMessageBoxSync({

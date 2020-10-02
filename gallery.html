@@ -287,7 +287,7 @@
       if (picid >= s.screenshot.length) {
         picid = 0;
       }
-      zip = new AdmZip("./gallery/" + buildid + ".zip");
+      zip = new AdmZip(join_path("gallery/" + buildid + ".zip"));
       //设置主图
       try {
         var decompressedData = zip.readFile(s.screenshot[picid].screenshothash + ".png");
@@ -472,7 +472,7 @@
       s = JSON.parse(arg);
       buildid = s.buildid;
       mainpic = s.main_pic;
-      zip = new AdmZip("./gallery/" + buildid + ".zip");
+      zip = new AdmZip(join_path("gallery/" + buildid + ".zip"));
       //设置主图
       try {
         var decompressedData = zip.readFile(s.screenshot[mainpic].screenshothash + ".png");

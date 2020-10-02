@@ -18,6 +18,7 @@ const { now } = require('jquery');
 const prompt = require('electron-prompt');
 const { resolve } = require('path');
 const { app } = require('electron');
+const { join_path } = require('../../../static/js/i18n.node');
 if (process.platform === 'darwin') {
     const isMac = process.platform === 'darwin'
 
@@ -115,7 +116,7 @@ function getpar_height(sel) {
     return w;
 }
 function loadpic(buildid, picid) {
-    zip = new AdmZip(process.cwd() + "/gallery/" + buildid + ".zip");
+    zip = new AdmZip(join_path("gallery/" + buildid + ".zip"));
     //设置主图
     var info = zip.readAsText("pic.json");
     console.log(info);
@@ -528,7 +529,7 @@ function make_screen_zip(buildid) {
         zip_new.addFile($(this).attr('data-pic-hash') + ".png", d, $(this).attr('data-pic-hash') + ".png");
     });
     zip_new.addFile("pic.json", Buffer.alloc(picjson.length, picjson), "pic.json");
-    zip_new.writeZip(process.cwd() + "/gallery/" + buildid + ".zip");
+    zip_new.writeZip(join_path("gallery/" + buildid + ".zip"));
     zip_new = null;
 }
 ipcRenderer.on('syslist', function (event, arg) {
@@ -776,7 +777,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
     $("#FixEN").val(s[0][10]);
     $("#screenshotlist").empty();
     try {
-        zip = new AdmZip(process.cwd() + "/gallery/" + now_buildid + ".zip");
+        zip = new AdmZip(join_path("gallery/"+ now_buildid + ".zip"));
         if (ifzipfileexist(zip, 'pic.json') == 1) {
             var info = zip.readAsText("pic.json");
             console.log(info);

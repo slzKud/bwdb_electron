@@ -11,6 +11,27 @@ function get_path(){
         return process.cwd();
     }
 }
+function join_path(filename){
+    ap=get_path();
+    if(os.platform=="darwin"){
+        if(ap.indexOf(".app")==-1){
+            return ap+"/"+filename;
+        }else{
+            v=ap.lastIndexOf(".app");
+            v1=ap.substring(0,v+4);
+            v2=v1.lastIndexOf("/");
+            v3=v1.substring(0,v2);
+            if(fs1.existsSync(v3+"/"+filename)){
+                return v3+"/"+filename;
+            }else{
+                return ap+"/"+filename;
+            }
+        }
+    }else{
+        return ap+"/"+filename;
+    }
+    
+}
 var appp=get_path();
 function isChn(str) {
     var reg = /^[\u4E00-\u9FA5]+$/;

@@ -29,7 +29,7 @@
         //const os = require("os");
         const { Menu, MenuItem } = remote;
         const menu = new Menu()
-        if (fs.existsSync(get_path() + '/gallery/info.json') == true) {
+        if (fs.existsSync(join_path('gallery/info.json')) == true) {
             menu.append(new MenuItem({ label: convert_dymstrlist_to_string('仅显示有截图的Build', get_lang_now()), type: 'checkbox', click() { only_picflag = 1; ipcRenderer.send('getbuildstage', now_proid); } }));
             //menu.append(new MenuItem({ type: 'separator' }));
         } else {
@@ -458,7 +458,7 @@
             console.log($('#main_pic').attr('class'));
             if ($('#main_pic').attr('class') == 'info_box_pics have_pic') {
                 console.log('a');
-                var zip = new AdmZip("./gallery/" + now_buildid + ".zip");
+                var zip = new AdmZip(join_path("gallery/" + now_buildid + ".zip"));
                 if (ifzipfileexist(zip, 'pic.json') == 1) {
                     var info = zip.readAsText("pic.json");
                     if (info != "") {
@@ -536,7 +536,7 @@
             $("[data-type='build_stage'][data-id='" + arg[1] + "']").html('');
             for (var i = 0; i < s.length; i++) {
                 if (only_picflag == 1) {
-                    if (fs.existsSync("./gallery/" + s[i][0] + ".zip")) {
+                    if (fs.existsSync(join_path("gallery/" + s[i][0] + ".zip"))) {
                         //如果图片存在
                         console.log(s[i]);
                         $("[data-type='build_stage'][data-id='" + arg[1] + "']").append('<div class="sidebar_ver bwdb_sidebar_item" data-id="' + s[i][0] + '" data-type="build_item">' + s[i][1] + '</div>');
@@ -604,7 +604,7 @@
             hide_pic();
             picflag = 1;
             try {
-                zip = new AdmZip("./gallery/" + now_buildid + ".zip");
+                zip = new AdmZip(join_path("gallery/" + now_buildid + ".zip"));
                 if (ifzipfileexist(zip, 'pic.json') == 1) {
                     var info = zip.readAsText("pic.json");
                     console.log(info);
@@ -711,8 +711,8 @@
             $("#basedb_version").html(convert_dymstrlist_to_string_include_array('基础数据库版本：V%1,更新于%2。', get_lang_now(), [s[0][0], s[0][1]]));
             //alert(s[0][2]);
             $("#check_btn").attr('data-url', s[0][2]);
-            if (fs.existsSync('./gallery/info.json') == true) {
-                var data = fs.readFileSync('./gallery/info.json');
+            if (fs.existsSync(join_path('gallery/info.json')) == true) {
+                var data = fs.readFileSync(join_path('gallery/info.json'));
                 var info = data.toString();
                 if (info != "") {
                     var s1 = JSON.parse(info);
