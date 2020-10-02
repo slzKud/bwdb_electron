@@ -79,6 +79,14 @@
             {
                 "ori_text": "你已经打开了一个截图阅览器，请关闭后重试。",
                 "translate_text": "You have opened a screenshot viewer, please close it and try again."
+            },
+            {
+                "ori_text": "使用的基本数据库是内置在程序的Lite版本，一些功能可能只在本地App生效。请手动复制数据库文件到与应用程序同级的文件夹中。",
+                "translate_text": "The basic database is the Lite version built into the program, and some functions may only take effect in the local App. Please copy the database file to a folder at the same level as the application manually."
+            },
+            {
+                "ori_text": "基本数据库路径提醒",
+                "translate_text": "Notice"
             }
         ]
     },
@@ -256,14 +264,6 @@
             {
                 "ori_text": "切换至数据库编辑模式",
                 "translate_text": "Switch to Database Manage"
-            },
-            {
-                "ori_text": "使用的基本数据库是内置在程序的Lite版本，一些功能可能只在本地App生效。请手动复制数据库文件到与应用程序同级到文件夹中。",
-                "translate_text": "The basic database is the Lite version built into the program, and some functions may only take effect in the local App. Please copy the database file to a folder at the same level as the application manually."
-            },
-            {
-                "ori_text": "基本数据库路径提醒",
-                "translate_text": "Notice"
             }
         ]
     },

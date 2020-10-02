@@ -97,7 +97,7 @@ function createWindow() {
     minWidth: 600,
     width: 900,
     height: 600,
-    show: true,
+    show: false,
     icon: './static/img/bwdb_icon.png',
     webPreferences: {
       nodeIntegration: true,

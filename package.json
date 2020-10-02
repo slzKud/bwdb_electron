@@ -5,12 +5,12 @@
   "scripts": {
     "start": "electron .",
     "startmanage": "electron . --manage",
-    "package": "electron-packager . BetaWorld_Library --platform=win32 --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --overwrite --win32metadata.CompanyName=\"BetaWorld\" --win32metadata.ProductName=\"BetaWorld Library\" --win32metadata.FileDescription=\"BetaWorld Library\" --ignore=\"(gallery)\" ",
-    "packagelinux": "electron-packager . BetaWorld_Library --platform=linux --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --ignore=\"(gallery)\" --overwrite",
-    "packagemac": "electron-packager . BetaWorld_Library --platform=darwin --arch=x64 --icon=./bwdb.icns --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --ignore=\"(gallery)\" --overwrite",
-    "package_nonmanage": "electron-packager . BetaWorld_Library --platform=win32 --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --overwrite --win32metadata.CompanyName=\"BetaWorld\" --win32metadata.ProductName=\"BetaWorld Library\" --win32metadata.FileDescription=\"BetaWorld Library\" --ignore=\"(gallery|manage)\" ",
-    "packagelinux_nonmanage": "electron-packager . BetaWorld_Library --platform=linux --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --ignore=\"(gallery|manage)\" --overwrite",
-    "packagemac_nonmanage": "electron-packager . BetaWorld_Library --platform=darwin --arch=x64 --icon=./bwdb.icns --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --ignore=\"(gallery|manage)\" --overwrite",
+    "package": "electron-packager . BetaWorld_Library --platform=win32 --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --overwrite --win32metadata.CompanyName=\"BetaWorld\" --win32metadata.ProductName=\"BetaWorld Library\" --win32metadata.FileDescription=\"BetaWorld Library\" --ignore=\"(gallery/)\" ",
+    "packagelinux": "electron-packager . BetaWorld_Library --platform=linux --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --ignore=\"(gallery/)\" --overwrite",
+    "packagemac": "electron-packager . BetaWorld_Library --platform=darwin --arch=x64 --icon=./bwdb.icns --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --ignore=\"(gallery/)\" --overwrite",
+    "package_nonmanage": "electron-packager . BetaWorld_Library --platform=win32 --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --overwrite --win32metadata.CompanyName=\"BetaWorld\" --win32metadata.ProductName=\"BetaWorld Library\" --win32metadata.FileDescription=\"BetaWorld Library\" --ignore=\"(gallery/|manage)\" ",
+    "packagelinux_nonmanage": "electron-packager . BetaWorld_Library --platform=linux --arch=x64 --icon=bwdb.ico --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --ignore=\"(gallery/|manage)\" --overwrite",
+    "packagemac_nonmanage": "electron-packager . BetaWorld_Library --platform=darwin --arch=x64 --icon=./bwdb.icns --out=./out --app-version=12.0.6 --app-copyright=\"Copyright(c) 2020 BetaWorld\" --ignore=\"(gallery/|manage)\" --overwrite",
     "zipmac":"electron-installer-zip ./out/BetaWorld_Library-darwin-x64 ./out/BetaWorld_Library-darwin-x64.zip"
   },
   "devDependencies": {
