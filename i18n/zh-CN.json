@@ -79,6 +79,14 @@
             {
                 "ori_text": "你已经打开了一个截图阅览器，请关闭后重试。",
                 "translate_text": "你已经打开了一个截图阅览器，请关闭后重试。"
+            },
+            {
+                "ori_text": "使用的基本数据库是内置在程序的Lite版本，一些功能可能只在本地App生效。请手动复制数据库文件到与应用程序同级到文件夹中。",
+                "translate_text": "使用的基本数据库是内置在程序的Lite版本，一些功能可能只在本地App生效。请手动复制数据库文件到与应用程序同级到文件夹中。"
+            },
+            {
+                "ori_text": "基本数据库路径提醒",
+                "translate_text": "基本数据库路径提醒"
             }
         ]
     },
@@ -248,6 +256,14 @@
             {
                 "ori_text": "打开VMGuide",
                 "translate_text": "打开VMGuide"
+            },
+            {
+                "ori_text": "VMGuide暂不可用。",
+                "translate_text": "VMGuide暂不可用。"
+            },
+            {
+                "ori_text": "切换至数据库编辑模式",
+                "translate_text": "切换至数据库编辑模式"
             }
         ]
     },

@@ -13,7 +13,7 @@ var appp = i18n.get_path();
 v = i18n.join_path('DataBase.db');
 if (os.platform == "darwin") {
   if (v.indexOf('.app/') != -1) {
-    dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库路径提醒', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('所使用的基本数据库是内置在程序的Lite版本，一些功能可能只在本地App生效。请手动复制数据库文件到与应用程序同级到文件夹中。', i18n.get_lang_now(), 'main.js'));
+    dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库路径提醒', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('使用的基本数据库是内置在程序的Lite版本，一些功能可能只在本地App生效。请手动复制数据库文件到与应用程序同级的文件夹中。', i18n.get_lang_now(), 'main.js'));
   }
 }
 try {
