@@ -379,6 +379,10 @@
             {
                 "ori_text": "你输入的比例无效",
                 "translate_text": "The zoom ratio you entered is invalid."
+            },
+            {
+                "ori_text": "操作",
+                "translate_text": "Tools"
             }
         ]
     },

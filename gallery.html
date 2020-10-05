@@ -188,13 +188,7 @@
         // { role: 'appMenu' }
         ...(isMac ? [{
           label: remote.app.name,
-          submenu: [
-            {
-              label: convert_dymstrlist_to_string('设置', get_lang_now()),
-              click: async () => {
-                $('.nav_right_btn .nav_btn[data-do=setting]').click();
-              }
-            },
+          submenu:[
             {
               label: convert_dymstrlist_to_string_with_mod('Language', get_lang_now(), 'main.html'),
               click: async () => {
