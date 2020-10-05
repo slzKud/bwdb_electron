@@ -29,7 +29,7 @@ String.prototype.myReplace = function (f, e) {//吧f替换成e
 ////console.log(db);
 var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow;
 var picjson;
-function createWindow() {
+function set_app_menu() {
   if (process.platform === 'darwin') {
     const isMac = process.platform === 'darwin'
     if (fs.existsSync(appp + "/manage")) {
@@ -91,6 +91,9 @@ function createWindow() {
   } else {
     Menu.setApplicationMenu(null);
   }
+}
+function createWindow() {
+  set_app_menu();
   // 创建浏览器窗口
   win = new BrowserWindow({
     minHeight: 300,
@@ -172,7 +175,7 @@ function creategalleryWindow() {
     gallerywindow.show();
     return -1;
   }
-  if(os.platform!="darwin"){
+  if (os.platform != "darwin") {
     gallerywindow = new BrowserWindow({
       width: 750,
       height: 650,
@@ -186,14 +189,14 @@ function creategalleryWindow() {
         directWrite: false
       }
     });
-  }else{
+  } else {
     gallerywindow = new BrowserWindow({
       width: 750,
       height: 650,
       resizable: true,
       transparent: true,
-      titleBarStyle:"hidden",
-      maximizable:false,
+      titleBarStyle: "hidden",
+      maximizable: false,
       show: false,
       icon: './static/img/bwdb_icon.png',
       webPreferences: {
@@ -202,10 +205,11 @@ function creategalleryWindow() {
       }
     });
   }
-  
+
   gallerywindow.loadFile('gallery.html');
   //gallerywindow.webContents.openDevTools();
   gallerywindow.on("close", function () {
+    set_app_menu();
     gallerywindow = null;
   });
 }
