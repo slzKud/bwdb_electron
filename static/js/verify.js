@@ -15,10 +15,11 @@ function filetosha256sync(file){
     return s256;
 }
 function filetosha256(data){
-    const dataBuffer = data; 
+    dataBuffer = data; 
     const hash=crypto.createHash('sha256');
     hash.update(dataBuffer,'utf8');
     const md5=hash.digest('hex');
+    dataBuffer=null;
     return(md5);
 }
 async function makesha256list(path1,callback){
@@ -29,7 +30,7 @@ async function makesha256list(path1,callback){
                 //获取当前文件的绝对路径
                 var filepath = path.join(path1, filename);
                 var s256 = filetosha256sync(filepath);
-                var a1 = { "filename": getFileName(filename), "sha256": s256, "modifydate": "" };
+                var a1 = { "filename": filename, "sha256": s256, "modifydate": "" };
                 console.log(a1);
                 callback(a1);
                 //a.push(a1);
