@@ -9,6 +9,7 @@ const { promises } = require('dns');
 const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 const { resourceUsage } = require('process');
 const i18n = require('./static/js/i18n.node');
+const v1 = require('./static/js/verify');
 var appp = i18n.get_path();
 v = i18n.join_path('DataBase.db');
 if (os.platform == "darwin") {
@@ -27,7 +28,7 @@ String.prototype.myReplace = function (f, e) {//吧f替换成e
   return this.replace(reg, e);
 }
 ////console.log(db);
-var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow;
+var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow,workerwindow;
 var picjson;
 function set_app_menu() {
   if (process.platform === 'darwin') {
@@ -706,6 +707,14 @@ ipcMain.on('closegallery', (event, args) => {
   }
 
 });
+ipcMain.on('closeworker', (event, args) => {
+  try {
+    workerwindow.close();
+  } catch {
+    return -1;
+  }
+
+});
 //管理界面的IPC部分
 ipcMain.on('editbuild', (event, args) => {
   var s = args;
@@ -981,4 +990,28 @@ ipcMain.on('reload', (event, args) => {
     app.relaunch({ args: ["."] })
     app.exit(0)
   }
+});
+ipcMain.on('msgfoward', (event, args) => {
+  win.webContents.send('log',args);
+});
+ipcMain.on('getsha256list', (event, args) => {
+  workerwindow = new BrowserWindow({
+    minHeight: 300,
+    minWidth: 600,
+    width: 900,
+    height: 600,
+    show:true,
+    webPreferences: {
+      nodeIntegration: true,
+      directWrite: false
+    }
+  });
+  if (!app.isPackaged) {
+    workerwindow.webContents.openDevTools();
+  }
+  // 并且为你的应用加载index.html
+  workerwindow.loadFile('worker.html');
+  workerwindow.on("close", function () {
+    workerwindow = null;
+  });
 });

@@ -747,6 +747,9 @@
                 $('#update_list').append(things_html);
             }
         });
+        ipcRenderer.on('log', function (event, arg) {
+            console.log(arg);
+        });
         function test1() {
             //var decompressedData = zip.readFile("1/1.png");
             //console.log(zip.readAsText("1/pic.json")); 

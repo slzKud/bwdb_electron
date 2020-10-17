@@ -31,7 +31,6 @@ function base642hash(base64str){
   hash.update(dataBuffer,'utf8');
   const md5=hash.digest('hex');
   return(md5);
-
 }
 module.exports={
   openOpenDialog,
