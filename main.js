@@ -279,8 +279,8 @@ function createHashSettingWindow() {
     Menu.setApplicationMenu(null);
   }
   hashwindow = new BrowserWindow({
-    width: 325,
-    height: 400,
+    width: 450,
+    height: 350,
     resizable: true,
     maximizable: true,
     show: true,

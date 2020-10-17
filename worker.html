@@ -9,6 +9,7 @@
     }
     window.onload=function(){
         v1.makesha256list(join_path('gallery'),c).then(val=>{
+            ipcRenderer.send('msgfoward',{"obj":"hash","msgname":"hashover","msg":""});
             ipcRenderer.send('closeworker','worker')
         });
     }

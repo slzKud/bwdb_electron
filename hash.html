@@ -35,6 +35,7 @@
             sfn=0;
             $('.tablelist').html('');
             $('.progress-bar').attr('style','width:0%');
+            $('#statustext').html('正在生成文件列表....');
             ipcRenderer.send('getsha256list','');
         }
         $(document).ready(function () {
@@ -51,11 +52,15 @@
                     sfn=sfn+1;
                     p=parseInt(sfn/fn*100);
                     console.log(p)
+                    $('#statustext').html('正在生成文件列表....'+p+"%");
                     $('.progress-bar').attr('style','width:'+p+"%");
                     s = '<div class="jc-items"><div class="jc-icon correct"><i class="fa fa-file" aria-hidden="true"></i></div><div class="jc-filename correct">filenamestr</div><div class="jc-filestatus correct">statustext</div></div>';
                     s = s.replace('filenamestr', arg.msg.filename);
                     s = s.replace('statustext', arg.msg.sha256);
                     $('.tablelist').append(s);
+                }
+                if (arg.msgname == "hashover") {
+                    $('#statustext').html('生成文件列表完成，正在比对....');
                 }
             }
         });
