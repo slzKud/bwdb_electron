@@ -13,10 +13,11 @@
     <script>
         const ipcRenderer = require('electron').ipcRenderer;
         const remote = require('electron').remote;
-        const fs=require('fs');
-        var fn=0;
-        var sfn=0;
-        var p=0;
+        const fs = require('fs');
+        var fn = 0;
+        var sfn = 0;
+        var p = 0;
+        var a = [];
         function getfilenum(path1) {
             var a = 0;
             return new Promise(resolve => {
@@ -31,36 +32,99 @@
                 return (a);
             });
         }
-        function dosomething(){
-            sfn=0;
+        function dosomething() {
+            sfn = 0;
             $('.tablelist').html('');
-            $('.progress-bar').attr('style','width:0%');
+            $('.progress-bar').attr('style', 'width:0%');
             $('#statustext').html('正在生成文件列表....');
-            ipcRenderer.send('getsha256list','');
+            ipcRenderer.send('getsha256list', '');
+        }
+        function findbyfilename(filename) {
+            return a.find(function (x) { return x.filename == filename; })
+        }
+        function push_json() {
+            var path1 = remote.dialog.showSaveDialogSync({
+                title: convert_dymstrlist_to_string("请选择要导出的JSON：", get_lang_now(), 'main.js'),
+                properties: ['showOverwriteConfirmation'],
+                filters: [
+                    { name: convert_dymstrlist_to_string('JSON', get_lang_now(), 'main.js'), extensions: ['json'] }
+                ]
+            });
+            if (path1 != "") {
+                x = JSON.stringify(a);
+                fs.writeFileSync(path1, x);
+            }
+            alert('写入成功！');
         }
         $(document).ready(function () {
             $('.tablelist').html('');
-            getfilenum(join_path('gallery')).then(val=>{
+            getfilenum(join_path('gallery')).then(val => {
                 console.log(val);
-                fn=val;
+                fn = val;
             })
         });
         ipcRenderer.on('log', function (event, arg) {
             console.log(arg);
             if (arg.obj == "hash") {
                 if (arg.msgname == "hash") {
-                    sfn=sfn+1;
-                    p=parseInt(sfn/fn*100);
+                    sfn = sfn + 1;
+                    p = parseInt(sfn / fn * 100);
                     console.log(p)
-                    $('#statustext').html('正在生成文件列表....'+p+"%");
-                    $('.progress-bar').attr('style','width:'+p+"%");
-                    s = '<div class="jc-items"><div class="jc-icon correct"><i class="fa fa-file" aria-hidden="true"></i></div><div class="jc-filename correct">filenamestr</div><div class="jc-filestatus correct">statustext</div></div>';
-                    s = s.replace('filenamestr', arg.msg.filename);
-                    s = s.replace('statustext', arg.msg.sha256);
-                    $('.tablelist').append(s);
+                    $('#statustext').html('正在生成文件列表....' + p + "%");
+                    $('.progress-bar').attr('style', 'width:' + p + "%");
+                    //s = '<div class="jc-items"><div class="jc-icon correct"><i class="fa fa-file" aria-hidden="true"></i></div><div class="jc-filename correct">filenamestr</div><div class="jc-filestatus correct">statustext</div></div>';
+                    //s = s.replace('filenamestr', arg.msg.filename);
+                    // s = s.replace('statustext', arg.msg.sha256);
+                    //$('.tablelist').append(s);
+                    a.push({ "filename": arg.msg.filename, "sha256": arg.msg.sha256 });
                 }
                 if (arg.msgname == "hashover") {
                     $('#statustext').html('生成文件列表完成，正在比对....');
+                    if (!fs.existsSync(join_path('galleryhash.json'))) {
+                        $('#statustext').html('正在拉取BetaWorld提供的标准校验文件....');
+                        $.ajax({
+                            type: "GET",
+                            url: "https://www.betaworld.org/bwdb_electron/hash.json",
+                            data: "", //预留填写数据库版本
+                            async: false,
+                            success: function (data) {
+                                f = data;
+                            }
+                        });
+                        console.log(f);
+                        if (f == "") {
+                            alert('拉取失败!');
+                            return 0;
+                        }
+                    } else {
+                        $('#statustext').html('正在读取BetaWorld提供的标准校验文件....');
+                        var data = fs.readFileSync(join_path('galleryhash.json'));
+                        var info = data.toString();
+                        console.log(info);
+                        f = JSON.parse(info);
+                    }
+                    for (i = 0; i < f.length; i++) {
+                        console.log(f[i].filename);
+                        if (findbyfilename(f[i].filename) != undefined) {
+                            s = findbyfilename(f[i].filename);
+                            if (f[i].sha256 == s.sha256) {
+                                msg = "文件校验成功！";
+                                d = "correct";
+                            } else {
+                                msg = "文件存在但校验不成功！";
+                                d = "wrong";
+                            }
+                        } else {
+                            msg = "文件不存在，请重新下载！";
+                            d = "wrong";
+                        }
+                        s = '<div class="jc-items"><div class="jc-icon %d% "><i class="fa fa-file" aria-hidden="true"></i></div><div class="jc-filename %d% ">filenamestr</div><div class="jc-filestatus %d% ">statustext</div></div>';
+                        s = s.replace('filenamestr', f[i].filename);
+                        s = s.replace('statustext', msg);
+                        s = s.replace(/%d%/g, d);
+                        $('.tablelist').append(s);
+                    }
+                    $('#statustext').html('校验完成！....');
                 }
             }
         });
@@ -129,8 +193,8 @@
     <div
         style="display: flex;flex-direction: unset;justify-content: space-between;margin-left: 15px;margin-right: 15px;margin-bottom: 10px;margin-top: 3px;">
         <span style="display: flex;align-items: center;" id="statustext">正在生成文件列表...</span><button type="button"
-            class="btn btn-primary pic_btn" style="float: right;" onclick="dosomething();"><i
-                class="fa fa-save" aria-hidden="true"></i> 开始</button></div>
+            class="btn btn-primary pic_btn" style="float: right;" onclick="dosomething();"><i class="fa fa-save"
+                aria-hidden="true"></i> 开始</button></div>
     <div class="tablelist"
         style="background-color: #fff;border: 1px solid #ececec;height: 150px;margin-left: 15px;margin-right:15px;overflow:auto;user-select: none;">
         <div class="jc-items">
