@@ -740,6 +740,12 @@
             },
             {
                 "strtype": "html",
+                "ori_text": "导出文件校验列表",
+                "translate_text": "导出文件校验列表",
+                "classStr": "edit_title"
+            },
+            {
+                "strtype": "html",
                 "ori_text": "<i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                        清空",
                 "translate_text": "<i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                        清空",
                 "classStr": "btn.btn-primary.pic_btn"
@@ -748,6 +754,12 @@
                 "strtype": "html",
                 "ori_text": "<i class=\"fa fa-save\" aria-hidden=\"true\"></i> 保存",
                 "translate_text": "<i class=\"fa fa-save\" aria-hidden=\"true\"></i> 保存",
+                "classStr": "btn.btn-primary.pic_btn"
+            },
+            {
+                "strtype": "html",
+                "ori_text": "<i class=\"fa fa-check-square\" aria-hidden=\"true\"></i>\n                        打开文件校验窗口",
+                "translate_text": "<i class=\"fa fa-check-square\" aria-hidden=\"true\"></i>\n                        打开文件校验窗口",
                 "classStr": "btn.btn-primary.pic_btn"
             }
         ],

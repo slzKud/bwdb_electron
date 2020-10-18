@@ -20,6 +20,7 @@
         var wfn = 0;
         var p = 0;
         var a = [];
+        var flag=0;
         var stdstr = convert_dymstrlist_to_string('正在生成文件列表....', get_lang_now());
         var stdstr1 = convert_dymstrlist_to_string('生成文件列表完成，正在比对....', get_lang_now());
         var stdstrlist = [convert_dymstrlist_to_string("文件校验成功！", get_lang_now())
@@ -77,6 +78,11 @@
             })
             ipcRenderer.send('show-win','hash');
         });
+        ipcRenderer.on('setmode', function (event, arg) {
+            if(arg==1){
+                flag=1;
+            }
+        });
         ipcRenderer.on('log', function (event, arg) {
             console.log(arg);
             if (arg.obj == "hash") {
@@ -93,6 +99,10 @@
                     a.push({ "filename": arg.msg.filename, "sha256": arg.msg.sha256 });
                 }
                 if (arg.msgname == "hashover") {
+                    if(flag==1){
+                        push_json();
+                        return 1;
+                    }
                     $('#statustext').html(stdstr1);
                     if (!fs.existsSync(join_path('galleryhash.json'))) {
                         $('#statustext').html(stdstrlist[4]);

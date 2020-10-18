@@ -29,7 +29,7 @@ String.prototype.myReplace = function (f, e) {//吧f替换成e
 }
 ////console.log(db);
 var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow,workerwindow,hashwindow;
-var picjson;
+var picjson,flaghash=0;
 function set_app_menu() {
   if (process.platform === 'darwin') {
     const isMac = process.platform === 'darwin'
@@ -247,7 +247,7 @@ function createManageSettingWindow() {
     minHeight: 690,
     minWidth: 363,
     width: 690,
-    height: 400,
+    height: 480,
     resizable: false,
     show: false,
     webPreferences: {
@@ -289,6 +289,7 @@ function createHashSettingWindow() {
     }
   });
   hashwindow.loadFile('hash.html');
+  flaghash=0;
   //hashwindow.webContents.openDevTools();
 }
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
@@ -351,6 +352,9 @@ ipcMain.on('show-win', (event, args) => {
     return 0;
   }
   if (args == "hash") {
+    if(flaghash==1){
+      hashwindow.webContents.send("setmode",1);
+    }
     hashwindow.show();
     return 0;
   }
@@ -719,7 +723,9 @@ ipcMain.on('openlangsetting', (event, args) => {
 });
 ipcMain.on('openhashwindow', (event, args) => {
   createHashSettingWindow();
-
+  if(args=="w"){
+    flaghash=1;
+  }
 });
 ipcMain.on('closeabout', (event, args) => {
   aboutWindow.close();
