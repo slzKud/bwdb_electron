@@ -347,7 +347,7 @@ function convert_dymstrlist_to_string_include_array(str, langcode, arr) {
         }
     }
     if (s == undefined) {
-        s1=s;
+        s1=str;
         for (let i = 0; i < arr.length; i++) {
             s1 = s1.replace(new RegExp("%" + String(i + 1), "gm"), arr[i]);
         }

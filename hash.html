@@ -16,8 +16,17 @@
         const fs = require('fs');
         var fn = 0;
         var sfn = 0;
+        var cfn = 0;
+        var wfn = 0;
         var p = 0;
         var a = [];
+        var stdstr = convert_dymstrlist_to_string('正在生成文件列表....', get_lang_now());
+        var stdstr1 = convert_dymstrlist_to_string('生成文件列表完成，正在比对....', get_lang_now());
+        var stdstrlist = [convert_dymstrlist_to_string("文件校验成功！", get_lang_now())
+            , convert_dymstrlist_to_string("文件存在但校验不成功！", get_lang_now())
+            , convert_dymstrlist_to_string("文件不存在，请重新下载！", get_lang_now())
+            , convert_dymstrlist_to_string('正在读取BetaWorld提供的标准校验文件....', get_lang_now())
+            , convert_dymstrlist_to_string('正在拉取BetaWorld提供的标准校验文件....', get_lang_now())]
         function getfilenum(path1) {
             var a = 0;
             return new Promise(resolve => {
@@ -33,10 +42,10 @@
             });
         }
         function dosomething() {
-            sfn = 0;
+            sfn = 0; wfn = 0; cfn = 0;
             $('.tablelist').html('');
             $('.progress-bar').attr('style', 'width:0%');
-            $('#statustext').html('正在生成文件列表....');
+            $('#statustext').html(convert_dymstrlist_to_string('正在生成文件列表....', get_lang_now()));
             ipcRenderer.send('getsha256list', '');
         }
         function findbyfilename(filename) {
@@ -44,20 +53,22 @@
         }
         function push_json() {
             var path1 = remote.dialog.showSaveDialogSync({
-                title: convert_dymstrlist_to_string("请选择要导出的JSON：", get_lang_now(), 'main.js'),
+                title: convert_dymstrlist_to_string("请选择要导出的JSON：", get_lang_now()),
                 properties: ['showOverwriteConfirmation'],
                 filters: [
-                    { name: convert_dymstrlist_to_string('JSON', get_lang_now(), 'main.js'), extensions: ['json'] }
+                    { name: convert_dymstrlist_to_string('JSON', get_lang_now()), extensions: ['json'] }
                 ]
             });
             if (path1 != "") {
                 x = JSON.stringify(a);
                 fs.writeFileSync(path1, x);
             }
-            alert('写入成功！');
+            alert(convert_dymstrlist_to_string('写入成功！', get_lang_now()));
         }
         $(document).ready(function () {
             $('.tablelist').html('');
+            $('#statustext').html(convert_dymstrlist_to_string('待命', get_lang_now()));
+            $('.progress-bar').attr('style', 'width:0%');
             getfilenum(join_path('gallery')).then(val => {
                 console.log(val);
                 fn = val;
@@ -70,7 +81,7 @@
                     sfn = sfn + 1;
                     p = parseInt(sfn / fn * 100);
                     console.log(p)
-                    $('#statustext').html('正在生成文件列表....' + p + "%");
+                    $('#statustext').html(stdstr + p + "%");
                     $('.progress-bar').attr('style', 'width:' + p + "%");
                     //s = '<div class="jc-items"><div class="jc-icon correct"><i class="fa fa-file" aria-hidden="true"></i></div><div class="jc-filename correct">filenamestr</div><div class="jc-filestatus correct">statustext</div></div>';
                     //s = s.replace('filenamestr', arg.msg.filename);
@@ -79,9 +90,9 @@
                     a.push({ "filename": arg.msg.filename, "sha256": arg.msg.sha256 });
                 }
                 if (arg.msgname == "hashover") {
-                    $('#statustext').html('生成文件列表完成，正在比对....');
+                    $('#statustext').html(stdstr1);
                     if (!fs.existsSync(join_path('galleryhash.json'))) {
-                        $('#statustext').html('正在拉取BetaWorld提供的标准校验文件....');
+                        $('#statustext').html(stdstrlist[4]);
                         $.ajax({
                             type: "GET",
                             url: "https://www.betaworld.org/bwdb_electron/hash.json",
@@ -93,11 +104,11 @@
                         });
                         console.log(f);
                         if (f == "") {
-                            alert('拉取失败!');
+                            alert(convert_dymstrlist_to_string('拉取失败!', get_lang_now()));
                             return 0;
                         }
                     } else {
-                        $('#statustext').html('正在读取BetaWorld提供的标准校验文件....');
+                        $('#statustext').html(stdstrlist[3]);
                         var data = fs.readFileSync(join_path('galleryhash.json'));
                         var info = data.toString();
                         console.log(info);
@@ -108,15 +119,18 @@
                         if (findbyfilename(f[i].filename) != undefined) {
                             s = findbyfilename(f[i].filename);
                             if (f[i].sha256 == s.sha256) {
-                                msg = "文件校验成功！";
+                                msg = stdstrlist[0];
                                 d = "correct";
+                                cfn = cfn + 1;
                             } else {
-                                msg = "文件存在但校验不成功！";
+                                msg = stdstrlist[1];
                                 d = "wrong";
+                                wfn = wfn + 1;
                             }
                         } else {
-                            msg = "文件不存在，请重新下载！";
+                            msg = stdstrlist[2];
                             d = "wrong";
+                            wfn = wfn + 1;
                         }
                         s = '<div class="jc-items"><div class="jc-icon %d% "><i class="fa fa-file" aria-hidden="true"></i></div><div class="jc-filename %d% ">filenamestr</div><div class="jc-filestatus %d% ">statustext</div></div>';
                         s = s.replace('filenamestr', f[i].filename);
@@ -124,7 +138,7 @@
                         s = s.replace(/%d%/g, d);
                         $('.tablelist').append(s);
                     }
-                    $('#statustext').html('校验完成！....');
+                    $('#statustext').html(convert_dymstrlist_to_string_include_array("校验完成！....有%1项校验失败。", get_lang_now(), [wfn]));
                 }
             }
         });
@@ -193,8 +207,8 @@
     <div
         style="display: flex;flex-direction: unset;justify-content: space-between;margin-left: 15px;margin-right: 15px;margin-bottom: 10px;margin-top: 3px;">
         <span style="display: flex;align-items: center;" id="statustext">正在生成文件列表...</span><button type="button"
-            class="btn btn-primary pic_btn" style="float: right;" onclick="dosomething();"><i class="fa fa-save"
-                aria-hidden="true"></i> 开始</button></div>
+            class="btn btn-primary pic_btn" style="float: right;" onclick="dosomething();"><i
+                class="fa fa-check-square-o" aria-hidden="true"></i> 开始</button></div>
     <div class="tablelist"
         style="background-color: #fff;border: 1px solid #ececec;height: 150px;margin-left: 15px;margin-right:15px;overflow:auto;user-select: none;">
         <div class="jc-items">
