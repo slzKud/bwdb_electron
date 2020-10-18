@@ -800,5 +800,72 @@
                 "translate_text": "语言设置"
             }
         ]
+    },
+    {
+        "modulename": "hash.html",
+        "staticlangstr": [
+            {
+                "strtype": "html",
+                "ori_text": "文件完整性校验",
+                "translate_text": "文件完整性校验",
+                "classStr": "lang_text"
+            },
+            {
+                "strtype": "html",
+                "ori_text": "<i class=\"fa fa-check-square-o\" aria-hidden=\"true\"></i> 开始",
+                "translate_text": "<i class=\"fa fa-check-square-o\" aria-hidden=\"true\"></i> 开始",
+                "classStr": "btn.btn-primary.pic_btn"
+            }
+        ],
+        "dymstr": [
+            {
+                "ori_text": "生成文件列表完成，正在比对....",
+                "translate_text": "生成文件列表完成，正在比对...."
+            },
+            {
+                "ori_text": "文件校验成功！",
+                "translate_text": "文件校验成功！"
+            },
+            {
+                "ori_text": "文件存在但校验不成功！",
+                "translate_text": "文件存在但校验不成功！"
+            },
+            {
+                "ori_text": "文件不存在，请重新下载！",
+                "translate_text": "文件不存在，请重新下载！"
+            },
+            {
+                "ori_text": "正在读取BetaWorld提供的标准校验文件....",
+                "translate_text": "正在读取BetaWorld提供的标准校验文件...."
+            },
+            {
+                "ori_text": "正在拉取BetaWorld提供的标准校验文件....",
+                "translate_text": "正在拉取BetaWorld提供的标准校验文件...."
+            },
+            {
+                "ori_text": "正在生成文件列表....",
+                "translate_text": "正在生成文件列表...."
+            },
+            {
+                "ori_text": "请选择要导出的JSON：",
+                "translate_text": "请选择要导出的JSON："
+            },
+            {
+                "ori_text": "写入成功！",
+                "translate_text": "写入成功！"
+            },
+            {
+                "ori_text": "待命",
+                "translate_text": "待命"
+            },
+            {
+                "ori_text": "校验完成！....有%1项校验失败。",
+                "translate_text": "校验完成！....有%1项校验失败。"
+            },
+            {
+                "ori_text": "拉取失败!",
+                "translate_text": "拉取失败!"
+            }
+        ]
     }
 ]

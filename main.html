@@ -39,7 +39,7 @@
             menu.append(new MenuItem({ label: convert_dymstrlist_to_string('切换至数据库编辑模式', get_lang_now()), click() { ipcRenderer.send('reload', 'manage'); } }));
             menu.append(new MenuItem({ type: 'separator' }));
         }
-        menu.append(new MenuItem({ label: convert_dymstrlist_to_string('检测完整性', get_lang_now()), click() { ipcRenderer.send('openhashwindow', ''); } }));
+        menu.append(new MenuItem({ label: convert_dymstrlist_to_string_with_mod('文件完整性校验', get_lang_now(),"hash.html"), click() { ipcRenderer.send('openhashwindow', ''); } }));
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string('Language', get_lang_now()), click() { ipcRenderer.send('openlangsetting', ''); } }));
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string('关于', get_lang_now()), click() { ipcRenderer.send('openabout', ''); } }));
         if (os.platform == "darwin") {

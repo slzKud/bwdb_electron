@@ -66,6 +66,8 @@
             alert(convert_dymstrlist_to_string('写入成功！', get_lang_now()));
         }
         $(document).ready(function () {
+            change_static_element(get_lang_now());
+            $('title').html(convert_dymstrlist_to_string_with_mod('文件完整性校验', get_lang_now(),"hash.html"));
             $('.tablelist').html('');
             $('#statustext').html(convert_dymstrlist_to_string('待命', get_lang_now()));
             $('.progress-bar').attr('style', 'width:0%');
@@ -73,6 +75,7 @@
                 console.log(val);
                 fn = val;
             })
+            ipcRenderer.send('show-win','hash');
         });
         ipcRenderer.on('log', function (event, arg) {
             console.log(arg);
@@ -206,11 +209,11 @@
     </div>
     <div
         style="display: flex;flex-direction: unset;justify-content: space-between;margin-left: 15px;margin-right: 15px;margin-bottom: 10px;margin-top: 3px;">
-        <span style="display: flex;align-items: center;" id="statustext">正在生成文件列表...</span><button type="button"
+        <span style="display: flex;align-items: center;user-select: none;" id="statustext">正在生成文件列表...</span><button type="button"
             class="btn btn-primary pic_btn" style="float: right;" onclick="dosomething();"><i
                 class="fa fa-check-square-o" aria-hidden="true"></i> 开始</button></div>
     <div class="tablelist"
-        style="background-color: #fff;border: 1px solid #ececec;height: 150px;margin-left: 15px;margin-right:15px;overflow:auto;user-select: none;">
+        style="background-color: #fff;border: 1px solid #ececec;height: 180px;margin-left: 15px;margin-right:15px;overflow:auto;user-select: none;">
         <div class="jc-items">
             <div class="jc-icon correct">
                 <i class="fa fa-file" aria-hidden="true"></i>

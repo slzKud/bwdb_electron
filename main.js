@@ -279,17 +279,17 @@ function createHashSettingWindow() {
     Menu.setApplicationMenu(null);
   }
   hashwindow = new BrowserWindow({
-    width: 450,
-    height: 350,
-    resizable: true,
-    maximizable: true,
-    show: true,
+    width: 650,
+    height: 400,
+    resizable: false,
+    maximizable: false,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
   });
   hashwindow.loadFile('hash.html');
-  hashwindow.webContents.openDevTools();
+  //hashwindow.webContents.openDevTools();
 }
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
 // 部分 API 在 ready 事件触发后才能使用。
@@ -348,6 +348,10 @@ ipcMain.on('show-win', (event, args) => {
   }
   if (args == "langsetting") {
     langwindow.show();
+    return 0;
+  }
+  if (args == "hash") {
+    hashwindow.show();
     return 0;
   }
 });

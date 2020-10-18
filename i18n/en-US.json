@@ -794,5 +794,72 @@
                 "translate_text": "Language Settings"
             }
         ]
+    },
+    {
+        "modulename": "hash.html",
+        "staticlangstr": [
+            {
+                "strtype": "html",
+                "ori_text": "文件完整性校验",
+                "translate_text": "File integrity check",
+                "classStr": "lang_text"
+            },
+            {
+                "strtype": "html",
+                "ori_text": "<i class=\"fa fa-check-square-o\" aria-hidden=\"true\"></i> 开始",
+                "translate_text": "<i class=\"fa fa-check-square-o\" aria-hidden=\"true\"></i> Start",
+                "classStr": "btn.btn-primary.pic_btn"
+            }
+        ],
+        "dymstr": [
+            {
+                "ori_text": "生成文件列表完成，正在比对....",
+                "translate_text": "The file list has been generated and verified..."
+            },
+            {
+                "ori_text": "文件校验成功！",
+                "translate_text": "File verification succeeded!"
+            },
+            {
+                "ori_text": "文件存在但校验不成功！",
+                "translate_text": "The file exists but the verification is unsuccessful!"
+            },
+            {
+                "ori_text": "文件不存在，请重新下载！",
+                "translate_text": "The file does not exist, please download again!"
+            },
+            {
+                "ori_text": "正在读取BetaWorld提供的标准校验文件....",
+                "translate_text": "Reading the standard verification file provided by BetaWorld..."
+            },
+            {
+                "ori_text": "正在拉取BetaWorld提供的标准校验文件....",
+                "translate_text": "Obtaining the standard verification file provided by BetaWorld..."
+            },
+            {
+                "ori_text": "正在生成文件列表....",
+                "translate_text": "Generating file list...."
+            },
+            {
+                "ori_text": "请选择要导出的JSON：",
+                "translate_text": "Please select the JSON File to be exported:"
+            },
+            {
+                "ori_text": "写入成功！",
+                "translate_text": "Write successfully!"
+            },
+            {
+                "ori_text": "待命",
+                "translate_text": "Ready"
+            },
+            {
+                "ori_text": "校验完成！....有%1项校验失败。",
+                "translate_text": "The verification is complete!The verification of %1 items failed."
+            },
+            {
+                "ori_text": "拉取失败!",
+                "translate_text": "Request failed!"
+            }
+        ]
     }
 ]
