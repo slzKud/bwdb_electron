@@ -2,13 +2,13 @@
 <script>
     const ipcRenderer = require('electron').ipcRenderer;
     const remote = require('electron').remote;
-    const v1 = require('./static/js/verify');
+    const ver_js = require('./static/js/verify');
     function c(s){
         //console.log(s);
         ipcRenderer.send('msgfoward',{"obj":"hash","msgname":"hash","msg":s});
     }
     window.onload=function(){
-        v1.makesha256list(join_path('gallery'),c).then(val=>{
+        ver_js.makesha256list(join_path('gallery'),c).then(val=>{
             ipcRenderer.send('msgfoward',{"obj":"hash","msgname":"hashover","msg":""});
             ipcRenderer.send('closeworker','worker')
         });
