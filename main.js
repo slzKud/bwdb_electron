@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, MenuItem } = require('electron')
+const { app, BrowserWindow, Menu, MenuItem,nativeTheme} = require('electron')
 const ipcMain = require('electron').ipcMain;
 const initSqlJs = require('sql.js/dist/sql-asm');
 const dialog = require('electron').dialog;
@@ -305,7 +305,7 @@ function app_ready_do() {
   if (os.platform == "darwin") {
     app.dock.setIcon(appp + "/static/img/bwdb_icon.png");
   }
-
+  //dialog.showErrorBox("1",String(nativeTheme.shouldUseDarkColors));
 }
 app.whenReady().then(app_ready_do)
 
