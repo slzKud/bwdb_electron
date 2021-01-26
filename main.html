@@ -189,11 +189,11 @@
             });
             //$(".big_stage_item").hover(function(){
             $(document).on('mouseenter', '.big_stage_item', function () {
-                $(this).children('.big_stage_text').css('background-color', '#d4e2ee');
+                $(this).children('.big_stage_text').css('background-color', '#37373D');
             });
             //$(".big_stage_item").mouseleave(function(){
             $(document).on('mouseleave', '.big_stage_item', function () {
-                $(this).children('.big_stage_text').css('background-color', '#ececec');
+                $(this).children('.big_stage_text').css('background-color', '#252526');
             });
 
             //$(".bwdb_sidebar_item").click(function(){
@@ -201,7 +201,7 @@
                 verflag = 1;
                 $('.bwdb_sidebar_item').css('background-color', 'unset');
                 $('.bwdb_sidebar_item').css('color', 'unset');
-                $(this).css('background-color', '#19478a');
+                $(this).css('background-color', '#37373D');
                 $(this).css('color', '#fff');
                 $('.bwdb_infobox_textarea').hide();
                 $('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
@@ -222,7 +222,7 @@
             $(document).on('click', '.update_list_item', function () {
                 $('.update_list_item').css('background-color', 'unset');
                 $('.update_list_item').css('color', 'unset');
-                $(this).css('background-color', '#19478a');
+                $(this).css('background-color', '#37373D');
                 $(this).css('color', '#fff');
                 console.log($(this).attr('data-id'));
                 console.log($(this).attr('data-id-proid'));
@@ -450,7 +450,7 @@
             if ($("#homeinfobox").css('display') != 'none') {
                 $("#verinfobox").show();
                 $("#homeinfobox").hide();
-                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#37373D');
                 $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
             } else {
                 $("#verinfobox").hide();
@@ -565,7 +565,7 @@
             }
             if (now_buildid > 0 && $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').length > 0) {
                 if ($("#homeinfobox").css('display') == 'none') {
-                    $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
+                    $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#37373D');
                     $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
                 }
                 get_build_info(now_proid, now_buildid);
@@ -969,7 +969,7 @@
                     </div>
                     <div style="align-items: center;display: flex;">
                         <button class="btn btn-primary"
-                            style="float:right;margin-right:25px;background-color: #19478a;border:#19478a;max-width: 220px;min-height: 30px;"
+                            style="float:right;margin-right:25px;background-color: #37373D;border:#37373D;max-width: 220px;min-height: 30px;"
                             id="check_btn" onclick="show_update();" data-url=""><i class="fa fa-cloud-download"
                                 aria-hidden="true"></i> 检查数据库更新</button>
                     </div>

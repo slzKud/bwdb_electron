@@ -4,11 +4,10 @@
 }
 body{
     overflow: hidden;
-    height:100%;
-    color: #fff;
+    height:100%
 }
 .bwdb_toolbar{
-    background-color: #252525;
+    background-color: #113260;
     height:55px;
     padding:0 !important;
 }
@@ -16,7 +15,6 @@ body{
     height: 100%;
     width: 100%;
     background-color: #1e1e1e;
-    color: #bfbfbf;
 }
 .nav_search_1{
     display: flex;
@@ -36,7 +34,7 @@ body{
     opacity: 0.5; 
 }
 .search_box{
-    background-color: #2D2D2D;
+    background-color: #19478a;
     width:240px;
     height: 100%;
     display: flex;
@@ -53,7 +51,7 @@ body{
 .search_box_down {
 	color: #fff;
 	font-size: 1.25rem;
-	background-color: #2D2D2D;
+	background-color: #19478a;
 	width: 25px;
 	align-items: center;
 	justify-content: center;
@@ -64,7 +62,7 @@ body{
 	display: flex;
 }
 .search_btn{
-    background-color: #2D2D2D;
+    background-color: #19478a;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -116,18 +114,17 @@ body{
     height:auto;
     max-height: 200px;
     overflow: auto;
-    background-color: #1e1e1e;
+    background-color: #fff;
     border: #5f5f5f 2px solid;
     display:none;
 }
 .bwdb_select_item{
     padding-left: 5px;
     user-select: none;
-    color:#bfbfbf;
 }
 .bwdb_select_item:hover{
     color:#fff;
-    background-color:#37373D ;
+    background-color:#19478a ;
     cursor: pointer;
     
 }
@@ -138,13 +135,13 @@ body{
     z-index:1000;
     width:250px;
     height:55px;
-    background-color: #37373D;
+    background-color: #19478a;
     display: none;
 }
 .bwdb_nav_search_text{
     width: 100%;
     height:100%;
-    background-color: #37373D;
+    background-color: #113260;
     color:#fff;
     font-size:1.15rem;
     padding-left: 8px;
@@ -157,7 +154,7 @@ body{
 }
 .bwdb_sidebar{
     width:298px;
-    background-color: #252526;
+    background-color: #ececec;
 }
 .bwdb_sidebarA{
     position: relative;
@@ -177,7 +174,7 @@ body{
     text-overflow:ellipsis;
 }
 .big_stage_text{
-    background-color:#252526 ;
+    background-color:#1e1e1e ;
     z-index: 10;
     padding-right: 10px;
     width:90%;
@@ -188,7 +185,6 @@ body{
     white-space: nowrap;
     font-size: 1rem;
     font-weight: 450;
-    color:#fff;
 
 }
 .big_stage_divider:hover{
@@ -200,7 +196,7 @@ body{
 .big_stage_divider .big_stage_item:before,.big_stage_divider .big_stage_item:after
     {
         position:absolute;
-        background:#bfbfbf;
+        background:#a5b4d3;
         content:"";
         height:1px;
         top:50%;
@@ -215,7 +211,6 @@ body{
     margin-top: 2px;
     user-select: none;
     cursor: pointer;
-    color:#bfbfbf;
 }
 .bwdb_sidebar_item:hover{
     background-color: #37373D;
@@ -224,8 +219,7 @@ body{
     padding-top:5px;
     padding-left: 5px;
     position: inherit;
-    background-color: #252526;
-    color:#bfbfbf;
+    background-color: #1e1e1e;
     z-index:200;
     width:298px;
     display: none;
@@ -235,9 +229,6 @@ body{
     padding-top: 15px;
     padding-left: 25px;
     flex:1;
-}
-.bw_welcome{
-    color:#fff;
 }
 .Version_Title{
     margin-bottom: 15px;
@@ -376,7 +367,7 @@ body{
 }
 .update_list_item:hover{
     color:#fff;
-    background-color:#37373D;
+    background-color:#19478a ;
     cursor: pointer;
     
 }
