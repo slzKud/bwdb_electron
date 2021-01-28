@@ -383,3 +383,17 @@ body{
 #ver_smalltag{
     font-size: 1.05rem;
 }
+::-webkit-scrollbar{
+    background-color: #252526;
+    border: 1px solid #37373D;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #37373D;
+}
+::-webkit-scrollbar-button{
+    display: none;
+}
+::-webkit-scrollbar-corner{
+    display: none;
+    border: 1px solid #37373D;
+}

@@ -4,7 +4,7 @@
     align-items: center;
     margin-left: 20px;
     font-size: 1.1rem;
-    color: #fff;
+    color: #bfbfbf;
     font-weight: bold;
     white-space: nowrap;
     user-select: none;
@@ -12,9 +12,15 @@
 .big_stage_divider.non_search{
     display:none;
 }
+.bwdb_sidebarA{
+    margin-top: 5px; 
+}
 .bwdb_sidebar_item{
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: unset;
+    margin-bottom: 1px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    
 }
 @media screen and (max-width:775px) {
     .title_bar {
@@ -26,7 +32,7 @@
     margin: 20px;
 }
 .panel.panel-primary{
-    border-color: #19478a;
+    border-color: #252526;
 }
 .panel .panel-heading{
     background-color: #8f8f8f;
@@ -35,7 +41,7 @@
     padding-bottom: 2px;
 }
 .panel.panel-primary .panel-heading{
-    background-color: #19478a;
+    background-color: #37373D;
     user-select: none;
     
 }
@@ -48,6 +54,7 @@
 }
 .panel-body{
     margin: 20px;
+    color:#bfbfbf;
 }
 
 .edit_item{
@@ -72,4 +79,55 @@
 #edit_pic_toolbar button{
     margin-bottom: 15px;
     margin-right: 5px;
+}
+.edit_control input{
+    background-color: #252526;
+    color:#bfbfbf;
+}
+.edit_control input:focus{
+    color:#fff;
+    background-color: #252526;
+}
+.edit_control textarea{
+    background-color: #252526;
+    color:#bfbfbf;
+}
+.edit_control select{
+    background-color: #252526;
+    color:#bfbfbf;
+}
+.edit_control select:focus{
+    color:#bfbfbf;
+    background-color: #252526;
+}
+.edit_control textarea:focus{
+    color:#bfbfbf;
+    background-color: #252526;
+}
+.edit_control select option:active{
+    color:#fff;
+    background-color: #252526;
+}
+input.open{
+    background-color: #252526;
+    color:#bfbfbf;
+}
+.es-list{
+    background-color: #252526;
+    color:#bfbfbf;
+}
+.es-input{
+    background-color: #252526;
+    color:#bfbfbf;
+}
+.edit_control .es-list li:hover{
+    background-color:#37373D;
+    color:#fff;
+}
+button.pic_btn{
+    background-color: #252526;
+    border: 1px solid #37373D;
+}
+button.pic_btn:hover{
+    background-color:#37373D;
 }
