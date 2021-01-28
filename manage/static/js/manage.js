@@ -213,6 +213,15 @@ function movelist(selector, flag) {
 $(window).ready(function () {
     //get_all_html_element();
     change_static_element(get_lang_now());
+    /*
+    $("<link>")
+                .attr({
+                    rel: "stylesheet",
+                    type: "text/css",
+                    href: "../static/css/bwdb_light.css"
+    })
+    .appendTo("head");
+    */
     now_height = document.documentElement.clientHeight - 55;
     now_width = document.documentElement.clientWidth - 355;
     $('.bwdb_sidebar').css('max-height', now_height);

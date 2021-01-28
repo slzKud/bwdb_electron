@@ -264,6 +264,22 @@
             {
                 "ori_text": "切换至数据库编辑模式",
                 "translate_text": "切换至数据库编辑模式"
+            },
+            {
+                "ori_text": "跟随系统",
+                "translate_text": "跟随系统"
+            },
+            {
+                "ori_text": "白色",
+                "translate_text": "白色"
+            },
+            {
+                "ori_text": "黑色",
+                "translate_text": "黑色"
+            },
+            {
+                "ori_text": "外观",
+                "translate_text": "外观"
             }
         ]
     },
