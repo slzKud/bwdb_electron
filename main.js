@@ -23,6 +23,11 @@ try {
   dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库不存在', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('基本数据库不存在，程序将退出。', i18n.get_lang_now(), 'main.js'));
   app.quit();
 }
+if(i18n.get_dark_now()!=undefined){
+  nativeTheme.themeSource=i18n.get_dark_now();
+}else{
+  nativeTheme.themeSource="system";
+}
 String.prototype.myReplace = function (f, e) {//吧f替换成e
   var reg = new RegExp(f, "g"); //创建正则RegExp对象   
   return this.replace(reg, e);
@@ -1052,4 +1057,27 @@ ipcMain.on('getsha256list', (event, args) => {
   workerwindow.on("close", function () {
     workerwindow = null;
   });
+});
+ipcMain.on('darkmode', (event, args) => {
+  if(args=="system"){
+    nativeTheme.themeSource="system";
+  }
+  if(args=="dark"){
+    nativeTheme.themeSource="dark";
+  }
+  if(args=="light"){
+    nativeTheme.themeSource="light";
+  }
+  i18n.setdarkmode(String(nativeTheme.themeSource));
+});
+nativeTheme.on('updated',()=>{
+  console.log('i am changed')
+  if(nativeTheme.shouldUseDarkColors){
+      console.log("i am dark.")
+      //tray.setImage('app/img/icon_white.png')
+  }else{
+      console.log("i am light.")
+      //tray.setImage('app/img/icon.png')
+      //tray.setPressedImage('app/img/icon_white.png')
+  }
 });

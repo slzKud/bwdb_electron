@@ -104,10 +104,35 @@ function get_lang_now(){
     }
     return langcode;
 }
+function setdarkmode(mode) {
+    try {
+        var j = fs1.readFileSync(appp + "/settings.json").toString();
+        var s = JSON.parse(j);
+        s.now_dark = mode;
+        fs1.writeFileSync(appp + "/settings.json", JSON.stringify(s));
+    } catch{
+        var s = { now_lang: langcode };
+        fs1.writeFileSync(appp + "/settings.json", JSON.stringify(s));
+        s.now_dark = mode;
+    }
+}
+function get_dark_now() {
+    langcode = "";
+    try {
+        var j = fs1.readFileSync(appp + "/settings.json").toString();
+        var s = JSON.parse(j);
+        langcode = s.now_dark;
+    } catch{
+        langcode = "system";
+    }
+    return langcode;
+}
 module.exports={
     convert_dymstrlist_to_string,
     convert_dymstrlist_to_string_include_array,
     get_lang_now,
     get_path,
-    join_path
+    join_path,
+    setdarkmode,
+    get_dark_now
 };

@@ -437,6 +437,40 @@ function setlang(langcode) {
         fs1.writeFileSync(appp + "/settings.json", JSON.stringify(s));
     }
 }
+function setdarkmode(mode) {
+    try {
+        var j = fs1.readFileSync(appp + "/settings.json").toString();
+        var s = JSON.parse(j);
+        s.now_dark = mode;
+        fs1.writeFileSync(appp + "/settings.json", JSON.stringify(s));
+    } catch{
+        var s = { now_lang: langcode };
+        fs1.writeFileSync(appp + "/settings.json", JSON.stringify(s));
+        s.now_dark = mode;
+    }
+}
+function get_dark_now() {
+    langcode = "";
+    try {
+        var j = fs1.readFileSync(appp + "/settings.json").toString();
+        var s = JSON.parse(j);
+        langcode = s.now_dark;
+    } catch{
+        langcode = "system";
+    }
+    return langcode;
+}
+function get_dark_now_bool(v) {
+    langcode = "";
+    try {
+        var j = fs1.readFileSync(appp + "/settings.json").toString();
+        var s = JSON.parse(j);
+        langcode = s.now_dark;
+    } catch{
+        langcode = "system";
+    }
+    return (v==langcode?true:false);
+}
 function iswindows(){
     
 }

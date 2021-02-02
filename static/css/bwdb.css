@@ -383,17 +383,102 @@ body{
 #ver_smalltag{
     font-size: 1.05rem;
 }
-::-webkit-scrollbar{
-    background-color: #252526;
-    border: 1px solid #37373D;
-}
-::-webkit-scrollbar-thumb{
-    background-color: #37373D;
-}
-::-webkit-scrollbar-button{
-    display: none;
-}
-::-webkit-scrollbar-corner{
-    display: none;
-    border: 1px solid #37373D;
+/*Light CSS*/
+@media (prefers-color-scheme: light) { 
+    body{
+        color: #000;
+    }
+    ::-webkit-scrollbar{
+        background-color: #bfbfbf;
+        border: 1px solid #3f3f3f;
+    }
+    ::-webkit-scrollbar-thumb{
+        background-color: #37373D;
+    }
+    ::-webkit-scrollbar-button{
+        display: none;
+    }
+    ::-webkit-scrollbar-corner{
+        display: none;
+        border: 1px solid #37373D;
+    }
+    .bwdb_content{
+        background-color: #fff;
+    }
+    .big_stage_text{
+        background-color:#ececec ;
+        color:#19478a;
+    }
+    .big_stage_divider:hover{
+        background-color: #d4e2ee;
+    }
+    .big_stage_text:hover{
+        background-color: #d4e2ee;
+    }
+    .bwdb_sidebar_item{
+        color:#000;
+    }
+    .bwdb_sidebar_item:hover{
+        background-color: #d4e2ee;
+    }
+    .bw_sidebar_info_box{
+        background-color: #ececec;
+    }
+    .info_box_items_btn_text:hover{
+        background-color: #ececec;
+    }
+    .info_box_items_btn_text.active{
+        background-color: #ececec;
+    }
+    .info_box_pics{
+        background-color: #fff;
+    }
+    .bwdb_content{
+        color: #000;
+    }
+    .search_box{
+        background-color: #19478a;
+    }
+    .search_box_down {
+        background-color: #19478a !important;
+    }
+    .search_btn{
+        background-color: #19478a;
+    }
+    .bwdb_nav_select{
+        background-color: #fff;
+    }
+    .bwdb_select_item{
+        color:#000;
+    }
+    .bwdb_select_item:hover{
+        background-color:#19478a ;
+    }
+    .bwdb_nav_search{
+        background-color: #19478a;
+    }
+    .bwdb_nav_search_text{
+        background-color: #113260;
+    }
+    .bwdb_sidebar{
+        background-color: #ececec;
+    }
+    .bw_welcome{
+        color:#000;
+    }
+    .info_box_items_btn_text:hover{
+        background-color: #ececec;
+    }
+    .info_box_items_btn_text.active{
+        background-color: #ececec;
+    }
+    .info_box_pics{
+        background-color: #fff;
+    }
+    .update_list_item:hover{
+        background-color:#19478a ;
+    }
+    .bwdb_toolbar{
+        background-color: #113260;
+    }
 }
