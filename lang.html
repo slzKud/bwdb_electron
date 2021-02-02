@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>语言设置</title>
     <link rel="stylesheet" href="static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/css/bwdb.css">
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <script>window.$ = window.jQuery = require('jquery');</script>
@@ -69,12 +70,51 @@
             text-align: left;
         }
 
+        #lang_list {
+            background-color: #37373D;
+            color: #bfbfbf;
+        }
+
         .lang_text {
             align-items: flex-start;
             margin: 15px;
             user-select: none;
-            color:#fff;
+            color: #fff;
             font-size: 1.2rem;
+        }
+
+        button.pic_btn {
+            background-color: #252526;
+            border: 1px solid #37373D;
+        }
+
+        button.pic_btn:hover {
+            background-color: #37373D;
+        }
+
+        @media (prefers-color-scheme: light) {
+            .lang_text {
+                color: rgb(57, 96, 192);
+            }
+
+            body {
+                background-color: #ececec;
+                color: rgb(57, 96, 192);
+            }
+
+            #lang_list {
+                background-color: #fff;
+                color: #000;
+            }
+
+            button.pic_btn {
+                background-color: #19478a;
+                border: 1px solid #fff;
+            }
+
+            button.pic_btn:hover {
+                background-color: rgb(57, 96, 192);
+            }
         }
     </style>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
@@ -87,7 +127,7 @@
     <div
         style="margin: 0;overflow: hidden;display:flex;justify-content: center;align-items: center;flex-direction: column;">
         <div class="lang_title">
-            <select id="lang_list" size='10' class="form-control" style="width: 100%;min-width: 250px;background-color: #37373D;color:#bfbfbf;">
+            <select id="lang_list" size='10' class="form-control" style="width: 100%;min-width: 250px;">
 
             </select>
         </div>

@@ -6,6 +6,7 @@
     <title>文件完整性校验</title>
     <link rel="stylesheet" href="static/css/font-awesome.min.css">
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/bwdb.css">
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="static/js/i18n.tools.js"></script>
@@ -20,7 +21,7 @@
         var wfn = 0;
         var p = 0;
         var a = [];
-        var flag=0;
+        var flag = 0;
         var stdstr = convert_dymstrlist_to_string('正在生成文件列表....', get_lang_now());
         var stdstr1 = convert_dymstrlist_to_string('生成文件列表完成，正在比对....', get_lang_now());
         var stdstrlist = [convert_dymstrlist_to_string("文件校验成功！", get_lang_now())
@@ -68,7 +69,7 @@
         }
         $(document).ready(function () {
             change_static_element(get_lang_now());
-            $('title').html(convert_dymstrlist_to_string_with_mod('文件完整性校验', get_lang_now(),"hash.html"));
+            $('title').html(convert_dymstrlist_to_string_with_mod('文件完整性校验', get_lang_now(), "hash.html"));
             $('.tablelist').html('');
             $('#statustext').html(convert_dymstrlist_to_string('待命', get_lang_now()));
             $('.progress-bar').attr('style', 'width:0%');
@@ -76,11 +77,11 @@
                 console.log(val);
                 fn = val;
             })
-            ipcRenderer.send('show-win','hash');
+            ipcRenderer.send('show-win', 'hash');
         });
         ipcRenderer.on('setmode', function (event, arg) {
-            if(arg==1){
-                flag=1;
+            if (arg == 1) {
+                flag = 1;
             }
         });
         ipcRenderer.on('log', function (event, arg) {
@@ -99,7 +100,7 @@
                     a.push({ "filename": arg.msg.filename, "sha256": arg.msg.sha256 });
                 }
                 if (arg.msgname == "hashover") {
-                    if(flag==1){
+                    if (flag == 1) {
                         push_json();
                         return 1;
                     }
@@ -180,7 +181,7 @@
             margin-left: 5px;
             margin-right: 5px;
             margin-bottom: 5px;
-            color:#bfbfbf;
+            color: #bfbfbf;
         }
 
         .jc-icon {
@@ -203,6 +204,49 @@
         .wrong {
             color: #DC143C;
         }
+
+        button.pic_btn {
+            background-color: #252526;
+            border: 1px solid #37373D;
+        }
+
+        button.pic_btn:hover {
+            background-color: #37373D;
+        }
+
+        .tablelist {
+            background-color: #37373D;
+            border: 1px solid #252526;
+        }
+
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: #ececec;
+                color: #212529;
+            }
+
+            .lang_text {
+                color: rgb(57, 96, 192);
+            }
+
+            .jc-items {
+                color: #fff;
+            }
+
+            button.pic_btn {
+                background-color: #19478a;
+                border: 1px solid #fff;
+            }
+
+            button.pic_btn:hover {
+                background-color: rgb(57, 96, 192);
+            }
+
+            .tablelist {
+                background-color:#fff;
+                border: 1px solid #ececec;
+            }
+        }
     </style>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 </head>
@@ -220,11 +264,11 @@
     </div>
     <div
         style="display: flex;flex-direction: unset;justify-content: space-between;margin-left: 15px;margin-right: 15px;margin-bottom: 10px;margin-top: 3px;">
-        <span style="display: flex;align-items: center;user-select: none;" id="statustext">正在生成文件列表...</span><button type="button"
-            class="btn btn-primary pic_btn" style="float: right;background-color: #252526;color: #fff;border: 1px solid #252526;" onclick="dosomething();"><i
-                class="fa fa-check-square-o" aria-hidden="true"></i> 开始</button></div>
-    <div class="tablelist"
-        style="background-color: #37373D;border: 1px solid #252526;height: 180px;margin-left: 15px;margin-right:15px;overflow:auto;user-select: none;">
+        <span style="display: flex;align-items: center;user-select: none;" id="statustext">正在生成文件列表...</span><button
+            type="button" class="btn btn-primary pic_btn" style="float: right;" onclick="dosomething();"><i
+                class="fa fa-check-square-o" aria-hidden="true"></i> 开始</button>
+    </div>
+    <div class="tablelist" style="height: 180px;margin-left: 15px;margin-right:15px;overflow:auto;user-select: none;">
         <div class="jc-items">
             <div class="jc-icon correct">
                 <i class="fa fa-file" aria-hidden="true"></i>

@@ -1,57 +1,111 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title></title>
-    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-    <script>window.$ = window.jQuery = require('jquery');</script>
-    <script src="static/js/i18n.tools.js"></script>
-    <script>
-        const ipcRenderer = require('electron').ipcRenderer;
-        $(document).ready(function(){
-          //change_static_element(get_lang_now());
-          //get_all_html_element();
-          ipcRenderer.send('getbwdbversion','about');
-          //alert('ok');
-        });
-        ipcRenderer.on('bwdbversion', function(event, arg) {
-            console.log(arg);
-            var s=JSON.parse(arg);
-            //alert(s);
-            //下一步引入动态编译后这里版本号将读取配置文件的（暂时没想好怎么处理），这里先设置为静态版本号
-            //$("#basedb_version").html('V'+s[0][0]+' - '+s[0][1]+'');
-            $("#basedb_version").html('V12.0.9 - 2020/10/03');
-            $(".contributor").html(convert_dymstrlist_to_string("贡献者名单",get_lang_now()));
-            ipcRenderer.send('show-win', 'about');
-        });
-    </script>
-    <style>
-      body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #212529;
-            text-align: left;
-        }
-    </style>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-  </head>
-  <body style="margin: 0;overflow: hidden;"  >
-    <div class="aboutwindow" style="width:400px;height:250px;background-color: #1e1e1e;border: 1px #252526 solid;display:flex;">
-        <div clas="blank_sidebar" style="width: 50px;height: 250px;background-color: #113260;color:#113260;user-select: none;">
-            Slzkud
-        </div>
-        <div clas="right_side" style="width: 350px;height: 250px;background-color: #1e1e1e;color:#bfbfbf;user-select: none;" >
-            <div class="bwdb_logoNtitle" style="justify-content:center;align-items:center;display:flex;margin-top: 25%;" >
-                <img src="./static/img/bwdb_icon.png" style="width:50px;height: 50px;margin-right: 10px;"><div><div style="font-size: 1.55rem;">BetaWorld Library</div><div style="font-size: 0.7rem;" id="basedb_version">DataBase v11.11 - 2020-04-30</div></div>
-            </div>
-            <div class="bottom_bar" style="height: 20px;margin-top: 25%;">
-              <div style="float: left;margin-left: 10px;"><a style="font-size: 0.8rem;color:#bfbfbf ;" >(c) BetaWorld 2020</a></div>
-                <div style="float: right;margin-right: 10px;"><a style="font-size: 0.8rem;color:#fff ;cursor: pointer;" onclick="ipcRenderer.send('openauthor', 'about');" class="contributor">贡献者名单</a></div>
-            </div>
-        </div>
 
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+  <script>window.$ = window.jQuery = require('jquery');</script>
+  <script src="static/js/i18n.tools.js"></script>
+  <script>
+    const ipcRenderer = require('electron').ipcRenderer;
+    $(document).ready(function () {
+      //change_static_element(get_lang_now());
+      //get_all_html_element();
+      ipcRenderer.send('getbwdbversion', 'about');
+      //alert('ok');
+    });
+    ipcRenderer.on('bwdbversion', function (event, arg) {
+      console.log(arg);
+      var s = JSON.parse(arg);
+      //alert(s);
+      //下一步引入动态编译后这里版本号将读取配置文件的（暂时没想好怎么处理），这里先设置为静态版本号
+      //$("#basedb_version").html('V'+s[0][0]+' - '+s[0][1]+'');
+      $("#basedb_version").html('V12.0.9 - 2020/10/03');
+      $(".contributor").html(convert_dymstrlist_to_string("贡献者名单", get_lang_now()));
+      ipcRenderer.send('show-win', 'about');
+    });
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      text-align: left;
+    }
+
+    .aboutwindow {
+      width: 400px;
+      height: 250px;
+      background-color: #1e1e1e;
+      border: 1px #252526 solid;
+      display: flex;
+    }
+
+    .blank_sidebar {
+      width: 50px;
+      height: 250px;
+      background-color: #113260;
+      color: #113260;
+      user-select: none;
+    }
+
+    .right_side {
+      width: 350px;
+      height: 250px;
+      background-color: #1e1e1e;
+      color: #bfbfbf;
+      user-select: none;
+    }
+    .contributor{
+        color: #fff;
+      }
+    @media (prefers-color-scheme: light) {
+      .aboutwindow {
+        background-color: #fff;
+        border: 1px #ececec solid;
+      }
+
+      .blank_sidebar {
+        background-color: #19478a;
+        color: #19478a;
+      }
+
+      .right_side {
+        background-color: #fff;
+        color: #000;
+      }
+      .contributor{
+        color: #19478a;
+      }
+    }
+  </style>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+
+<body style="margin: 0;overflow: hidden;">
+  <div class="aboutwindow">
+    <div class="blank_sidebar">
+      Slzkud
     </div>
-  </body>
+    <div class="right_side">
+      <div class="bwdb_logoNtitle" style="justify-content:center;align-items:center;display:flex;margin-top: 25%;">
+        <img src="./static/img/bwdb_icon.png" style="width:50px;height: 50px;margin-right: 10px;">
+        <div>
+          <div style="font-size: 1.55rem;">BetaWorld Library</div>
+          <div style="font-size: 0.7rem;" id="basedb_version">DataBase v11.11 - 2020-04-30</div>
+        </div>
+      </div>
+      <div class="bottom_bar" style="height: 20px;margin-top: 25%;">
+        <div style="float: left;margin-left: 10px;"><a style="font-size: 0.8rem;">(c) BetaWorld 2020</a></div>
+        <div style="float: right;margin-right: 10px;"><a style="font-size: 0.8rem;cursor: pointer;"
+            onclick="ipcRenderer.send('openauthor', 'about');" class="contributor">贡献者名单</a></div>
+      </div>
+    </div>
+
+  </div>
+</body>
+
 </html>

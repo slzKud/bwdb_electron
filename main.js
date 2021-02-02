@@ -1073,10 +1073,20 @@ ipcMain.on('darkmode', (event, args) => {
 nativeTheme.on('updated',()=>{
   console.log('i am changed')
   if(nativeTheme.shouldUseDarkColors){
-      console.log("i am dark.")
+      //console.log("i am dark.")
       //tray.setImage('app/img/icon_white.png')
+      try{
+        win.webContents.send("refresh_darkmode","dark");
+      }finally{
+
+      }
   }else{
-      console.log("i am light.")
+      //console.log("i am light.")
+      try{
+        win.webContents.send("refresh_darkmode","light");
+      }finally{
+        
+      }
       //tray.setImage('app/img/icon.png')
       //tray.setPressedImage('app/img/icon_white.png')
   }

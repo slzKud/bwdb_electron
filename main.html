@@ -44,25 +44,25 @@
                 label: convert_dymstrlist_to_string('跟随系统', get_lang_now(), 'main.html'),
                 type: 'radio',
                 click: async () => {
-                    ipcRenderer.send('darkmode','system');
+                    ipcRenderer.send('darkmode', 'system');
                 },
-                checked:get_dark_now_bool("system")
+                checked: get_dark_now_bool("system")
             },
             {
                 label: convert_dymstrlist_to_string('白色', get_lang_now(), 'main.html'),
                 type: 'radio',
                 click: async () => {
-                    ipcRenderer.send('darkmode','light');
+                    ipcRenderer.send('darkmode', 'light');
                 },
-                checked:get_dark_now_bool("light")
+                checked: get_dark_now_bool("light")
             },
             {
                 label: convert_dymstrlist_to_string('黑色', get_lang_now(), 'main.html'),
                 type: 'radio',
                 click: async () => {
-                    ipcRenderer.send('darkmode','dark');
+                    ipcRenderer.send('darkmode', 'dark');
                 },
-                checked:get_dark_now_bool("dark")
+                checked: get_dark_now_bool("dark")
             }]
         }));
         menu.append(new MenuItem({ label: convert_dymstrlist_to_string_with_mod('文件完整性校验', get_lang_now(), "hash.html"), click() { ipcRenderer.send('openhashwindow', ''); } }));
@@ -215,18 +215,18 @@
             });
             //$(".big_stage_item").hover(function(){
             $(document).on('mouseenter', '.big_stage_item', function () {
-                if(remote.nativeTheme.shouldUseDarkColors){
+                if (remote.nativeTheme.shouldUseDarkColors) {
                     $(this).children('.big_stage_text').css('background-color', '#37373D');
-                }else{
+                } else {
                     $(this).children('.big_stage_text').css('background-color', '#d4e2ee');
                 }
-                
+
             });
             //$(".big_stage_item").mouseleave(function(){
             $(document).on('mouseleave', '.big_stage_item', function () {
-                if(remote.nativeTheme.shouldUseDarkColors){
-                    $(this).children('.big_stage_text').css('background-color', '#37373D');
-                }else{
+                if (remote.nativeTheme.shouldUseDarkColors) {
+                    $(this).children('.big_stage_text').css('background-color', '#252526');
+                } else {
                     $(this).children('.big_stage_text').css('background-color', '#ececec');
                 }
             });
@@ -236,12 +236,12 @@
                 verflag = 1;
                 $('.bwdb_sidebar_item').css('background-color', 'unset');
                 $('.bwdb_sidebar_item').css('color', 'unset');
-                if(remote.nativeTheme.shouldUseDarkColors){
+                if (remote.nativeTheme.shouldUseDarkColors) {
                     $(this).css('background-color', '#37373D');
-                }else{
+                } else {
                     $(this).css('background-color', '#19478a');
                 }
-                
+
                 $(this).css('color', '#fff');
                 $('.bwdb_infobox_textarea').hide();
                 $('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
@@ -262,12 +262,12 @@
             $(document).on('click', '.update_list_item', function () {
                 $('.update_list_item').css('background-color', 'unset');
                 $('.update_list_item').css('color', 'unset');
-                if(remote.nativeTheme.shouldUseDarkColors){
+                if (remote.nativeTheme.shouldUseDarkColors) {
                     $(this).css('background-color', '#37373D');
-                }else{
+                } else {
                     $(this).css('background-color', '#19478a');
                 }
-                
+
                 $(this).css('color', '#fff');
                 console.log($(this).attr('data-id'));
                 console.log($(this).attr('data-id-proid'));
@@ -495,12 +495,12 @@
             if ($("#homeinfobox").css('display') != 'none') {
                 $("#verinfobox").show();
                 $("#homeinfobox").hide();
-                if(remote.nativeTheme.shouldUseDarkColors){
+                if (remote.nativeTheme.shouldUseDarkColors) {
                     $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#37373D');
-                }else{
+                } else {
                     $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
                 }
-                
+
                 $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
             } else {
                 $("#verinfobox").hide();
@@ -512,6 +512,7 @@
             }
 
         }
+
         function main_pic_click() {
             console.log($('#main_pic').attr('class'));
             if ($('#main_pic').attr('class') == 'info_box_pics have_pic') {
@@ -615,12 +616,12 @@
             }
             if (now_buildid > 0 && $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').length > 0) {
                 if ($("#homeinfobox").css('display') == 'none') {
-                    if(remote.nativeTheme.shouldUseDarkColors){
+                    if (remote.nativeTheme.shouldUseDarkColors) {
                         $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#37373D');
-                }else{
-                    $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
-                }
-                    
+                    } else {
+                        $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
+                    }
+
                     $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
                 }
                 get_build_info(now_proid, now_buildid);
@@ -647,7 +648,7 @@
                 //$("#"+arrlist[i]).html(s[2+i]);
                 changeinfotext(arrlist[i], s[0][3 + i]);
             }
-            changeinfotext(arrlist[4], dateFtt('yyyy/MM/d', s[0][7]));
+            changeinfotext(arrlist[4], dateFtt('yyyy/M/d', s[0][7]));
             if ($('.bw_sidebar_info_box').css('display') == 'none') {
                 var x = $('.search_box_title').attr('data-id-codename');
                 var y = $('.search_box_title').html();
@@ -975,6 +976,37 @@
             console.log(link);
             shell.openExternal(encodeURI(link));
         }
+        ipcRenderer.on('refresh_darkmode', function (event, arg) {
+            console.log(arg);
+            if (arg == "dark") {
+                $('.bwdb_sidebar_item').css('background-color', 'unset');
+                $('.bwdb_sidebar_item').css('background-color', 'unset');
+                $('.bwdb_sidebar_item').css('color', '#bfbfbf');
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#37373D');
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
+                $('.big_stage_text').css('background-color', '#252526');
+            }
+            if (arg == "light") {
+                $('.bwdb_sidebar_item').css('background-color', 'unset');
+                $('.bwdb_sidebar_item').css('background-color', 'unset');
+                $('.bwdb_sidebar_item').css('color', '#000');
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
+                $('.big_stage_text').css('background-color', '#ececec')
+            }
+            if ($('.bw_sidebar_info_box').css('display') == 'none') {
+                $('.bwdb_sidebarA').css('max-height', now_height);
+                $('.bwdb_sidebarA').css('height', now_height);
+            } else {
+                $('.bwdb_sidebarA').css('max-height', now_height - $('.bw_sidebar_info_box').height);
+                $('.bwdb_sidebarA').css('height', now_height - $('.bw_sidebar_info_box').height);
+            }
+            if (getpar_height('.bwdb_sidebarA') > $('.bwdb_sidebarA').css('max-height')) {
+                $('.bwdb_sidebarA').css('overflow-y', 'scroll');
+            } else {
+                $('.bwdb_sidebarA').css('overflow-y', 'auto');
+            }
+        });
         function show_update() {
             //alert($("#check_btn").attr('data-url'));
             shell.openExternal($("#check_btn").attr('data-url'));
@@ -1024,9 +1056,9 @@
                     </div>
                     <div style="align-items: center;display: flex;">
                         <button class="btn btn-primary"
-                            style="float:right;margin-right:25px;background-color: #37373D;border:#37373D;max-width: 220px;min-height: 30px;"
-                            id="check_btn" onclick="show_update();" data-url=""><i class="fa fa-cloud-download"
-                                aria-hidden="true"></i> 检查数据库更新</button>
+                            style="float:right;margin-right:25px;max-width: 220px;min-height: 30px;" id="check_btn"
+                            onclick="show_update();" data-url=""><i class="fa fa-cloud-download" aria-hidden="true"></i>
+                            检查数据库更新</button>
                     </div>
                 </div>
 
