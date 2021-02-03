@@ -80,54 +80,73 @@
     margin-bottom: 15px;
     margin-right: 5px;
 }
-.edit_control input{
-    background-color: #252526;
-    color:#bfbfbf;
-}
-.edit_control input:focus{
-    color:#fff;
-    background-color: #252526;
-}
-.edit_control textarea{
-    background-color: #252526;
-    color:#bfbfbf;
-}
-.edit_control select{
-    background-color: #252526;
-    color:#bfbfbf;
-}
-.edit_control select:focus{
-    color:#bfbfbf;
-    background-color: #252526;
-}
-.edit_control textarea:focus{
-    color:#bfbfbf;
-    background-color: #252526;
-}
-.edit_control select option:active{
-    color:#fff;
-    background-color: #252526;
-}
-input.open{
-    background-color: #252526;
-    color:#bfbfbf;
-}
-.es-list{
-    background-color: #252526;
-    color:#bfbfbf;
-}
-.es-input{
-    background-color: #252526;
-    color:#bfbfbf;
-}
-.edit_control .es-list li:hover{
-    background-color:#37373D;
-    color:#fff;
-}
-button.pic_btn{
-    background-color: #252526;
-    border: 1px solid #37373D;
-}
-button.pic_btn:hover{
-    background-color:#37373D;
+@media (prefers-color-scheme: dark) {
+    .edit_control input{
+        background-color: #252526;
+        color:#bfbfbf;
+    }
+    .edit_control input:focus{
+        color:#fff;
+        background-color: #252526;
+    }
+    .edit_control textarea{
+        background-color: #252526;
+        color:#bfbfbf;
+    }
+    .edit_control select{
+        background-color: #252526;
+        color:#bfbfbf;
+    }
+    .edit_control select:focus{
+        color:#bfbfbf;
+        background-color: #252526;
+    }
+    .edit_control textarea:focus{
+        color:#bfbfbf;
+        background-color: #252526;
+    }
+    .edit_control select option:active{
+        color:#fff;
+        background-color: #252526;
+    }
+    input.open{
+        background-color: #252526;
+        color:#bfbfbf;
+    }
+    .es-list{
+        background-color: #252526;
+        color:#bfbfbf;
+    }
+    .es-input{
+        background-color: #252526;
+        color:#bfbfbf;
+    }
+    .edit_control .es-list li:hover{
+        background-color:#37373D;
+        color:#fff;
+    }
+    button.pic_btn{
+        background-color: #252526;
+        border: 1px solid #37373D;
+    }
+    button.pic_btn:hover{
+        background-color:#37373D;
+    }
+} 
+@media (prefers-color-scheme: light) {
+    body{
+        color: #fff;
+    }
+    .panel.panel-primary .panel-heading{
+        background-color: #19478a;
+    }
+    .panel.panel-primary{
+        border-color: #19478a;
+    }
+    .panel-body{
+        color: #000;
+    }
+    .title_bar{
+        color: #fff;
+    }
 }

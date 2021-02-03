@@ -303,7 +303,11 @@ $(document).on('click', '.bwdb_sidebar_item', function () {
     verflag = 1;
     $('.bwdb_sidebar_item').css('background-color', 'unset');
     $('.bwdb_sidebar_item').css('color', 'unset');
-    $(this).css('background-color', '#37373D');
+    if(remote.nativeTheme.shouldUseDarkColors){
+        $(this).css('background-color', '#37373D');
+    }else{
+        $(this).css('background-color', '#19478a');
+    }
     $(this).css('color', '#fff');
     $('.bwdb_infobox_textarea').hide();
     $('.info_box_items_btn_text').attr('class', 'info_box_items_btn_text');
@@ -627,7 +631,11 @@ ipcRenderer.on('buildlist', function (event, arg) {
     }
     if (now_buildid > 0 && $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').length > 0) {
         if ($("#homeinfobox").css('display') == 'none') {
-            $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#37373D');
+            if(remote.nativeTheme.shouldUseDarkColors){
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#37373D');
+            }else{
+                $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
+            }
             $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
         }
         get_build_info(now_proid, now_buildid);

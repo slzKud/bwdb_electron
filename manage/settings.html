@@ -70,9 +70,16 @@
             ipcRenderer.send('changeversion',s);
         }
     </script>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            body{
+                background-color: #1e1e1e;
+            }
+        }
+    </style>
 </head>
 
-<body style="margin: 0;overflow: hidden;background-color: #1e1e1e;">
+<body style="margin: 0;overflow: hidden;">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">数据库基本设置</h3>
