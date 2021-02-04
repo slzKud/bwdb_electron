@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, MenuItem,nativeTheme} = require('electron')
+const { app, BrowserWindow, Menu, MenuItem,nativeTheme,nativeImage} = require('electron')
 const ipcMain = require('electron').ipcMain;
 const initSqlJs = require('sql.js/dist/sql-asm');
 const dialog = require('electron').dialog;
@@ -183,7 +183,7 @@ function createWindow() {
     width: 900,
     height: 600,
     show: false,
-    icon: './static/img/bwdb_icon.png',
+    icon: nativeImage.createFromPath('./static/img/bwdb_icon.png'),
     webPreferences: {
       nodeIntegration: true,
       directWrite: false
@@ -265,7 +265,7 @@ function creategalleryWindow() {
       transparent: true,
       frame: false,
       show: false,
-      icon: './static/img/bwdb_icon.png',
+      icon: nativeImage.createFromPath('./static/img/bwdb_icon.png'),
       webPreferences: {
         nodeIntegration: true,
         directWrite: false
@@ -280,7 +280,7 @@ function creategalleryWindow() {
       titleBarStyle: "hidden",
       maximizable: false,
       show: false,
-      icon: './static/img/bwdb_icon.png',
+      icon: nativeImage.createFromPath('./static/img/bwdb_icon.png'),
       webPreferences: {
         nodeIntegration: true,
         directWrite: false
