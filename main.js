@@ -2,9 +2,11 @@ const { app, BrowserWindow, Menu, MenuItem,nativeTheme} = require('electron')
 const ipcMain = require('electron').ipcMain;
 const initSqlJs = require('sql.js/dist/sql-asm');
 const dialog = require('electron').dialog;
+//const ref = require("ref");
 //const SQL = require('sql.js/dist/sql-asm');
 const fs = require("fs");
 const os = require("os");
+const exec = require('child_process').exec
 const { promises } = require('dns');
 const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
 const { resourceUsage } = require('process');
@@ -35,6 +37,80 @@ String.prototype.myReplace = function (f, e) {//吧f替换成e
 ////console.log(db);
 var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow,workerwindow,hashwindow;
 var picjson,flaghash=0;
+function getNativeWindowHandle_Int(win) {
+  if (win==undefined){return 0;} 
+  let hbuf = win.getNativeWindowHandle()
+
+  if (os.endianness() == "LE") {
+      return hbuf.readInt32LE()
+  }
+  else {
+      return hbuf.readInt32BE()
+  }
+}
+function changecolor(){
+  console.log('i am changed')
+  if(nativeTheme.shouldUseDarkColors){
+      //console.log("i am dark.")
+      //tray.setImage('app/img/icon_white.png')
+      try{
+        win.webContents.send("refresh_darkmode","dark");
+        if (os.platform == "win32") {
+          if (fs.existsSync(i18n.join_path('/static/tools/FDM.exe'))){
+            handleAsNumber=getNativeWindowHandle_Int(win)
+            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+          }
+        }
+      }finally{
+        console.log('finish');
+      }
+      try{
+        if (os.platform == "win32") {
+          if (fs.existsSync(i18n.join_path('/static/tools/FDM.exe'))){
+            handleAsNumber=getNativeWindowHandle_Int(authorwindow)
+            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+            handleAsNumber=getNativeWindowHandle_Int(hashwindow)
+            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+            handleAsNumber=getNativeWindowHandle_Int(langwindow)
+            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+            handleAsNumber=getNativeWindowHandle_Int(settingwindow)
+            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+          }
+        }
+      }finally{
+        console.log('finish');
+      }
+  }else{
+      //console.log("i am light.")
+      try{
+        win.webContents.send("refresh_darkmode","light");
+        if (os.platform == "win32") {
+          if (fs.existsSync(i18n.join_path('/static/tools/FDM.exe'))){
+            handleAsNumber=getNativeWindowHandle_Int(win)
+            exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+          }
+        }
+      }finally{
+        console.log('finish');
+      }
+      try{
+        if (fs.existsSync(i18n.join_path('/static/tools/FDM.exe'))){
+          handleAsNumber=getNativeWindowHandle_Int(authorwindow)
+          exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+          handleAsNumber=getNativeWindowHandle_Int(hashwindow)
+          exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+          handleAsNumber=getNativeWindowHandle_Int(langwindow)
+          exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+          handleAsNumber=getNativeWindowHandle_Int(settingwindow)
+          exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+        }
+      }finally{
+        console.log('finish');
+      }
+      //tray.setImage('app/img/icon.png')
+      //tray.setPressedImage('app/img/icon_white.png')
+  }
+}
 function set_app_menu() {
   if (process.platform === 'darwin') {
     const isMac = process.platform === 'darwin'
@@ -303,8 +379,10 @@ function app_ready_do() {
   //console.log(process.argv)
   if (process.argv[2] == "--manage") {
     createManageMainWindow();
+    changecolor();
   } else {
     createWindow();
+    changecolor();
   }
   global.syslang = app.getLocale();
   if (os.platform == "darwin") {
@@ -1071,23 +1149,5 @@ ipcMain.on('darkmode', (event, args) => {
   i18n.setdarkmode(String(nativeTheme.themeSource));
 });
 nativeTheme.on('updated',()=>{
-  console.log('i am changed')
-  if(nativeTheme.shouldUseDarkColors){
-      //console.log("i am dark.")
-      //tray.setImage('app/img/icon_white.png')
-      try{
-        win.webContents.send("refresh_darkmode","dark");
-      }finally{
-
-      }
-  }else{
-      //console.log("i am light.")
-      try{
-        win.webContents.send("refresh_darkmode","light");
-      }finally{
-        
-      }
-      //tray.setImage('app/img/icon.png')
-      //tray.setPressedImage('app/img/icon_white.png')
-  }
+  changecolor();
 });
