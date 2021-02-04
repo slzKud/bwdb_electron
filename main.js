@@ -6,6 +6,7 @@ const dialog = require('electron').dialog;
 //const SQL = require('sql.js/dist/sql-asm');
 const fs = require("fs");
 const os = require("os");
+const path = require("path");
 const exec = require('child_process').exec
 const { promises } = require('dns');
 const { RSA_X931_PADDING, UV_UDP_REUSEADDR } = require('constants');
@@ -56,9 +57,9 @@ function changecolor(){
       try{
         win.webContents.send("refresh_darkmode","dark");
         if (os.platform == "win32") {
-          if (fs.existsSync(i18n.join_path('/static/tools/FDM.exe'))){
+          if (fs.existsSync(path.join(__dirname,"/static/tools/FDM.exe"))){
             handleAsNumber=getNativeWindowHandle_Int(win)
-            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
           }
         }
       }finally{
@@ -66,15 +67,15 @@ function changecolor(){
       }
       try{
         if (os.platform == "win32") {
-          if (fs.existsSync(i18n.join_path('/static/tools/FDM.exe'))){
+          if (fs.existsSync(path.join(__dirname,"/static/tools/FDM.exe"))){
             handleAsNumber=getNativeWindowHandle_Int(authorwindow)
-            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
             handleAsNumber=getNativeWindowHandle_Int(hashwindow)
-            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
             handleAsNumber=getNativeWindowHandle_Int(langwindow)
-            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
             handleAsNumber=getNativeWindowHandle_Int(settingwindow)
-            exec(i18n.join_path('/static/tools/FDM.exe')+" E,"+String(handleAsNumber));
+            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
           }
         }
       }finally{
@@ -85,24 +86,24 @@ function changecolor(){
       try{
         win.webContents.send("refresh_darkmode","light");
         if (os.platform == "win32") {
-          if (fs.existsSync(i18n.join_path('/static/tools/FDM.exe'))){
+          if (fs.existsSync(path.join(__dirname,"/static/tools/FDM.exe"))){
             handleAsNumber=getNativeWindowHandle_Int(win)
-            exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+            exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
           }
         }
       }finally{
         console.log('finish');
       }
       try{
-        if (fs.existsSync(i18n.join_path('/static/tools/FDM.exe'))){
+        if (fs.existsSync(path.join(__dirname,"/static/tools/FDM.exe"))){
           handleAsNumber=getNativeWindowHandle_Int(authorwindow)
-          exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+          exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
           handleAsNumber=getNativeWindowHandle_Int(hashwindow)
-          exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+          exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
           handleAsNumber=getNativeWindowHandle_Int(langwindow)
-          exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+          exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
           handleAsNumber=getNativeWindowHandle_Int(settingwindow)
-          exec(i18n.join_path('/static/tools/FDM.exe')+" D,"+String(handleAsNumber));
+          exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
         }
       }finally{
         console.log('finish');
