@@ -65,3 +65,4 @@ buildgallery.pak
 DataBase.db
 .DS_store
 galleryhash.json
+package-lock.json
