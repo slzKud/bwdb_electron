@@ -718,6 +718,10 @@
             {
                 "ori_text": "操作",
                 "translate_text": "编辑Build"
+            },
+            {
+                "ori_text": "删除Build成功",
+                "translate_text": "删除Build成功"
             }
         ]
     },
