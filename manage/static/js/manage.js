@@ -452,7 +452,7 @@ function save_build() {
     if (buildid == -1) {
         buildid = -1;
     }
-    proid = $('#productname').next('.es-list').children('[value="' + $('#productname').val() + '"]').attr('data-proid');
+    proid = $('#productname').next('.es-list').children('[value="' + $('#productname').val().replace(/\"/g,"\\\"") + '"]').attr('data-proid');
     productname = $('#productname').val();
     //如果没有该产品 那就设置为-1
     if (proid == undefined) {

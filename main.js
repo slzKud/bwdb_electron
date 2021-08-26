@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, MenuItem,nativeTheme,nativeImage} = require('electron')
+const { app, BrowserWindow, Menu, MenuItem, nativeTheme, nativeImage } = require('electron')
 const ipcMain = require('electron').ipcMain;
 const initSqlJs = require('sql.js/dist/sql-asm');
 const dialog = require('electron').dialog;
@@ -26,90 +26,90 @@ try {
   dialog.showErrorBox(i18n.convert_dymstrlist_to_string('基本数据库不存在', i18n.get_lang_now(), 'main.js'), i18n.convert_dymstrlist_to_string('基本数据库不存在，程序将退出。', i18n.get_lang_now(), 'main.js'));
   app.quit();
 }
-if(i18n.get_dark_now()!=undefined){
-  nativeTheme.themeSource=i18n.get_dark_now();
-}else{
-  nativeTheme.themeSource="system";
+if (i18n.get_dark_now() != undefined) {
+  nativeTheme.themeSource = i18n.get_dark_now();
+} else {
+  nativeTheme.themeSource = "system";
 }
 String.prototype.myReplace = function (f, e) {//吧f替换成e
   var reg = new RegExp(f, "g"); //创建正则RegExp对象   
   return this.replace(reg, e);
 }
 ////console.log(db);
-var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow,workerwindow,hashwindow;
-var picjson,flaghash=0;
+var win, aboutWindow, authorwindow, gallerywindow, settingwindow, langwindow, workerwindow, hashwindow;
+var picjson, flaghash = 0;
 function getNativeWindowHandle_Int(win) {
-  if (win==undefined){return 0;} 
+  if (win == undefined) { return 0; }
   let hbuf = win.getNativeWindowHandle()
 
   if (os.endianness() == "LE") {
-      return hbuf.readInt32LE()
+    return hbuf.readInt32LE()
   }
   else {
-      return hbuf.readInt32BE()
+    return hbuf.readInt32BE()
   }
 }
-function changecolor(){
+function changecolor() {
   console.log('i am changed')
-  if(nativeTheme.shouldUseDarkColors){
-      //console.log("i am dark.")
-      //tray.setImage('app/img/icon_white.png')
-      try{
-        win.webContents.send("refresh_darkmode","dark");
-        if (os.platform == "win32") {
-          if (fs.existsSync(path.join(__dirname,"/static/tools/FDM.exe"))){
-            handleAsNumber=getNativeWindowHandle_Int(win)
-            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
-          }
+  if (nativeTheme.shouldUseDarkColors) {
+    //console.log("i am dark.")
+    //tray.setImage('app/img/icon_white.png')
+    try {
+      win.webContents.send("refresh_darkmode", "dark");
+      if (os.platform == "win32") {
+        if (fs.existsSync(path.join(__dirname, "/static/tools/FDM.exe"))) {
+          handleAsNumber = getNativeWindowHandle_Int(win)
+          exec(path.join(__dirname, "/static/tools/FDM.exe") + " E," + String(handleAsNumber));
         }
-      }finally{
-        console.log('finish');
       }
-      try{
-        if (os.platform == "win32") {
-          if (fs.existsSync(path.join(__dirname,"/static/tools/FDM.exe"))){
-            handleAsNumber=getNativeWindowHandle_Int(authorwindow)
-            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
-            handleAsNumber=getNativeWindowHandle_Int(hashwindow)
-            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
-            handleAsNumber=getNativeWindowHandle_Int(langwindow)
-            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
-            handleAsNumber=getNativeWindowHandle_Int(settingwindow)
-            exec(path.join(__dirname,"/static/tools/FDM.exe")+" E,"+String(handleAsNumber));
-          }
+    } finally {
+      console.log('finish');
+    }
+    try {
+      if (os.platform == "win32") {
+        if (fs.existsSync(path.join(__dirname, "/static/tools/FDM.exe"))) {
+          handleAsNumber = getNativeWindowHandle_Int(authorwindow)
+          exec(path.join(__dirname, "/static/tools/FDM.exe") + " E," + String(handleAsNumber));
+          handleAsNumber = getNativeWindowHandle_Int(hashwindow)
+          exec(path.join(__dirname, "/static/tools/FDM.exe") + " E," + String(handleAsNumber));
+          handleAsNumber = getNativeWindowHandle_Int(langwindow)
+          exec(path.join(__dirname, "/static/tools/FDM.exe") + " E," + String(handleAsNumber));
+          handleAsNumber = getNativeWindowHandle_Int(settingwindow)
+          exec(path.join(__dirname, "/static/tools/FDM.exe") + " E," + String(handleAsNumber));
         }
-      }finally{
-        console.log('finish');
       }
-  }else{
-      //console.log("i am light.")
-      try{
-        win.webContents.send("refresh_darkmode","light");
-        if (os.platform == "win32") {
-          if (fs.existsSync(path.join(__dirname,"/static/tools/FDM.exe"))){
-            handleAsNumber=getNativeWindowHandle_Int(win)
-            exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
-          }
+    } finally {
+      console.log('finish');
+    }
+  } else {
+    //console.log("i am light.")
+    try {
+      win.webContents.send("refresh_darkmode", "light");
+      if (os.platform == "win32") {
+        if (fs.existsSync(path.join(__dirname, "/static/tools/FDM.exe"))) {
+          handleAsNumber = getNativeWindowHandle_Int(win)
+          exec(path.join(__dirname, "/static/tools/FDM.exe") + " D," + String(handleAsNumber));
         }
-      }finally{
-        console.log('finish');
       }
-      try{
-        if (fs.existsSync(path.join(__dirname,"/static/tools/FDM.exe"))){
-          handleAsNumber=getNativeWindowHandle_Int(authorwindow)
-          exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
-          handleAsNumber=getNativeWindowHandle_Int(hashwindow)
-          exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
-          handleAsNumber=getNativeWindowHandle_Int(langwindow)
-          exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
-          handleAsNumber=getNativeWindowHandle_Int(settingwindow)
-          exec(path.join(__dirname,"/static/tools/FDM.exe")+" D,"+String(handleAsNumber));
-        }
-      }finally{
-        console.log('finish');
+    } finally {
+      console.log('finish');
+    }
+    try {
+      if (fs.existsSync(path.join(__dirname, "/static/tools/FDM.exe"))) {
+        handleAsNumber = getNativeWindowHandle_Int(authorwindow)
+        exec(path.join(__dirname, "/static/tools/FDM.exe") + " D," + String(handleAsNumber));
+        handleAsNumber = getNativeWindowHandle_Int(hashwindow)
+        exec(path.join(__dirname, "/static/tools/FDM.exe") + " D," + String(handleAsNumber));
+        handleAsNumber = getNativeWindowHandle_Int(langwindow)
+        exec(path.join(__dirname, "/static/tools/FDM.exe") + " D," + String(handleAsNumber));
+        handleAsNumber = getNativeWindowHandle_Int(settingwindow)
+        exec(path.join(__dirname, "/static/tools/FDM.exe") + " D," + String(handleAsNumber));
       }
-      //tray.setImage('app/img/icon.png')
-      //tray.setPressedImage('app/img/icon_white.png')
+    } finally {
+      console.log('finish');
+    }
+    //tray.setImage('app/img/icon.png')
+    //tray.setPressedImage('app/img/icon_white.png')
   }
 }
 function set_app_menu() {
@@ -371,7 +371,7 @@ function createHashSettingWindow() {
     }
   });
   hashwindow.loadFile('hash.html');
-  flaghash=0;
+  flaghash = 0;
   //hashwindow.webContents.openDevTools();
 }
 // Electron会在初始化完成并且准备好创建浏览器窗口时调用这个方法
@@ -436,8 +436,8 @@ ipcMain.on('show-win', (event, args) => {
     return 0;
   }
   if (args == "hash") {
-    if(flaghash==1){
-      hashwindow.webContents.send("setmode",1);
+    if (flaghash == 1) {
+      hashwindow.webContents.send("setmode", 1);
     }
     hashwindow.show();
     return 0;
@@ -807,8 +807,8 @@ ipcMain.on('openlangsetting', (event, args) => {
 });
 ipcMain.on('openhashwindow', (event, args) => {
   createHashSettingWindow();
-  if(args=="w"){
-    flaghash=1;
+  if (args == "w") {
+    flaghash = 1;
   }
 });
 ipcMain.on('closeabout', (event, args) => {
@@ -932,6 +932,9 @@ ipcMain.on('editbuild', (event, args) => {
       return new Promise(resolve => {
         console.log("proidV:" + proid);
         initSqlJs().then(SQL => {
+          contents = db.exec("select ProductID from Build Where ID=" + buildid);
+          arr = contents[0].values;
+          oldproid = arr[0][0];
           update_list = ['Version', 'Stage', 'BuildTag', 'Architecture', 'Date', 'Serial', 'Edition', 'Language', 'Notes', 'NotesEN', 'CodeName'];
           contents_version = db.exec("SELECT * FROM Version");
           arr_version = contents_version[0].values;
@@ -951,6 +954,13 @@ ipcMain.on('editbuild', (event, args) => {
             console.log(sql);
             db.run(sql);
             db.run('COMMIT;');
+          }
+          contents = db.exec("select count(*) as c from Build Where ProductID=" + oldproid);
+          arr = contents[0].values;
+          count = arr[0][0];
+          if (count == 0) {
+            console.log('the pro is empty,delete it.')
+            db.run("delete from Product Where ID=" + oldproid);
           }
           db.run("insert into ChangeLog values ('" + dbversion + "'," + buildid + ")");
           //dialog.showErrorBox('发生致命错误', '1');
@@ -1108,12 +1118,12 @@ ipcMain.on('reload', (event, args) => {
 });
 ipcMain.on('msgfoward', (event, args) => {
   //win.webContents.send('log',args);
-  if(args.obj=="win"){
-     win.webContents.send('log',args);
+  if (args.obj == "win") {
+    win.webContents.send('log', args);
   }
-  if(args.obj=="hash"){
-    hashwindow.webContents.send('log',args);
- }
+  if (args.obj == "hash") {
+    hashwindow.webContents.send('log', args);
+  }
 });
 ipcMain.on('getsha256list', (event, args) => {
   workerwindow = new BrowserWindow({
@@ -1121,7 +1131,7 @@ ipcMain.on('getsha256list', (event, args) => {
     minWidth: 600,
     width: 900,
     height: 600,
-    show:false,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       directWrite: false
@@ -1138,17 +1148,17 @@ ipcMain.on('getsha256list', (event, args) => {
   });
 });
 ipcMain.on('darkmode', (event, args) => {
-  if(args=="system"){
-    nativeTheme.themeSource="system";
+  if (args == "system") {
+    nativeTheme.themeSource = "system";
   }
-  if(args=="dark"){
-    nativeTheme.themeSource="dark";
+  if (args == "dark") {
+    nativeTheme.themeSource = "dark";
   }
-  if(args=="light"){
-    nativeTheme.themeSource="light";
+  if (args == "light") {
+    nativeTheme.themeSource = "light";
   }
   i18n.setdarkmode(String(nativeTheme.themeSource));
 });
-nativeTheme.on('updated',()=>{
+nativeTheme.on('updated', () => {
   changecolor();
 });
