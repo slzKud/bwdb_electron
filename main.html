@@ -773,7 +773,7 @@
             console.log(arg);
             var s = JSON.parse(arg);
             console.log(s);
-            $("#basedb_version").html(convert_dymstrlist_to_string_include_array('基础数据库版本：V%1,更新于%2。', get_lang_now(), [s[0][0], s[0][1]]));
+            $("#basedb_version").html(convert_dymstrlist_to_string_include_array('基础数据库版本：V%1,更新于%2。', get_lang_now(), [s[0][0], dateFtt("yyyy-M-d",s[0][1])]));
             //alert(s[0][2]);
             $("#check_btn").attr('data-url', s[0][2]);
             if (fs.existsSync(join_path('gallery/info.json')) == true) {
@@ -781,7 +781,7 @@
                 var info = data.toString();
                 if (info != "") {
                     var s1 = JSON.parse(info);
-                    $("#gallerypak_version").html(convert_dymstrlist_to_string_include_array('图片数据库版本：V%1,更新于%2。', get_lang_now(), [s1.GalleryVersion, s1.GalleryUpdateTime]));
+                    $("#gallerypak_version").html(convert_dymstrlist_to_string_include_array('图片数据库版本：V%1,更新于%2。', get_lang_now(), [s1.GalleryVersion, dateFtt("yyyy-M-d",s1.GalleryUpdateTime)]));
                 }
             } else {
                 $("#gallerypak_version").hide();
