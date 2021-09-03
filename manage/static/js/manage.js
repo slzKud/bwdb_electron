@@ -35,13 +35,13 @@ if (process.platform === 'darwin') {
                 {
                     label: convert_dymstrlist_to_string_with_mod('Language', get_lang_now(), 'main.html'),
                     click: async () => {
-                        ipcRenderer.send('openlangsetting','')
+                        ipcRenderer.send('openlangsetting', '')
                     }
                 },
                 {
                     label: convert_dymstrlist_to_string_with_mod('关于', get_lang_now(), 'main.html') + " BetaWorld Library",
                     click: async () => {
-                        ipcRenderer.send('openabout','')
+                        ipcRenderer.send('openabout', '')
                     }
                 },
                 { role: 'quit' }
@@ -87,7 +87,7 @@ if (process.platform === 'darwin') {
                     }
                 }
             ]
-          }
+        }
     ]
 
     const menu = Menu.buildFromTemplate(template)
@@ -200,15 +200,35 @@ function movelist(selector, flag) {
         //alert('你不能再往下移动');
         return -1;
     }
-    a = $(selector).find("option:selected").prop("outerHTML");
-    $(selector).find("option:selected").attr('remove', 1);
-    //$(selector).find("option:selected").remove();
+    a = ""
+
+    //TODO 按照选择的逐步移动
     if (flag == true) {
-        $(selector).children("option:selected").prev().before(a);
+        console.log($(selector).find("option:selected"))
+        for (let i = 0; i < $(selector).find("option:selected").length; i++) {
+            a = $(selector).find("option:selected")[i].outerHTML;
+            a1 = $(selector).find("option:selected")[i].getAttribute('data-pic-hash')
+            console.log($(selector + " option:selected[data-pic-hash='" + a1 + "']"))
+            console.log(a)
+            $(selector + " option:selected[data-pic-hash='" + a1 + "']").attr('remove', 1);
+            //$(selector).find("option:selected").remove();
+            $(selector + " option:selected[data-pic-hash='" + a1 + "']").prev().before(a);
+            $(selector).find("option:selected[remove=1]").remove();
+        }
     } else {
-        $(selector).children("option:selected").next().after(a);
+        console.log($(selector).find("option:selected"))
+        for (let i = $(selector).find("option:selected").length-1; i>=0; i--) {
+            a = $(selector).find("option:selected")[i].outerHTML;
+            a1 = $(selector).find("option:selected")[i].getAttribute('data-pic-hash')
+            console.log($(selector + " option:selected[data-pic-hash='" + a1 + "']"))
+            console.log(a)
+            $(selector + " option:selected[data-pic-hash='" + a1 + "']").attr('remove', 1);
+            //$(selector).find("option:selected").remove();
+            $(selector + " option:selected[data-pic-hash='" + a1 + "']").next().after(a);
+            $(selector).find("option:selected[remove=1]").remove();
+        }
     }
-    $(selector).find("option:selected[remove=1]").remove();
+
 }
 $(window).ready(function () {
     //get_all_html_element();
@@ -303,9 +323,9 @@ $(document).on('click', '.bwdb_sidebar_item', function () {
     verflag = 1;
     $('.bwdb_sidebar_item').css('background-color', 'unset');
     $('.bwdb_sidebar_item').css('color', 'unset');
-    if(remote.nativeTheme.shouldUseDarkColors){
+    if (remote.nativeTheme.shouldUseDarkColors) {
         $(this).css('background-color', '#37373D');
-    }else{
+    } else {
         $(this).css('background-color', '#19478a');
     }
     $(this).css('color', '#fff');
@@ -452,7 +472,7 @@ function save_build() {
     if (buildid == -1) {
         buildid = -1;
     }
-    proid = $('#productname').next('.es-list').children('[value="' + $('#productname').val().replace(/\"/g,"\\\"") + '"]').attr('data-proid');
+    proid = $('#productname').next('.es-list').children('[value="' + $('#productname').val().replace(/\"/g, "\\\"") + '"]').attr('data-proid');
     productname = $('#productname').val();
     //如果没有该产品 那就设置为-1
     if (proid == undefined) {
@@ -631,9 +651,9 @@ ipcRenderer.on('buildlist', function (event, arg) {
     }
     if (now_buildid > 0 && $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').length > 0) {
         if ($("#homeinfobox").css('display') == 'none') {
-            if(remote.nativeTheme.shouldUseDarkColors){
+            if (remote.nativeTheme.shouldUseDarkColors) {
                 $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#37373D');
-            }else{
+            } else {
                 $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('background-color', '#19478a');
             }
             $('.bwdb_sidebar_item[data-id="' + now_buildid + '"]').css('color', '#fff');
@@ -681,7 +701,7 @@ ipcRenderer.on('newbuildid', function (event, arg) {
     console.log(arg);
     now_proid = arg[0];
     now_buildid = arg[1];
-    if($("#screenshotlist").html()!=""){
+    if ($("#screenshotlist").html() != "") {
         make_screen_zip(now_buildid);
     }
     //remote.dialog.showMessageBoxSync();
@@ -795,7 +815,7 @@ ipcRenderer.on('buildinfo', function (event, arg) {
     $("#FixEN").val(s[0][10]);
     $("#screenshotlist").empty();
     try {
-        zip = new AdmZip(join_path("gallery/"+ now_buildid + ".zip"));
+        zip = new AdmZip(join_path("gallery/" + now_buildid + ".zip"));
         if (ifzipfileexist(zip, 'pic.json') == 1) {
             var info = zip.readAsText("pic.json");
             console.log(info);
