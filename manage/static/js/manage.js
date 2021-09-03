@@ -681,7 +681,9 @@ ipcRenderer.on('newbuildid', function (event, arg) {
     console.log(arg);
     now_proid = arg[0];
     now_buildid = arg[1];
-    make_screen_zip(now_buildid);
+    if($("#screenshotlist").html()!=""){
+        make_screen_zip(now_buildid);
+    }
     //remote.dialog.showMessageBoxSync();
     if (os.platform == "win32") {
         remote.dialog.showMessageBoxSync({
@@ -879,6 +881,8 @@ $(document).on('click', '.nav_right_btn .nav_btn', function () {
             s1 = "url('static/images/no_image_preview.png')";
             $('#main_pic').css('background-image', s1);
             $('.title_bar').html('New Build');
+            $("#screenshotlist").empty();
+            s1 = "url('static/images/no_image_preview.png')";
             break;
         case "refresh":
             if (now_buildid != -1) {
