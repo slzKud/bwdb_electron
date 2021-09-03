@@ -201,7 +201,7 @@ function movelist(selector, flag) {
         return -1;
     }
     a = ""
-
+    var b1=[]
     //TODO 按照选择的逐步移动
     if (flag == true) {
         console.log($(selector).find("option:selected"))
@@ -214,6 +214,7 @@ function movelist(selector, flag) {
             //$(selector).find("option:selected").remove();
             $(selector + " option:selected[data-pic-hash='" + a1 + "']").prev().before(a);
             $(selector).find("option:selected[remove=1]").remove();
+            b1.push(a1)
         }
     } else {
         console.log($(selector).find("option:selected"))
@@ -226,7 +227,11 @@ function movelist(selector, flag) {
             //$(selector).find("option:selected").remove();
             $(selector + " option:selected[data-pic-hash='" + a1 + "']").next().after(a);
             $(selector).find("option:selected[remove=1]").remove();
+            b1.push(a1)
         }
+    }
+    for (let i = 0; i < b1.length; i++) {
+        $(selector + " option[data-pic-hash='" + b1[i] + "']").attr("selected",true);
     }
 
 }
